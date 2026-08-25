@@ -259,7 +259,7 @@
 
             <div id="chests-container">
                 <!-- Small Chest -->
-                <div class="glass-card chest-card">
+                <div class="glass-card chest-card" id="chest-card-small">
                     <div class="chest-header">
                         <div class="chest-icon-wrapper">
                             <svg class="chest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M2 8h20M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M12 12v3"/></svg>
@@ -273,7 +273,7 @@
                 </div>
 
                 <!-- Medium Chest -->
-                <div class="glass-card chest-card">
+                <div class="glass-card chest-card" id="chest-card-medium">
                     <div class="chest-header">
                         <div class="chest-icon-wrapper">
                             <svg class="chest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M2 8h20M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M12 12v3"/></svg>
@@ -288,7 +288,7 @@
                 </div>
 
                 <!-- Mega Chest -->
-                <div class="glass-card chest-card">
+                <div class="glass-card chest-card" id="chest-card-mega">
                     <div class="chest-header">
                         <div class="chest-icon-wrapper">
                             <svg class="chest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M2 8h20M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M12 12v3"/></svg>
@@ -403,27 +403,26 @@
         <div class="fullscreen-content">
             <div id="slide-1" class="slide active">
                 <img src="images/diamond.webp" alt="Welcome" class="onboarding-img">
-                <h2>Welcome to TappyStars</h2>
-                <p>Mine coins daily, race on the highway, and redeem Telegram Gifts.</p>
-                <button class="action-btn primary-btn big-btn" onclick="nextSlide(2)">Next</button>
+                <h2 data-i18n="onboarding_slide1_title">Welcome to TappyStars</h2>
+                <p data-i18n="onboarding_slide1_desc">Mine coins daily, race on the highway, and redeem Telegram Gifts.</p>
+                <button class="action-btn primary-btn big-btn" onclick="nextSlide(2)" data-i18n="onboarding_next">Next</button>
             </div>
             <div id="slide-2" class="slide">
-                <!-- Custom stylized car SVG to represent the game -->
                 <svg class="onboarding-img" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="8" y="5" width="44" height="90" rx="10" fill="#7B2C2C" stroke="#141414" stroke-width="4"/>
                     <path d="M 10 32 L 10 18 C 10 10 18 6 30 6 C 42 6 50 10 50 18 L 50 32 Z" fill="#141414"/>
                     <path d="M 14 34 L 46 34 L 42 46 L 18 46 Z" fill="#1A2530"/>
                     <rect x="16" y="47" width="28" height="22" rx="3" fill="#4A1D1D"/>
                 </svg>
-                <h2>Earn & Upgrade</h2>
-                <p>Drive in the highway minigame, collect coins, and upgrade your garage!</p>
-                <button class="action-btn primary-btn big-btn" onclick="nextSlide(3)">Next</button>
+                <h2 data-i18n="onboarding_slide2_title">Earn & Upgrade</h2>
+                <p data-i18n="onboarding_slide2_desc">Drive in the highway minigame, collect coins, and upgrade your garage!</p>
+                <button class="action-btn primary-btn big-btn" onclick="nextSlide(3)" data-i18n="onboarding_next">Next</button>
             </div>
             <div id="slide-3" class="slide">
                 <img src="images/box.webp" alt="Gifts" class="onboarding-img">
-                <h2>The Marketplace</h2>
-                <p>Spend your Stars on real Telegram Gifts sent directly to your account.</p>
-                <button class="action-btn primary-btn big-btn" onclick="finishOnboarding()">Start Playing</button>
+                <h2 data-i18n="onboarding_slide3_title">The Marketplace</h2>
+                <p data-i18n="onboarding_slide3_desc">Spend your Stars on real Telegram Gifts sent directly to your account.</p>
+                <button class="action-btn primary-btn big-btn" onclick="finishOnboarding()" data-i18n="onboarding_start">Start Playing</button>
             </div>
         </div>
     </div>
@@ -604,6 +603,23 @@
             <div id="chest-reward-amount" class="chest-reward-amount">+0</div>
             
             <button class="action-btn primary-btn thanks-btn" id="chest-reward-thanks-btn" onclick="closeChestRewardModal()" data-i18n="thanks">Thanks!</button>
+        </div>
+    </div>
+
+    <!-- INTERACTIVE NEW-USER GUIDE (spotlight tour) -->
+    <div id="guide-overlay" class="guide-overlay" style="display: none;" aria-hidden="true">
+        <div id="guide-spotlight" class="guide-spotlight"></div>
+        <div id="guide-tooltip" class="guide-tooltip">
+            <div class="guide-tooltip-top">
+                <span class="guide-location" id="guide-location"></span>
+                <span class="guide-step-indicator" id="guide-step-indicator">1 / 6</span>
+            </div>
+            <h3 id="guide-title" class="guide-title"></h3>
+            <p id="guide-desc" class="guide-desc"></p>
+            <div class="guide-actions">
+                <button type="button" class="action-btn guide-skip-btn" id="guide-skip-btn" onclick="skipGuide()">Skip</button>
+                <button type="button" class="action-btn primary-btn guide-next-btn" id="guide-next-btn" onclick="nextGuideStep()">Next</button>
+            </div>
         </div>
     </div>
 

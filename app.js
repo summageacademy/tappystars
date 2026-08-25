@@ -121,7 +121,36 @@ const TRANSLATIONS = {
         confirm_purchase: "Confirm & Buy",
         cancel: "Cancel",
         username_required: "Please enter a valid Telegram username",
-        gift_success: "Order placed! Gift will be sent in 7–10 days."
+        gift_success: "Order placed! Gift will be sent in 7–10 days.",
+        guide_skip: "Skip",
+        guide_next: "Next",
+        guide_done: "Start playing!",
+        guide_loc_home: "Bottom menu · Home",
+        guide_loc_boosters: "Bottom menu · Boosters",
+        guide_loc_earn: "Bottom menu · Race",
+        guide_loc_news: "Bottom menu · Boxes",
+        guide_loc_profile: "Bottom menu · Profile",
+        guide_loc_done: "You're all set",
+        guide_step1_title: "This is where you earn coins",
+        guide_step1_desc: "You are on Home (first icon at the bottom). Tap the big blue coin to mine. Limit: 1,000 coins per day. This is your main income.",
+        guide_step2_title: "Boosters make you earn faster",
+        guide_step2_desc: "This is the Boosters tab (second icon). Watch an ad or spend coins to turn on Auto-Tap, Multi-Tap, Shield, and more. Each booster lasts 30 minutes.",
+        guide_step3_title: "Race to earn extra coins",
+        guide_step3_desc: "This is the Race tab (third icon). Press PLAY NOW, dodge cars, collect gold coins on the road. Upgrade your car in Home → Garage for better runs.",
+        guide_step4_title: "Open boxes with ads",
+        guide_step4_desc: "This is the Boxes tab (fourth icon). Watch the required ads on the card, then open it for random coins or Stars. Daily free coins are below.",
+        guide_step5_title: "Spend Stars on gifts & cars",
+        guide_step5_desc: "This is Profile (fifth icon). 1) Exchange coins for Stars. 2) Open Marketplace to buy real Telegram gifts. 3) Car Dealership to unlock new cars.",
+        guide_step6_title: "Quick map of the app",
+        guide_step6_desc: "1 Home = tap coins · 2 Boosters = power-ups · 3 Race = minigame · 4 Boxes = ad rewards · 5 Profile = exchange, gifts, cars. You're ready!",
+        onboarding_slide1_title: "Welcome to TappyStars",
+        onboarding_slide1_desc: "Mine coins daily, race on the highway, and redeem Telegram Gifts.",
+        onboarding_slide2_title: "Earn & Upgrade",
+        onboarding_slide2_desc: "Drive in the highway minigame, collect coins, and upgrade your garage!",
+        onboarding_slide3_title: "The Marketplace",
+        onboarding_slide3_desc: "Spend your Stars on real Telegram Gifts sent directly to your account.",
+        onboarding_next: "Next",
+        onboarding_start: "Start Playing"
     },
     ru: {
         clicker: "Кликер",
@@ -217,7 +246,36 @@ const TRANSLATIONS = {
         confirm_purchase: "Подтвердить и купить",
         cancel: "Отмена",
         username_required: "Пожалуйста, введите корректное имя пользователя",
-        gift_success: "Заказ оформлен! Подарок будет отправлен через 7–10 дней."
+        gift_success: "Заказ оформлен! Подарок будет отправлен через 7–10 дней.",
+        guide_skip: "Пропустить",
+        guide_next: "Далее",
+        guide_done: "Начать играть!",
+        guide_loc_home: "Нижнее меню · Главная",
+        guide_loc_boosters: "Нижнее меню · Бустеры",
+        guide_loc_earn: "Нижнее меню · Гонка",
+        guide_loc_news: "Нижнее меню · Ящики",
+        guide_loc_profile: "Нижнее меню · Профиль",
+        guide_loc_done: "Всё готово",
+        guide_step1_title: "Здесь вы зарабатываете монеты",
+        guide_step1_desc: "Вы на Главной (первая иконка внизу). Нажимайте на большую монету. Лимит: 1 000 монет в день. Это основной доход.",
+        guide_step2_title: "Бустеры ускоряют заработок",
+        guide_step2_desc: "Это вкладка Бустеры (вторая иконка). Смотрите рекламу или тратьте монеты: Авто-тап, Мульти-тап, Щит и др. Каждый бустер работает 30 минут.",
+        guide_step3_title: "Гонка: доп. монеты",
+        guide_step3_desc: "Это вкладка Гонка (третья иконка). Нажмите ИГРАТЬ, уворачивайтесь от машин, собирайте монеты. Улучшайте авто: Главная → Гараж.",
+        guide_step4_title: "Открывайте ящики за рекламу",
+        guide_step4_desc: "Это вкладка Ящики (четвёртая иконка). Смотрите нужное число реклам на карточке, затем открывайте. Ниже есть ежедневные монеты.",
+        guide_step5_title: "Звёзды, подарки и машины",
+        guide_step5_desc: "Это Профиль (пятая иконка). 1) Обмен монет → Звёзды. 2) Маркетплейс — реальные подарки Telegram. 3) Автосалон — новые машины.",
+        guide_step6_title: "Карта приложения",
+        guide_step6_desc: "1 Главная = тап · 2 Бустеры = усиления · 3 Гонка = мини-игра · 4 Ящики = награды за рекламу · 5 Профиль = обмен, подарки, авто. Готово!",
+        onboarding_slide1_title: "Добро пожаловать в TappyStars",
+        onboarding_slide1_desc: "Добывайте монеты каждый день, гоняйте по шоссе и обменивайте на подарки Telegram.",
+        onboarding_slide2_title: "Зарабатывайте и улучшайте",
+        onboarding_slide2_desc: "Играйте в гонку, собирайте монеты и улучшайте авто в гараже!",
+        onboarding_slide3_title: "Маркетплейс",
+        onboarding_slide3_desc: "Тратьте Звёзды на реальные подарки Telegram — они приходят на ваш аккаунт.",
+        onboarding_next: "Далее",
+        onboarding_start: "Начать играть!"
     },
     uz: {
         clicker: "Kliker",
@@ -313,7 +371,36 @@ const TRANSLATIONS = {
         confirm_purchase: "Tasdiqlash va sotib olish",
         cancel: "Bekor qilish",
         username_required: "Iltimos, to‘g‘ri Telegram foydalanuvchi nomini kiriting",
-        gift_success: "Buyurtma qabul qilindi! Sovg‘a 7–10 kun ichida yuboriladi."
+        gift_success: "Buyurtma qabul qilindi! Sovg‘a 7–10 kun ichida yuboriladi.",
+        guide_skip: "O'tkazib yuborish",
+        guide_next: "Keyingi",
+        guide_done: "O'ynashni boshlash!",
+        guide_loc_home: "Pastki menyu · Bosh sahifa",
+        guide_loc_boosters: "Pastki menyu · Busterlar",
+        guide_loc_earn: "Pastki menyu · Poyga",
+        guide_loc_news: "Pastki menyu · Qutilar",
+        guide_loc_profile: "Pastki menyu · Profil",
+        guide_loc_done: "Hammasi tayyor",
+        guide_step1_title: "Tanga shu yerda ishlanadi",
+        guide_step1_desc: "Siz Bosh sahifadasiz (pastdagi 1-ikonka). Katta tangaga bosing. Kunlik limit: 1 000. Bu asosiy daromad.",
+        guide_step2_title: "Busterlar daromadni oshiradi",
+        guide_step2_desc: "Bu Busterlar bo'limi (2-ikonka). Reklama ko'ring yoki tanga sarflang: Avto-klik, Ko'p klik, Qalqon va boshqalar. Har biri 30 daqiqa ishlaydi.",
+        guide_step3_title: "Poyga: qo'shimcha tanga",
+        guide_step3_desc: "Bu Poyga bo'limi (3-ikonka). O'YNASH ni bosing, mashinalardan qoching, oltin tanga yig'ing. Mashinani Bosh sahifa → Garajda yaxshilang.",
+        guide_step4_title: "Qutilar oching",
+        guide_step4_desc: "Bu Qutilar bo'limi (4-ikonka). Sandiqlarni olish uchun reklama ko'ring, keyin oching. Pastda kunlik bepul tangalar ham bor.",
+        guide_step5_title: "Yulduz, sovg'a va mashinalar",
+        guide_step5_desc: "Bu Profil (5-ikonka). 1) Tangani Yulduzga almashtiring. 2) Bozordan haqiqiy Telegram sovg'alar oling 3) Avtosalondan yangi mashinalar sotib oling.",
+        guide_step6_title: "Ilova xaritasi",
+        guide_step6_desc: "1 Bosh = bosish · 2 Busterlar · 3 Poyga · 4 Qutilar = reklama mukofoti · 5 Profil = almashish, sovg'a va mashinalar. Tayyorsiz!",
+        onboarding_slide1_title: "TappyStars ga xush kelibsiz",
+        onboarding_slide1_desc: "Har kuni tanga qazing, yo‘lda poyga qiling va Telegram sovg‘alarini oling.",
+        onboarding_slide2_title: "Daromad va yaxshilash",
+        onboarding_slide2_desc: "Poyga o‘ynang, tanga yig‘ing va garajda mashinani yaxshilang!",
+        onboarding_slide3_title: "Bozor",
+        onboarding_slide3_desc: "Yulduzlarni haqiqiy Telegram sovg‘alariga sarflang — ular hisobingizga yuboriladi.",
+        onboarding_next: "Keyingi",
+        onboarding_start: "O'ynashni boshlash!"
     }
 };
 
@@ -685,6 +772,7 @@ onSnapshot(userRef, async (docSnap) => {
             activeBoosters: {}, 
             cooldowns: {},      
             hasOnboarded: false, 
+            hasCompletedGuide: false,
             hasClaimedWelcome: false,
             lastAutoTapTime: 0,
             ownedCars: ["car_runner"],
@@ -1026,6 +1114,9 @@ function routeUser() {
         document.getElementById('onboarding-modal').style.display = 'flex';
     } else {
         showMainApp();
+        if (!userData.hasCompletedGuide) {
+            setTimeout(() => startGuide(), 500);
+        }
     }
 }
 
@@ -1047,6 +1138,10 @@ window.switchHomeSubTab = (subTab) => {
         document.getElementById('subtab-btn-garage').classList.add('active');
     }
     safeHaptic('selection');
+
+    if (typeof guideActive !== 'undefined' && guideActive && !guideSwitchingTab) {
+        return;
+    }
 };
 
 window.switchGarageCar = async () => {
@@ -1639,6 +1734,11 @@ window.finishOnboarding = async () => {
     await updateDoc(userRef, { hasOnboarded: true });
     document.getElementById('onboarding-modal').style.display = 'none';
     showMainApp();
+    setTimeout(() => {
+        if (userData && !userData.hasCompletedGuide) {
+            startGuide();
+        }
+    }, 400);
 };
 
 window.claimGift = async () => {
@@ -1664,6 +1764,10 @@ window.switchTab = (tabId) => {
     
     safeHaptic('selection');
     if (tabId === 'profile') fetchPurchases();
+
+    if (typeof guideActive !== 'undefined' && guideActive && !guideSwitchingTab) {
+        return;
+    }
 };
 
 document.getElementById('mine-btn')?.addEventListener('click', (e) => {
@@ -2431,6 +2535,9 @@ function applyLanguage() {
 
     updateUI();
     renderProgressUI();
+    if (typeof guideActive !== 'undefined' && guideActive && typeof renderGuideStep === 'function') {
+        renderGuideStep();
+    }
 }
 
 // Window-scoped dropdown controllers for ES module compatibility
@@ -2457,3 +2564,274 @@ document.addEventListener('click', (e) => {
         dropdown.classList.remove('open');
     }
 });
+
+// ==========================================
+// INTERACTIVE NEW-USER GUIDE (SPOTLIGHT)
+// ==========================================
+const GUIDE_STEPS = [
+    {
+        tab: 'home',
+        subTab: 'clicker',
+        navIndex: 0,
+        target: '#mine-btn',
+        circle: true,
+        locationKey: 'guide_loc_home',
+        titleKey: 'guide_step1_title',
+        descKey: 'guide_step1_desc',
+        pad: 14
+    },
+    {
+        tab: 'boosters',
+        navIndex: 1,
+        target: '#boosters .glass-card',
+        locationKey: 'guide_loc_boosters',
+        titleKey: 'guide_step2_title',
+        descKey: 'guide_step2_desc',
+        pad: 10
+    },
+    {
+        tab: 'earn',
+        navIndex: 2,
+        target: '#earn .earn-preview-container, #earn .glass-card',
+        locationKey: 'guide_loc_earn',
+        titleKey: 'guide_step3_title',
+        descKey: 'guide_step3_desc',
+        pad: 10
+    },
+    {
+        tab: 'news',
+        navIndex: 3,
+        target: '#chest-card-small, #chests-container .chest-card',
+        locationKey: 'guide_loc_news',
+        titleKey: 'guide_step4_title',
+        descKey: 'guide_step4_desc',
+        pad: 10
+    },
+    {
+        tab: 'profile',
+        navIndex: 4,
+        target: '#profile .exchange-card, .marketplace-btn',
+        locationKey: 'guide_loc_profile',
+        titleKey: 'guide_step5_title',
+        descKey: 'guide_step5_desc',
+        pad: 10
+    },
+    {
+        tab: 'home',
+        subTab: 'clicker',
+        navIndex: 0,
+        target: null,
+        locationKey: 'guide_loc_done',
+        titleKey: 'guide_step6_title',
+        descKey: 'guide_step6_desc',
+        pad: 0
+    }
+];
+
+let guideIndex = 0;
+let guideActive = false;
+let guideHighlightedEl = null;
+let guideResizeHandler = null;
+let guideSwitchingTab = false;
+
+function queryGuideTarget(selector) {
+    if (!selector) return null;
+    for (const sel of selector.split(',').map(s => s.trim())) {
+        const el = document.querySelector(sel);
+        if (el) return el;
+    }
+    return null;
+}
+
+function clearGuideHighlight() {
+    if (guideHighlightedEl) {
+        guideHighlightedEl.classList.remove('guide-highlight-target');
+        guideHighlightedEl = null;
+    }
+    document.querySelectorAll('.nav-item.guide-nav-active').forEach(el => {
+        el.classList.remove('guide-nav-active');
+    });
+}
+
+function positionGuideUI(step) {
+    const spotlight = document.getElementById('guide-spotlight');
+    const tooltip = document.getElementById('guide-tooltip');
+    if (!spotlight || !tooltip) return;
+
+    const target = step.target ? queryGuideTarget(step.target) : null;
+    clearGuideHighlight();
+
+    if (typeof step.navIndex === 'number') {
+        const navItems = document.querySelectorAll('.nav-item');
+        if (navItems[step.navIndex]) {
+            navItems[step.navIndex].classList.add('guide-nav-active');
+        }
+    }
+
+    // Always keep card above bottom bar
+    tooltip.style.left = '16px';
+    tooltip.style.right = '16px';
+    tooltip.style.bottom = '16px';   // was '100px'
+    tooltip.style.top = 'auto';
+    tooltip.style.transform = 'none';
+
+    if (target) {
+        try {
+            target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        } catch (e) {}
+
+        const rect = target.getBoundingClientRect();
+        const pad = step.pad ?? 10;
+        const top = Math.max(8, rect.top - pad);
+        const left = Math.max(8, rect.left - pad);
+        const width = Math.min(window.innerWidth - 16, rect.width + pad * 2);
+        const maxH = Math.max(60, window.innerHeight - 100 - 16 - top - 8);
+        const height = Math.min(maxH, rect.height + pad * 2);
+
+        spotlight.style.display = 'block';
+        spotlight.style.top = `${top}px`;
+        spotlight.style.left = `${left}px`;
+        spotlight.style.width = `${width}px`;
+        spotlight.style.height = `${height}px`;
+        spotlight.classList.toggle('circle', !!step.circle);
+
+        target.classList.add('guide-highlight-target');
+        guideHighlightedEl = target;
+    } else {
+        spotlight.style.display = 'none';
+    }
+}
+
+function renderGuideStep() {
+    const step = GUIDE_STEPS[guideIndex];
+    if (!step) {
+        endGuide(true);
+        return;
+    }
+
+    guideSwitchingTab = true;
+    try {
+        if (step.tab) window.switchTab(step.tab);
+        if (step.subTab) window.switchHomeSubTab(step.subTab);
+    } finally {
+        guideSwitchingTab = false;
+    }
+
+    const titleEl = document.getElementById('guide-title');
+    const descEl = document.getElementById('guide-desc');
+    const stepEl = document.getElementById('guide-step-indicator');
+    const locEl = document.getElementById('guide-location');
+    const nextBtn = document.getElementById('guide-next-btn');
+    const skipBtn = document.getElementById('guide-skip-btn');
+
+    if (titleEl) titleEl.innerText = t(step.titleKey);
+    if (descEl) descEl.innerText = t(step.descKey);
+    if (stepEl) stepEl.innerText = `${guideIndex + 1} / ${GUIDE_STEPS.length}`;
+    if (locEl) {
+        locEl.innerText = step.locationKey ? t(step.locationKey) : '';
+        locEl.style.display = step.locationKey ? 'inline-flex' : 'none';
+    }
+    if (nextBtn) nextBtn.innerText = guideIndex === GUIDE_STEPS.length - 1 ? t('guide_done') : t('guide_next');
+    if (skipBtn) {
+        skipBtn.innerText = t('guide_skip');
+        skipBtn.style.display = guideIndex === GUIDE_STEPS.length - 1 ? 'none' : 'inline-block';
+    }
+
+    requestAnimationFrame(() => {
+        setTimeout(() => positionGuideUI(step), 160);
+    });
+}
+
+window.startGuide = function() {
+    if (guideActive) return;
+    if (!document.getElementById('guide-overlay')) return;
+
+    guideActive = true;
+    guideIndex = 0;
+    document.body.classList.add('guide-running');
+
+    const overlay = document.getElementById('guide-overlay');
+    overlay.style.display = 'block';
+    overlay.setAttribute('aria-hidden', 'false');
+
+    // Reset any old broken styles on bottom bar
+    const nav = document.getElementById('bottom-nav');
+    if (nav) {
+        nav.style.zIndex = '';
+        nav.style.width = '';
+        nav.style.left = '';
+        nav.style.right = '';
+        nav.classList.remove('guide-highlight-target');
+    }
+
+    guideResizeHandler = () => {
+        if (guideActive) positionGuideUI(GUIDE_STEPS[guideIndex] || {});
+    };
+    window.addEventListener('resize', guideResizeHandler);
+    window.addEventListener('orientationchange', guideResizeHandler);
+
+    renderGuideStep();
+    safeHaptic('selection');
+};
+
+window.nextGuideStep = function() {
+    if (!guideActive) return;
+    guideIndex += 1;
+    if (guideIndex >= GUIDE_STEPS.length) {
+        endGuide(true);
+        return;
+    }
+    renderGuideStep();
+    safeHaptic('selection');
+};
+
+window.skipGuide = function() {
+    endGuide(true);
+};
+
+async function endGuide(markComplete) {
+    if (!guideActive && !markComplete) return;
+    guideActive = false;
+    clearGuideHighlight();
+    document.body.classList.remove('guide-running');
+
+    const overlay = document.getElementById('guide-overlay');
+    if (overlay) {
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    const nav = document.getElementById('bottom-nav');
+    if (nav) {
+        nav.style.zIndex = '';
+        nav.style.width = '';
+        nav.style.left = '';
+        nav.style.right = '';
+        nav.classList.remove('guide-highlight-target');
+    }
+
+    if (guideResizeHandler) {
+        window.removeEventListener('resize', guideResizeHandler);
+        window.removeEventListener('orientationchange', guideResizeHandler);
+        guideResizeHandler = null;
+    }
+
+    try {
+        guideSwitchingTab = true;
+        window.switchTab('home');
+        window.switchHomeSubTab('clicker');
+    } catch (e) {
+    } finally {
+        guideSwitchingTab = false;
+    }
+
+    if (markComplete && userData && userRef) {
+        try {
+            await updateDoc(userRef, { hasCompletedGuide: true });
+            userData.hasCompletedGuide = true;
+        } catch (e) {
+            if (userData) userData.hasCompletedGuide = true;
+        }
+    }
+    safeHaptic('notification', 'success');
+}
