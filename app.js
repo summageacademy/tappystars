@@ -882,7 +882,7 @@ window.buyBoosterAd = async (boosterType) => {
     }
 
     try {
-        const AdController = window.Adsgram.init({ blockId: '43457', debug: false });
+        const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
         await AdController.show().then(async () => {
             const duration = 30 * 60 * 1000;  
             const cooldown = 15 * 60 * 1000;  
@@ -1106,7 +1106,7 @@ window.upgradeCarStatAd = async (stat) => {
     }
 
     try {
-        const AdController = window.Adsgram.init({ blockId: '43457', debug: false });
+        const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
         await AdController.show().then(async () => {
             const currentLvl = userData.carStats?.[stat] || 1;
             const newLvl = currentLvl + 1;
@@ -1607,7 +1607,7 @@ window.showMainMenu = async () => {
 };
 
 window.reviveGameWithAd = async () => {
-    const adSuccess = await window.watchAd('game_revive', '43363', 50);
+    const adSuccess = await window.watchAd('game_revive', '44503', 50);
     
     if (adSuccess) {
         document.getElementById('game-over-screen').style.display = 'none';
@@ -2285,7 +2285,7 @@ window.handleChest = async (type, requiredAds) => {
         return;
     }
 
-    const success = await window.watchAd(`chest_${type}`, '43457', 0);
+    const success = await window.watchAd(`chest_${type}`, '44503', 0);
     
     if (success) {
         const now = Date.now();
@@ -2361,7 +2361,7 @@ window.handleNewsReward = async () => {
     const currentProgress = userData.chestProgress.news || 0;
     const requiredAds = 2;
 
-    const success = await window.watchAd('news_reward', '43457', 0);
+    const success = await window.watchAd('news_reward', '44503', 0);
     
     if (success) {
         const now = Date.now();
