@@ -254,6 +254,29 @@
 
         <!-- NEWS SECTION -->
         <section id="news" class="tab-content">
+            <!-- BEAR RACE PROMO CARD -->
+            <div class="contest-promo" onclick="openContestModal()">
+                <div class="contest-promo-stripe"></div>
+                <div class="contest-promo-body">
+                    <div class="contest-promo-top">
+                        <span class="contest-promo-tag">EVENT</span>
+                        <h2 class="contest-promo-title" data-i18n="contest_title">BEAR RACE</h2>
+                    </div>
+                    <p class="contest-promo-sub" data-i18n="contest_subtitle">TOP 2 COIN KINGS WIN BEAR GIFTS</p>
+                    <div class="contest-promo-prizes">
+                        <div class="contest-promo-bear">
+                            <img src="images/bear.webp" alt="">
+                            <span>1ST</span>
+                        </div>
+                        <div class="contest-promo-vs">VS</div>
+                        <div class="contest-promo-bear">
+                            <img src="images/bear.webp" alt="">
+                            <span>2ND</span>
+                        </div>
+                    </div>
+                    <button class="contest-promo-btn" data-i18n="contest_view">ENTER</button>
+                </div>
+            </div>
             <h3 class="section-title" style="margin-top: 25px;" data-i18n="mystery_chests">Mystery Chests</h3>
             <p style="text-align: center; color: var(--text-muted); font-size: 0.85em; margin-bottom: 15px;" data-i18n="chests_subtitle">Unlock chests for random Coin & Star prizes!</p>
 
@@ -476,6 +499,64 @@
             <div class="reward-amount">+1,000 Coins</div>
             <button class="action-btn primary-btn" onclick="claimGift()">Claim My Bonus</button>
         </div>
+    </div>
+
+    <!-- BEAR RACE CONTEST MODAL -->
+    <div id="contest-modal" class="overlay contest-fullscreen" style="display: none;">
+        <div class="contest-scroll">
+            <div class="contest-header">
+                <span class="contest-header-tag">EVENT</span>
+                <h1 id="contest-modal-title" data-i18n="contest_modal_title">BEAR RACE</h1>
+            </div>
+
+            <!-- PRIZES -->
+            <div class="contest-prizes-block">
+                <h3 id="contest-prizes-title" data-i18n="contest_prizes_title">THE PRIZES</h3>
+                <div class="contest-prizes-row">
+                    <div class="contest-prize-card contest-prize-gold">
+                        <div class="contest-prize-place" id="contest-prize-1-label" data-i18n="contest_prize_1">1ST PLACE</div>
+                        <img src="images/bear.webp" alt="" class="contest-prize-img">
+                        <div class="contest-prize-name" id="contest-prize-1-name" data-i18n="contest_prize_bear">BEAR GIFT</div>
+                    </div>
+                    <div class="contest-prize-card contest-prize-silver">
+                        <div class="contest-prize-place" id="contest-prize-2-label" data-i18n="contest_prize_2">2ND PLACE</div>
+                        <img src="images/bear.webp" alt="" class="contest-prize-img">
+                        <div class="contest-prize-name" id="contest-prize-2-name" data-i18n="contest_prize_bear">BEAR GIFT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEPS / RULES -->
+            <div class="contest-steps">
+                <div class="contest-step">
+                    <div class="contest-step-num" id="contest-step1-num">01</div>
+                    <div class="contest-step-txt" id="contest-step1-txt" data-i18n="contest_step1">Mine coins. Race. Open chests. Stack as many as you can.</div>
+                </div>
+                <div class="contest-step">
+                    <div class="contest-step-num" id="contest-step2-num">02</div>
+                    <div class="contest-step-txt" id="contest-step2-txt" data-i18n="contest_step2">The two players with the most coins take the prizes.</div>
+                </div>
+                <div class="contest-step">
+                    <div class="contest-step-num" id="contest-step3-num">03</div>
+                    <div class="contest-step-txt" id="contest-step3-txt" data-i18n="contest_step3">1st place and 2nd place each get one Bear Gift.</div>
+                </div>
+                <div class="contest-step">
+                    <div class="contest-step-num" id="contest-step4-num">04</div>
+                    <div class="contest-step-txt" id="contest-step4-txt" data-i18n="contest_step4">Winners are announced and gifts are sent after the race ends.</div>
+                </div>
+            </div>
+
+            <!-- YOUR RANK -->
+            <div id="contest-sticky-user" class="contest-sticky"></div>
+
+            <!-- LEADERBOARD -->
+            <h3 id="contest-lb-title" class="contest-lb-heading" data-i18n="contest_leaderboard">COIN KINGS</h3>
+            <div id="contest-leaderboard-list" class="contest-lb-list"></div>
+        </div>
+
+        <nav class="contest-bottom-bar">
+            <button id="contest-back-btn" class="contest-back-btn" onclick="closeContestModal()" data-i18n="contest_back">BACK</button>
+        </nav>
     </div>
 
     <!-- Full-screen Exchange Modal (crypto style) -->

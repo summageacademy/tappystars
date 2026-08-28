@@ -837,3 +837,402 @@ body.guide-running #guide-tooltip,
 body.guide-running #guide-tooltip * {
     pointer-events: auto !important;
 }
+
+/* ========== BEAR RACE — NEO-BRUTALIST / SPIDER-VERSE ========== */
+.contest-promo {
+    position: relative;
+    background: #1C1C1C;
+    border: 4px solid #1C1C1C;
+    box-shadow: 8px 8px 0 #FFD700;
+    border-radius: 0;
+    margin: 12px 0 24px;
+    overflow: hidden;
+    cursor: pointer;
+    transform: rotate(-0.5deg);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.contest-promo:active {
+    transform: rotate(0deg) translate(4px, 4px);
+    box-shadow: 4px 4px 0 #FFD700;
+}
+.contest-promo-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(
+        90deg,
+        #FFD700 0 12px,
+        #1C1C1C 12px 24px,
+        #E74C3C 24px 36px,
+        #1C1C1C 36px 48px
+    );
+}
+.contest-promo-body {
+    padding: 22px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.contest-promo-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.contest-promo-tag {
+    background: #E74C3C;
+    color: #FFFFFF;
+    font-weight: 900;
+    font-size: 0.7em;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border: 2px solid #FFFFFF;
+    transform: rotate(-3deg);
+}
+.contest-promo-title {
+    color: #FFD700;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: 1px;
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.contest-promo-sub {
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+    margin: 0;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+.contest-promo-prizes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 4px 0;
+}
+.contest-promo-bear {
+    background: #FFD700;
+    border: 3px solid #FFFFFF;
+    box-shadow: 4px 4px 0 #000;
+    width: 72px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+.contest-promo-bear img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+.contest-promo-bear span {
+    font-weight: 900;
+    font-size: 0.7em;
+    color: #1C1C1C;
+    letter-spacing: 1px;
+}
+.contest-promo-vs {
+    color: #E74C3C;
+    font-weight: 900;
+    font-size: 1.1em;
+    letter-spacing: 2px;
+}
+.contest-promo-btn {
+    width: 100%;
+    background: #FFD700;
+    color: #1C1C1C;
+    border: 3px solid #FFFFFF;
+    box-shadow: 5px 5px 0 #E74C3C;
+    font-weight: 900;
+    font-size: 1.15em;
+    letter-spacing: 2px;
+    padding: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.contest-promo-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 #E74C3C;
+}
+
+/* FULLSCREEN MODAL */
+.contest-fullscreen {
+    background: #F4F0EB !important;
+    display: none;
+    flex-direction: column;
+    z-index: 2000;
+}
+.contest-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 16px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.contest-header {
+    text-align: center;
+    padding: 8px 0 4px;
+}
+.contest-header-tag {
+    display: inline-block;
+    background: #E74C3C;
+    color: #FFF;
+    font-weight: 900;
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    border: 2px solid #1C1C1C;
+    box-shadow: 3px 3px 0 #1C1C1C;
+    transform: rotate(-2deg);
+    margin-bottom: 8px;
+}
+.contest-header h1 {
+    font-weight: 900;
+    font-size: 2.4em;
+    letter-spacing: 2px;
+    color: #1C1C1C;
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0 #FFD700;
+}
+
+/* PRIZES BLOCK */
+.contest-prizes-block {
+    background: #1C1C1C;
+    border: 4px solid #1C1C1C;
+    box-shadow: 6px 6px 0 #FFD700;
+    padding: 16px;
+}
+.contest-prizes-block h3 {
+    color: #FFD700;
+    font-weight: 900;
+    font-size: 0.9em;
+    letter-spacing: 2px;
+    margin: 0 0 14px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.contest-prizes-row {
+    display: flex;
+    gap: 12px;
+}
+.contest-prize-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px;
+    border: 3px solid #1C1C1C;
+}
+.contest-prize-gold {
+    background: #FFD700;
+    box-shadow: 4px 4px 0 #E74C3C;
+}
+.contest-prize-silver {
+    background: #E8E8E8;
+    box-shadow: 4px 4px 0 #4A90E2;
+}
+.contest-prize-place {
+    font-weight: 900;
+    font-size: 0.75em;
+    letter-spacing: 1.5px;
+    color: #1C1C1C;
+}
+.contest-prize-img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+.contest-prize-name {
+    font-weight: 900;
+    font-size: 0.8em;
+    letter-spacing: 0.5px;
+    color: #1C1C1C;
+}
+
+/* BIG NUMBERED STEPS */
+.contest-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.contest-step {
+    display: flex;
+    align-items: stretch;
+    border: 3px solid #1C1C1C;
+    box-shadow: 4px 4px 0 #1C1C1C;
+    background: #FFFFFF;
+    overflow: hidden;
+}
+.contest-step-num {
+    background: #FFD700;
+    color: #1C1C1C;
+    font-weight: 900;
+    font-size: 1.6em;
+    letter-spacing: -1px;
+    min-width: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 3px solid #1C1C1C;
+    flex-shrink: 0;
+}
+.contest-step:nth-child(2) .contest-step-num { background: #E74C3C; color: #FFF; }
+.contest-step:nth-child(3) .contest-step-num { background: #4A90E2; color: #FFF; }
+.contest-step:nth-child(4) .contest-step-num { background: #1C1C1C; color: #FFD700; }
+.contest-step-txt {
+    padding: 14px 14px;
+    font-weight: 800;
+    font-size: 0.95em;
+    line-height: 1.4;
+    color: #1C1C1C;
+    display: flex;
+    align-items: center;
+}
+
+/* STICKY USER */
+.contest-sticky {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #FFD700;
+    border: 4px solid #1C1C1C;
+    box-shadow: 5px 5px 0 #1C1C1C;
+    padding: 12px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.contest-sticky-rank {
+    background: #1C1C1C;
+    color: #FFD700;
+    font-weight: 900;
+    font-size: 1.2em;
+    padding: 6px 12px;
+    flex-shrink: 0;
+}
+.contest-sticky-info {
+    flex: 1;
+    min-width: 0;
+}
+.contest-sticky-name {
+    font-weight: 900;
+    font-size: 1em;
+    color: #1C1C1C;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.contest-sticky-label {
+    font-weight: 800;
+    font-size: 0.7em;
+    letter-spacing: 1px;
+    color: #444;
+    text-transform: uppercase;
+}
+.contest-sticky-coins {
+    font-weight: 900;
+    font-size: 1.1em;
+    color: #1C1C1C;
+    flex-shrink: 0;
+}
+
+/* LEADERBOARD */
+.contest-lb-heading {
+    font-weight: 900;
+    font-size: 1.15em;
+    letter-spacing: 2px;
+    color: #1C1C1C;
+    margin: 4px 0 0;
+    text-transform: uppercase;
+    border-bottom: 4px solid #1C1C1C;
+    padding-bottom: 6px;
+}
+.contest-lb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.contest-lb-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 3px solid #1C1C1C;
+    box-shadow: 3px 3px 0 #1C1C1C;
+    padding: 12px 12px;
+}
+.contest-lb-gold {
+    background: #FFD700;
+    box-shadow: 4px 4px 0 #E74C3C;
+}
+.contest-lb-silver {
+    background: #E8E8E8;
+    box-shadow: 4px 4px 0 #4A90E2;
+}
+.contest-lb-me {
+    outline: 3px solid #4A90E2;
+    outline-offset: -3px;
+}
+.contest-lb-rank {
+    font-weight: 900;
+    font-size: 1.1em;
+    width: 36px;
+    flex-shrink: 0;
+}
+.contest-lb-name {
+    flex: 1;
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.contest-lb-coins {
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.contest-loading-txt {
+    text-align: center;
+    font-weight: 900;
+    font-size: 1em;
+    letter-spacing: 1px;
+    padding: 30px 0;
+    color: #1C1C1C;
+}
+
+/* BOTTOM BAR */
+.contest-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1C1C1C;
+    border-top: 4px solid #FFD700;
+    padding: 16px 20px;
+    z-index: 2010;
+}
+.contest-back-btn {
+    width: 100%;
+    background: #FFD700;
+    color: #1C1C1C;
+    border: 3px solid #FFFFFF;
+    box-shadow: 4px 4px 0 #E74C3C;
+    font-weight: 900;
+    font-size: 1.15em;
+    letter-spacing: 2px;
+    padding: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.contest-back-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 #E74C3C;
+}

@@ -150,7 +150,31 @@ const TRANSLATIONS = {
         onboarding_slide3_title: "The Marketplace",
         onboarding_slide3_desc: "Spend your Stars on real Telegram Gifts sent directly to your account.",
         onboarding_next: "Next",
-        onboarding_start: "Start Playing"
+        onboarding_start: "Start Playing",
+        contest_title: "Bear Prize Contest",
+        contest_subtitle: "Top 2 coin miners win Bear gifts",
+        contest_view: "View Contest",
+        contest_title: "BEAR RACE",
+        contest_subtitle: "TOP 2 COIN KINGS WIN BEAR GIFTS",
+        contest_view: "ENTER",
+        contest_modal_title: "BEAR RACE",
+        contest_step1_num: "01",
+        contest_step1: "Mine coins. Race. Open chests. Stack as many as you can.",
+        contest_step2_num: "02",
+        contest_step2: "The two players with the most coins take the prizes.",
+        contest_step3_num: "03",
+        contest_step3: "1st place and 2nd place each get one Bear Gift.",
+        contest_step4_num: "04",
+        contest_step4: "Winners are announced and gifts are sent after the race ends.",
+        contest_prizes_title: "THE PRIZES",
+        contest_prize_1: "1ST PLACE",
+        contest_prize_2: "2ND PLACE",
+        contest_prize_bear: "BEAR GIFT",
+        contest_your_rank: "YOUR RANK",
+        contest_leaderboard: "COIN KINGS",
+        contest_loading: "LOADING...",
+        contest_error: "FAILED TO LOAD.",
+        contest_back: "BACK"
     },
     ru: {
         clicker: "Кликер",
@@ -275,7 +299,28 @@ const TRANSLATIONS = {
         onboarding_slide3_title: "Маркетплейс",
         onboarding_slide3_desc: "Тратьте Звёзды на реальные подарки Telegram — они приходят на ваш аккаунт.",
         onboarding_next: "Далее",
-        onboarding_start: "Начать играть!"
+        onboarding_start: "Начать играть!",
+        contest_title: "ГОНКА МЕДВЕДЯ",
+        contest_subtitle: "ТОП-2 ПО МОНЕТАМ ПОЛУЧАЮТ МЕДВЕДЯ",
+        contest_view: "ВОЙТИ",
+        contest_modal_title: "ГОНКА МЕДВЕДЯ",
+        contest_step1_num: "01",
+        contest_step1: "Добывай монеты. Гоняй. Открывай сундуки. Собирай максимум.",
+        contest_step2_num: "02",
+        contest_step2: "Два игрока с наибольшим числом монет забирают призы.",
+        contest_step3_num: "03",
+        contest_step3: "1-е и 2-е места получают по одному подарку Медведь.",
+        contest_step4_num: "04",
+        contest_step4: "Победители объявляются и подарки отправляются после финиша.",
+        contest_prizes_title: "ПРИЗЫ",
+        contest_prize_1: "1 МЕСТО",
+        contest_prize_2: "2 МЕСТО",
+        contest_prize_bear: "МЕДВЕДЬ",
+        contest_your_rank: "ТВОЙ РАНГ",
+        contest_leaderboard: "КОРОЛИ МОНЕТ",
+        contest_loading: "ЗАГРУЗКА...",
+        contest_error: "ОШИБКА ЗАГРУЗКИ.",
+        contest_back: "НАЗАД"
     },
     uz: {
         clicker: "Kliker",
@@ -400,7 +445,28 @@ const TRANSLATIONS = {
         onboarding_slide3_title: "Bozor",
         onboarding_slide3_desc: "Yulduzlarni haqiqiy Telegram sovg‘alariga sarflang — ular hisobingizga yuboriladi.",
         onboarding_next: "Keyingi",
-        onboarding_start: "O'ynashni boshlash!"
+        onboarding_start: "O'ynashni boshlash!",
+        contest_title: "AYIQ POYGASI",
+        contest_subtitle: "ENG KO'P TANGA YIG'GAN 2 O'YINCHI AYIQ OLADI",
+        contest_view: "KIRISH",
+        contest_modal_title: "AYIQ POYGASI",
+        contest_step1_num: "01",
+        contest_step1: "Tanga qazing. Poyga qiling. Sandiq oching. Imkon qadar ko'proq yig'ing.",
+        contest_step2_num: "02",
+        contest_step2: "Eng ko'p tangaga ega ikki o'yinchi sovrinlarni oladi.",
+        contest_step3_num: "03",
+        contest_step3: "1-o'rin va 2-o'rin har biri bitta Ayiq sovg'asini oladi.",
+        contest_step4_num: "04",
+        contest_step4: "G'oliblar e'lon qilinadi va sovg'alar poyga tugagach yuboriladi.",
+        contest_prizes_title: "SOVRINLAR",
+        contest_prize_1: "1-O'RIN",
+        contest_prize_2: "2-O'RIN",
+        contest_prize_bear: "AYIQ SOVG'ASI",
+        contest_your_rank: "SIZNING O'RNINGIZ",
+        contest_leaderboard: "TANGA QIROLLARI",
+        contest_loading: "YUKLANMOQDA...",
+        contest_error: "YUKLAB BO'LMADI.",
+        contest_back: "ORQAGA"
     }
 };
 
@@ -2834,4 +2900,107 @@ async function endGuide(markComplete) {
         }
     }
     safeHaptic('notification', 'success');
+}
+
+// ==========================================
+// BEAR RACE CONTEST
+// ==========================================
+window.openContestModal = async () => {
+    const modal = document.getElementById('contest-modal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    document.getElementById('bottom-nav').style.display = 'none';
+    document.getElementById('top-bar').style.display = 'none';
+
+    const setText = (id, key) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = t(key);
+    };
+    setText('contest-modal-title', 'contest_modal_title');
+    setText('contest-step1-num', 'contest_step1_num');
+    setText('contest-step1-txt', 'contest_step1');
+    setText('contest-step2-num', 'contest_step2_num');
+    setText('contest-step2-txt', 'contest_step2');
+    setText('contest-step3-num', 'contest_step3_num');
+    setText('contest-step3-txt', 'contest_step3');
+    setText('contest-step4-num', 'contest_step4_num');
+    setText('contest-step4-txt', 'contest_step4');
+    setText('contest-prizes-title', 'contest_prizes_title');
+    setText('contest-prize-1-label', 'contest_prize_1');
+    setText('contest-prize-2-label', 'contest_prize_2');
+    setText('contest-prize-1-name', 'contest_prize_bear');
+    setText('contest-prize-2-name', 'contest_prize_bear');
+    setText('contest-lb-title', 'contest_leaderboard');
+    setText('contest-back-btn', 'contest_back');
+
+    await fetchContestLeaderboard();
+};
+
+window.closeContestModal = () => {
+    document.getElementById('contest-modal').style.display = 'none';
+    document.getElementById('bottom-nav').style.display = 'flex';
+    document.getElementById('top-bar').style.display = 'flex';
+};
+
+async function fetchContestLeaderboard() {
+    const listEl = document.getElementById('contest-leaderboard-list');
+    const stickyEl = document.getElementById('contest-sticky-user');
+    if (!listEl) return;
+
+    listEl.innerHTML = `<p class="contest-loading-txt">${t('contest_loading')}</p>`;
+
+    const coinSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" style="width:15px;height:15px;vertical-align:middle;margin-left:3px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>`;
+
+    try {
+        await syncCoinsToDatabase();
+        const q = query(collection(db, "users"), orderBy("coins", "desc"), limit(50));
+        const querySnapshot = await getDocs(q);
+
+        let html = '';
+        let rank = 1;
+        let myRank = "50+";
+        let myData = userData || { name: user.first_name, coins: 0 };
+        const myId = user.id.toString();
+
+        querySnapshot.forEach(docSnap => {
+            const u = docSnap.data();
+            const isMe = docSnap.id === myId;
+            const coins = u.coins || 0;
+            if (isMe) {
+                myRank = rank;
+                myData = u;
+            }
+
+            let rowClass = 'contest-lb-row';
+            if (rank === 1) rowClass += ' contest-lb-gold';
+            else if (rank === 2) rowClass += ' contest-lb-silver';
+            if (isMe) rowClass += ' contest-lb-me';
+
+            html += `
+                <div class="${rowClass}">
+                    <span class="contest-lb-rank">#${rank}</span>
+                    <span class="contest-lb-name">${u.name || 'Unknown'}</span>
+                    <span class="contest-lb-coins">${coins.toLocaleString()}${coinSvg}</span>
+                </div>
+            `;
+            rank++;
+        });
+
+        if (stickyEl) {
+            const myCoins = myData.coins || 0;
+            stickyEl.innerHTML = `
+                <span class="contest-sticky-rank">#${myRank}</span>
+                <div class="contest-sticky-info">
+                    <div class="contest-sticky-name">${myData.name || user.first_name || 'You'}</div>
+                    <div class="contest-sticky-label">${t('contest_your_rank')}</div>
+                </div>
+                <span class="contest-sticky-coins">${myCoins.toLocaleString()}${coinSvg}</span>
+            `;
+        }
+
+        listEl.innerHTML = html || `<p class="contest-loading-txt">${t('contest_error')}</p>`;
+    } catch (e) {
+        console.error(e);
+        listEl.innerHTML = `<p class="contest-loading-txt">${t('contest_error')}</p>`;
+    }
 }
