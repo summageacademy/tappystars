@@ -960,20 +960,28 @@ body.guide-running #guide-tooltip * {
     box-shadow: 2px 2px 0 #E74C3C;
 }
 
-/* FULLSCREEN MODAL */
 .contest-fullscreen {
     background: #F4F0EB !important;
     display: none;
     flex-direction: column;
     z-index: 2000;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
 }
 .contest-scroll {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 16px 100px;
+    overflow-x: hidden;
+    padding: 16px 20px 110px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .contest-header {
     text-align: center;
@@ -994,13 +1002,14 @@ body.guide-running #guide-tooltip * {
 }
 .contest-header h1 {
     font-weight: 900;
-    font-size: 2.4em;
+    font-size: clamp(1.8em, 8vw, 2.4em);
     letter-spacing: 2px;
     color: #1C1C1C;
     margin: 0;
     line-height: 1;
     text-transform: uppercase;
     text-shadow: 3px 3px 0 #FFD700;
+    word-break: break-word;
 }
 
 /* PRIZES BLOCK */
@@ -1008,7 +1017,10 @@ body.guide-running #guide-tooltip * {
     background: #1C1C1C;
     border: 4px solid #1C1C1C;
     box-shadow: 6px 6px 0 #FFD700;
-    padding: 16px;
+    padding: 14px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .contest-prizes-block h3 {
     color: #FFD700;
@@ -1021,16 +1033,20 @@ body.guide-running #guide-tooltip * {
 }
 .contest-prizes-row {
     display: flex;
-    gap: 12px;
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
 }
 .contest-prize-card {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    padding: 14px 8px;
+    padding: 12px 6px;
     border: 3px solid #1C1C1C;
+    box-sizing: border-box;
 }
 .contest-prize-gold {
     background: #FFD700;
@@ -1063,6 +1079,8 @@ body.guide-running #guide-tooltip * {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+    max-width: 100%;
 }
 .contest-step {
     display: flex;
@@ -1071,14 +1089,18 @@ body.guide-running #guide-tooltip * {
     box-shadow: 4px 4px 0 #1C1C1C;
     background: #FFFFFF;
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .contest-step-num {
     background: #FFD700;
     color: #1C1C1C;
     font-weight: 900;
-    font-size: 1.6em;
+    font-size: 1.5em;
     letter-spacing: -1px;
-    min-width: 56px;
+    min-width: 48px;
+    width: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1089,34 +1111,39 @@ body.guide-running #guide-tooltip * {
 .contest-step:nth-child(3) .contest-step-num { background: #4A90E2; color: #FFF; }
 .contest-step:nth-child(4) .contest-step-num { background: #1C1C1C; color: #FFD700; }
 .contest-step-txt {
-    padding: 14px 14px;
+    padding: 12px 12px;
     font-weight: 800;
-    font-size: 0.95em;
+    font-size: 0.9em;
     line-height: 1.4;
     color: #1C1C1C;
     display: flex;
     align-items: center;
+    min-width: 0;
+    flex: 1;
 }
 
 /* STICKY USER */
 .contest-sticky {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     background: #FFD700;
     border: 4px solid #1C1C1C;
     box-shadow: 5px 5px 0 #1C1C1C;
-    padding: 12px 14px;
+    padding: 10px 12px;
     position: sticky;
     top: 0;
     z-index: 5;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .contest-sticky-rank {
     background: #1C1C1C;
     color: #FFD700;
     font-weight: 900;
-    font-size: 1.2em;
-    padding: 6px 12px;
+    font-size: 1.1em;
+    padding: 6px 10px;
     flex-shrink: 0;
 }
 .contest-sticky-info {
@@ -1125,7 +1152,7 @@ body.guide-running #guide-tooltip * {
 }
 .contest-sticky-name {
     font-weight: 900;
-    font-size: 1em;
+    font-size: 0.95em;
     color: #1C1C1C;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1140,7 +1167,7 @@ body.guide-running #guide-tooltip * {
 }
 .contest-sticky-coins {
     font-weight: 900;
-    font-size: 1.1em;
+    font-size: 1.05em;
     color: #1C1C1C;
     flex-shrink: 0;
 }
@@ -1160,15 +1187,20 @@ body.guide-running #guide-tooltip * {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
 }
 .contest-lb-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: #FFFFFF;
     border: 3px solid #1C1C1C;
     box-shadow: 3px 3px 0 #1C1C1C;
-    padding: 12px 12px;
+    padding: 10px 10px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .contest-lb-gold {
     background: #FFD700;
