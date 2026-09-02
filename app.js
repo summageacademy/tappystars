@@ -3004,3 +3004,199 @@ async function fetchContestLeaderboard() {
         listEl.innerHTML = `<p class="contest-loading-txt">${t('contest_error')}</p>`;
     }
 }
+
+// ==========================================
+// YULDASHEV x TAPPY STARS PARTNER LANDING
+// ==========================================
+const PARTNER_MAX_CLAIMS = 2;
+
+function isPartnerEntry() {
+    try {
+        const startParam = (tg.initDataUnsafe?.start_param || "").toString().toLowerCase();
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = (urlParams.get("id") || urlParams.get("startapp") || urlParams.get("start_param") || "").toLowerCase();
+        const hash = (window.location.hash || "").toLowerCase();
+        return (
+            startParam.includes("shaxruz") ||
+            idParam.includes("shaxruz") ||
+            hash.includes("shaxruz") ||
+            window.location.href.toLowerCase().includes("shaxruz")
+        );
+    } catch (e) {
+        return false;
+    }
+}
+
+let partnerMode = false;
+let partnerLastWin = null;
+
+function updatePartnerClaimsUI() {
+    const used = userData?.partnerClaimsCount || 0;
+    const left = Math.max(0, PARTNER_MAX_CLAIMS - used);
+    const leftEl = document.getElementById("partner-claims-left");
+    const btn = document.getElementById("partner-claim-btn");
+    if (leftEl) {
+        leftEl.innerText = left === 1 ? "1 ta imkoniyat qoldi" : `${left} ta imkoniyat qoldi`;
+    }
+    if (btn) {
+        if (left <= 0) {
+            btn.disabled = true;
+            btn.innerText = "LIMIT TUGADI";
+        } else {
+            btn.disabled = false;
+            btn.innerText = "REKLAMA KO'RIB OLISH";
+        }
+    }
+}
+
+window.showPartnerPage = async function() {
+    partnerMode = true;
+    ["onboarding-modal", "top-bar", "app-content", "bottom-nav", "guide-overlay"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+    });
+
+    const page = document.getElementById("partner-page");
+    if (page) {
+        page.classList.add("active");
+        page.style.display = "flex";
+    }
+
+    updatePartnerClaimsUI();
+
+    if ((userData?.partnerClaimsCount || 0) > 0 || partnerLastWin) {
+        const bar = document.getElementById("partner-bottom-bar");
+        if (bar) bar.classList.add("show");
+    }
+};
+
+window.claimPartnerGift = async function() {
+    if (!userData || !userRef) {
+        safeAlert("Profil yuklanmoqda…");
+        return;
+    }
+
+    const used = userData.partnerClaimsCount || 0;
+    if (used >= PARTNER_MAX_CLAIMS) {
+        safeAlert("Siz allaqachon 2 ta imkoniyatdan foydalandingiz.");
+        updatePartnerClaimsUI();
+        return;
+    }
+
+    const btn = document.getElementById("partner-claim-btn");
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "KUTILMOQDA…";
+    }
+
+    const success = await window.watchAd("partner_yuldashev", "44503", 0);
+
+    if (!success) {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = "REKLAMA KO'RIB OLISH";
+        }
+        return;
+    }
+
+    const roll = Math.random();
+    let prizeType = "coins";
+    let amount = 150;
+    if (roll < 0.08) {
+        prizeType = "stars";
+        amount = 1;
+    } else if (roll < 0.35) {
+        amount = 300;
+    } else if (roll < 0.65) {
+        amount = 200;
+    } else {
+        amount = 150;
+    }
+
+    const now = Date.now();
+    const newCount = used + 1;
+
+    try {
+        const userUpdates = {
+            partnerClaimsCount: newCount,
+            [`cooldowns.ad_partner_yuldashev`]: now + (5 * 60 * 1000)
+        };
+        if (prizeType === "stars") {
+            userUpdates.stars = increment(amount);
+            userData.stars = (userData.stars || 0) + amount;
+        } else {
+            userUpdates.coins = increment(amount);
+            userData.coins = (userData.coins || 0) + amount;
+        }
+        userData.partnerClaimsCount = newCount;
+        await updateDoc(userRef, userUpdates);
+
+        await addDoc(collection(db, "partner_wins"), {
+            userId: user.id.toString(),
+            telegramId: user.id.toString(),
+            name: userData.name || user.first_name || "Unknown",
+            prizeType,
+            amount,
+            partner: "yuldashev",
+            timestamp: new Date().toISOString()
+        });
+
+        partnerLastWin = { prizeType, amount };
+
+        const box = document.getElementById("partner-reward-box");
+        const amt = document.getElementById("partner-reward-amount");
+        if (amt) {
+            amt.innerText = prizeType === "stars"
+                ? `+${amount} ⭐`
+                : `+${amount.toLocaleString()} tanga`;
+        }
+        if (box) box.classList.add("show");
+
+        const bar = document.getElementById("partner-bottom-bar");
+        if (bar) bar.classList.add("show");
+
+        updatePartnerClaimsUI();
+        updateUI();
+        safeHaptic("notification", "success");
+    } catch (err) {
+        console.error(err);
+        safeAlert("Xatolik yuz berdi. Qayta urinib ko'ring.");
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = "REKLAMA KO'RIB OLISH";
+        }
+    }
+};
+
+window.collectPartnerBonuses = function() {
+    const page = document.getElementById("partner-page");
+    if (page) {
+        page.classList.remove("active");
+        page.style.display = "none";
+    }
+    partnerMode = false;
+
+    if (userData?.hasOnboarded) {
+        showMainApp();
+        window.switchTab("home");
+    } else {
+        updateDoc(userRef, { hasOnboarded: true }).then(() => {
+            if (userData) userData.hasOnboarded = true;
+            showMainApp();
+            window.switchTab("home");
+        }).catch(() => {
+            showMainApp();
+            window.switchTab("home");
+        });
+    }
+    safeHaptic("selection");
+};
+
+const _originalRouteUser = typeof routeUser === "function" ? routeUser : function() {};
+routeUser = function() {
+    if (isPartnerEntry()) {
+        showPartnerPage();
+        return;
+    }
+    _originalRouteUser();
+};
