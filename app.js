@@ -3006,43 +3006,137 @@ async function fetchContestLeaderboard() {
 }
 
 // ==========================================
-// YULDASHEV x TAPPY STARS PARTNER LANDING
+// PARTNER LANDING (YULDASHEV / ABDURASHIDOV)
 // ==========================================
 const PARTNER_MAX_CLAIMS = 2;
+const PARTNER_RESET_MS = 30 * 60 * 1000; // 30 minutes
+
+const PARTNER_CONFIG = {
+    yuldashev: {
+        keys: ["shaxruz", "yuldashev"],
+        titleHtml: 'YULDASHEV<br><span class="partner-x">×</span><br>TAPPY STARS',
+        tag: "RASMIY HAMKOR",
+        partnerId: "yuldashev"
+    },
+    abdurashidov: {
+        keys: ["abdurashidov"],
+        titleHtml: 'ABDURASHIDOV<br><span class="partner-x">×</span><br>TAPPY STARS',
+        tag: "RASMIY HAMKOR",
+        partnerId: "abdurashidov"
+    }
+};
+
+let currentPartnerId = null;
+let partnerMode = false;
+let partnerLastWin = null;
+let partnerTimerInterval = null;
+
+function detectPartnerId() {
+    try {
+        const blobs = [
+            (tg.initDataUnsafe?.start_param || "").toString().toLowerCase(),
+            (new URLSearchParams(window.location.search).get("id") || "").toLowerCase(),
+            (new URLSearchParams(window.location.search).get("startapp") || "").toLowerCase(),
+            (new URLSearchParams(window.location.search).get("start_param") || "").toLowerCase(),
+            (window.location.hash || "").toLowerCase(),
+            (window.location.href || "").toLowerCase()
+        ].join(" ");
+
+        for (const [id, cfg] of Object.entries(PARTNER_CONFIG)) {
+            if (cfg.keys.some(k => blobs.includes(k))) return id;
+        }
+    } catch (e) {}
+    return null;
+}
 
 function isPartnerEntry() {
-    try {
-        const startParam = (tg.initDataUnsafe?.start_param || "").toString().toLowerCase();
-        const urlParams = new URLSearchParams(window.location.search);
-        const idParam = (urlParams.get("id") || urlParams.get("startapp") || urlParams.get("start_param") || "").toLowerCase();
-        const hash = (window.location.hash || "").toLowerCase();
-        return (
-            startParam.includes("shaxruz") ||
-            idParam.includes("shaxruz") ||
-            hash.includes("shaxruz") ||
-            window.location.href.toLowerCase().includes("shaxruz")
-        );
-    } catch (e) {
-        return false;
+    return !!detectPartnerId();
+}
+
+function getPartnerClaimState(partnerId) {
+    const raw = userData?.partnerClaims || {};
+    // migrate legacy single counter
+    if (!userData?.partnerClaims && (userData?.partnerClaimsCount || 0) > 0 && partnerId === "yuldashev") {
+        return {
+            count: userData.partnerClaimsCount || 0,
+            resetAt: userData.partnerClaimsResetAt || 0
+        };
+    }
+    const entry = raw[partnerId] || {};
+    return {
+        count: entry.count || 0,
+        resetAt: entry.resetAt || 0
+    };
+}
+
+function getEffectiveClaimState(partnerId) {
+    const state = getPartnerClaimState(partnerId);
+    const now = Date.now();
+    if (state.count >= PARTNER_MAX_CLAIMS && state.resetAt && now >= state.resetAt) {
+        return { count: 0, resetAt: 0, justReset: true };
+    }
+    return { ...state, justReset: false };
+}
+
+function formatPartnerCountdown(ms) {
+    const totalSec = Math.max(0, Math.ceil(ms / 1000));
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function stopPartnerTimer() {
+    if (partnerTimerInterval) {
+        clearInterval(partnerTimerInterval);
+        partnerTimerInterval = null;
     }
 }
 
-let partnerMode = false;
-let partnerLastWin = null;
-
 function updatePartnerClaimsUI() {
-    const used = userData?.partnerClaimsCount || 0;
+    if (!currentPartnerId) return;
+    const state = getEffectiveClaimState(currentPartnerId);
+    const used = state.count;
     const left = Math.max(0, PARTNER_MAX_CLAIMS - used);
     const leftEl = document.getElementById("partner-claims-left");
     const btn = document.getElementById("partner-claim-btn");
+    const timerEl = document.getElementById("partner-timer");
+    const now = Date.now();
+
+    stopPartnerTimer();
+
     if (leftEl) {
         leftEl.innerText = left === 1 ? "1 ta imkoniyat qoldi" : `${left} ta imkoniyat qoldi`;
     }
-    if (btn) {
-        if (left <= 0) {
+
+    if (left <= 0 && state.resetAt > now) {
+        if (btn) {
             btn.disabled = true;
             btn.innerText = "LIMIT TUGADI";
-        } else {
+        }
+        if (timerEl) {
+            timerEl.style.display = "block";
+            const tick = () => {
+                const remain = state.resetAt - Date.now();
+                if (remain <= 0) {
+                    stopPartnerTimer();
+                    if (userData) {
+                        if (!userData.partnerClaims) userData.partnerClaims = {};
+                        userData.partnerClaims[currentPartnerId] = { count: 0, resetAt: 0 };
+                    }
+                    updatePartnerClaimsUI();
+                    return;
+                }
+                timerEl.innerText = `Qayta ochiladi: ${formatPartnerCountdown(remain)}`;
+            };
+            tick();
+            partnerTimerInterval = setInterval(tick, 1000);
+        }
+    } else {
+        if (timerEl) {
+            timerEl.style.display = "none";
+            timerEl.innerText = "";
+        }
+        if (btn) {
             btn.disabled = false;
             btn.innerText = "REKLAMA KO'RIB OLISH";
         }
@@ -3051,10 +3145,20 @@ function updatePartnerClaimsUI() {
 
 window.showPartnerPage = async function() {
     partnerMode = true;
+    currentPartnerId = detectPartnerId();
+    if (!currentPartnerId) currentPartnerId = "yuldashev";
+
+    const cfg = PARTNER_CONFIG[currentPartnerId];
+
     ["onboarding-modal", "top-bar", "app-content", "bottom-nav", "guide-overlay"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = "none";
     });
+
+    const titleEl = document.getElementById("partner-brand-title");
+    const tagEl = document.getElementById("partner-brand-tag");
+    if (titleEl && cfg) titleEl.innerHTML = cfg.titleHtml;
+    if (tagEl && cfg) tagEl.innerText = cfg.tag;
 
     const page = document.getElementById("partner-page");
     if (page) {
@@ -3062,9 +3166,16 @@ window.showPartnerPage = async function() {
         page.style.display = "flex";
     }
 
+    const eff = getEffectiveClaimState(currentPartnerId);
+    if (eff.justReset && userData) {
+        if (!userData.partnerClaims) userData.partnerClaims = {};
+        userData.partnerClaims[currentPartnerId] = { count: 0, resetAt: 0 };
+    }
+
     updatePartnerClaimsUI();
 
-    if ((userData?.partnerClaimsCount || 0) > 0 || partnerLastWin) {
+    const used = getEffectiveClaimState(currentPartnerId).count;
+    if (used > 0 || partnerLastWin) {
         const bar = document.getElementById("partner-bottom-bar");
         if (bar) bar.classList.add("show");
     }
@@ -3075,10 +3186,22 @@ window.claimPartnerGift = async function() {
         safeAlert("Profil yuklanmoqda…");
         return;
     }
+    if (!currentPartnerId) currentPartnerId = detectPartnerId() || "yuldashev";
 
-    const used = userData.partnerClaimsCount || 0;
-    if (used >= PARTNER_MAX_CLAIMS) {
-        safeAlert("Siz allaqachon 2 ta imkoniyatdan foydalandingiz.");
+    let state = getEffectiveClaimState(currentPartnerId);
+    if (state.justReset) {
+        if (!userData.partnerClaims) userData.partnerClaims = {};
+        userData.partnerClaims[currentPartnerId] = { count: 0, resetAt: 0 };
+        state = { count: 0, resetAt: 0 };
+    }
+
+    if (state.count >= PARTNER_MAX_CLAIMS) {
+        const now = Date.now();
+        if (state.resetAt > now) {
+            safeAlert(`Imkoniyatlar tugadi. ${formatPartnerCountdown(state.resetAt - now)} dan keyin qayta ochiladi.`);
+        } else {
+            safeAlert("Siz allaqachon 2 ta imkoniyatdan foydalandingiz.");
+        }
         updatePartnerClaimsUI();
         return;
     }
@@ -3089,7 +3212,7 @@ window.claimPartnerGift = async function() {
         btn.innerText = "KUTILMOQDA…";
     }
 
-    const success = await window.watchAd("partner_yuldashev", "44503", 0);
+    const success = await window.watchAd(`partner_${currentPartnerId}`, "44503", 0);
 
     if (!success) {
         if (btn) {
@@ -3114,12 +3237,14 @@ window.claimPartnerGift = async function() {
     }
 
     const now = Date.now();
-    const newCount = used + 1;
+    const newCount = state.count + 1;
+    const newResetAt = newCount >= PARTNER_MAX_CLAIMS ? (now + PARTNER_RESET_MS) : (state.resetAt || 0);
 
     try {
         const userUpdates = {
-            partnerClaimsCount: newCount,
-            [`cooldowns.ad_partner_yuldashev`]: now + (5 * 60 * 1000)
+            [`partnerClaims.${currentPartnerId}.count`]: newCount,
+            [`partnerClaims.${currentPartnerId}.resetAt`]: newResetAt,
+            [`cooldowns.ad_partner_${currentPartnerId}`]: now + (5 * 60 * 1000)
         };
         if (prizeType === "stars") {
             userUpdates.stars = increment(amount);
@@ -3128,7 +3253,10 @@ window.claimPartnerGift = async function() {
             userUpdates.coins = increment(amount);
             userData.coins = (userData.coins || 0) + amount;
         }
-        userData.partnerClaimsCount = newCount;
+
+        if (!userData.partnerClaims) userData.partnerClaims = {};
+        userData.partnerClaims[currentPartnerId] = { count: newCount, resetAt: newResetAt };
+
         await updateDoc(userRef, userUpdates);
 
         await addDoc(collection(db, "partner_wins"), {
@@ -3137,7 +3265,7 @@ window.claimPartnerGift = async function() {
             name: userData.name || user.first_name || "Unknown",
             prizeType,
             amount,
-            partner: "yuldashev",
+            partner: currentPartnerId,
             timestamp: new Date().toISOString()
         });
 
@@ -3169,6 +3297,7 @@ window.claimPartnerGift = async function() {
 };
 
 window.collectPartnerBonuses = function() {
+    stopPartnerTimer();
     const page = document.getElementById("partner-page");
     if (page) {
         page.classList.remove("active");

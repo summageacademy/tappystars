@@ -1269,7 +1269,7 @@ body.guide-running #guide-tooltip * {
     box-shadow: 1px 1px 0 #E74C3C;
 }
 
-/* ========== YULDASHEV x TAPPY STARS PARTNER PAGE ========== */
+/* ========== PARTNER LANDING (YULDASHEV / ABDURASHIDOV) ========== */
 .partner-page {
     position: fixed;
     inset: 0;
@@ -1374,6 +1374,18 @@ body.guide-running #guide-tooltip * {
     letter-spacing: 0.5px;
     color: #E74C3C;
     text-transform: uppercase;
+}
+.partner-timer {
+    font-weight: 900;
+    font-size: 0.78em;
+    letter-spacing: 0.5px;
+    color: #FFD700;
+    text-transform: uppercase;
+    background: #1C1C1C;
+    border: 2px solid #FFD700;
+    padding: 6px 10px;
+    width: 100%;
+    text-align: center;
 }
 .partner-claim-btn {
     width: 100%;

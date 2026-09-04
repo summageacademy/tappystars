@@ -704,26 +704,37 @@
         </div>
     </div>
 
-        <!-- YULDASHEV x TAPPY STARS PARTNER PAGE -->
+    <!-- PARTNER LANDING (YULDASHEV / ABDURASHIDOV) -->
     <div id="partner-page" class="partner-page">
         <div class="partner-inner">
             <div class="partner-brand">
-                <div class="partner-brand-tag">RASMIY HAMKOR</div>
-                <h1 class="partner-brand-title">YULDASHEV<br><span class="partner-x">×</span><br>TAPPY STARS</h1>
+                <div class="partner-brand-tag" id="partner-brand-tag">RASMIY HAMKOR</div>
+                <h1 class="partner-brand-title" id="partner-brand-title">YULDASHEV<br><span class="partner-x">×</span><br>TAPPY STARS</h1>
             </div>
 
             <div class="partner-gift-machine">
                 <div class="partner-gift-icon" aria-hidden="true">
                     <svg viewBox="0 0 64 64" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="4" width="56" height="56" rx="8" fill="#1C1C1C" stroke="#FFD700" stroke-width="4"/>
-                        <path d="M20 38 L32 18 L44 38 Z" fill="#FFD700" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
-                        <circle cx="32" cy="42" r="6" fill="#E74C3C" stroke="#FFFFFF" stroke-width="2"/>
-                        <path d="M26 28 H38" stroke="#1C1C1C" stroke-width="3" stroke-linecap="round"/>
+                        <!-- gift box base -->
+                        <rect x="10" y="28" width="44" height="28" rx="3" fill="#E74C3C" stroke="#1C1C1C" stroke-width="3"/>
+                        <!-- lid -->
+                        <rect x="8" y="20" width="48" height="12" rx="2" fill="#C0392B" stroke="#1C1C1C" stroke-width="3"/>
+                        <!-- vertical ribbon -->
+                        <rect x="28" y="20" width="8" height="36" fill="#FFD700" stroke="#1C1C1C" stroke-width="2"/>
+                        <!-- horizontal ribbon on lid -->
+                        <rect x="8" y="24" width="48" height="5" fill="#FFD700" stroke="#1C1C1C" stroke-width="1.5"/>
+                        <!-- bow left -->
+                        <path d="M32 20 C24 8 14 12 20 18 C24 20 28 18 32 20Z" fill="#FFD700" stroke="#1C1C1C" stroke-width="2"/>
+                        <!-- bow right -->
+                        <path d="M32 20 C40 8 50 12 44 18 C40 20 36 18 32 20Z" fill="#FFD700" stroke="#1C1C1C" stroke-width="2"/>
+                        <!-- bow center knot -->
+                        <circle cx="32" cy="20" r="3.5" fill="#F5A623" stroke="#1C1C1C" stroke-width="2"/>
                     </svg>
                 </div>
                 <h2 class="partner-gift-title">Hamkor sovg'asi</h2>
-                <p class="partner-gift-desc">1 ta reklama ko'ring va bepul sovg'a oling</p>
+                <p class="partner-gift-desc">Reklama ko'ring va coins yoki stars oling</p>
                 <div class="partner-claims-left" id="partner-claims-left">2 ta imkoniyat qoldi</div>
+                <div class="partner-timer" id="partner-timer" style="display:none;"></div>
                 <button class="partner-claim-btn" id="partner-claim-btn" onclick="claimPartnerGift()">REKLAMA KO'RIB OLISH</button>
             </div>
 
