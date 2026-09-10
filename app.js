@@ -3023,6 +3023,12 @@ const PARTNER_CONFIG = {
         titleHtml: 'ABDURASHIDOV<br><span class="partner-x">×</span><br>TAPPY STARS',
         tag: "RASMIY HAMKOR",
         partnerId: "abdurashidov"
+    },
+    kirakai: {
+        keys: ["kira", "kai", "kirakai", "kira kai", "kira_kai"],
+        titleHtml: 'KIRA KAI<br><span class="partner-x">×</span><br>TAPPY STARS',
+        tag: "RASMIY HAMKOR",
+        partnerId: "kirakai"
     }
 };
 
@@ -3271,14 +3277,8 @@ window.claimPartnerGift = async function() {
 
         partnerLastWin = { prizeType, amount };
 
-        const box = document.getElementById("partner-reward-box");
-        const amt = document.getElementById("partner-reward-amount");
-        if (amt) {
-            amt.innerText = prizeType === "stars"
-                ? `+${amount} ⭐`
-                : `+${amount.toLocaleString()} tanga`;
-        }
-        if (box) box.classList.add("show");
+        // Exciting animated reveal
+        playPartnerRewardReveal(prizeType, amount);
 
         const bar = document.getElementById("partner-bottom-bar");
         if (bar) bar.classList.add("show");
@@ -3296,6 +3296,47 @@ window.claimPartnerGift = async function() {
     }
 };
 
+function playPartnerRewardReveal(prizeType, amount) {
+    const box = document.getElementById("partner-reward-box");
+    const amt = document.getElementById("partner-reward-amount");
+    const iconEl = document.getElementById("partner-reward-icon");
+    const confettiHost = document.getElementById("partner-confetti");
+
+    if (amt) {
+        amt.innerText = prizeType === "stars"
+            ? `+${amount} ⭐`
+            : `+${amount.toLocaleString()} tanga`;
+    }
+    if (iconEl) {
+        iconEl.innerHTML = prizeType === "stars"
+            ? `<svg viewBox="0 0 24 24" width="48" height="48" fill="#F5A623"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+            : `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#4A90E2" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>`;
+    }
+
+    if (box) {
+        box.classList.remove("show", "reveal-pop");
+        void box.offsetWidth; // reflow for re-trigger
+        box.classList.add("show", "reveal-pop");
+    }
+
+    // Confetti burst
+    if (confettiHost) {
+        confettiHost.innerHTML = "";
+        const colors = ["#FFD700", "#E74C3C", "#4A90E2", "#2ECC71", "#FFFFFF", "#F5A623"];
+        for (let i = 0; i < 28; i++) {
+            const p = document.createElement("span");
+            p.className = "partner-confetti-piece";
+            p.style.setProperty("--x", (Math.random() * 160 - 80) + "px");
+            p.style.setProperty("--y", (Math.random() * -120 - 40) + "px");
+            p.style.setProperty("--r", (Math.random() * 360) + "deg");
+            p.style.setProperty("--c", colors[i % colors.length]);
+            p.style.setProperty("--d", (Math.random() * 0.35) + "s");
+            confettiHost.appendChild(p);
+        }
+        setTimeout(() => { confettiHost.innerHTML = ""; }, 1600);
+    }
+}
+
 window.collectPartnerBonuses = function() {
     stopPartnerTimer();
     const page = document.getElementById("partner-page");
@@ -3305,20 +3346,28 @@ window.collectPartnerBonuses = function() {
     }
     partnerMode = false;
 
-    if (userData?.hasOnboarded) {
+    const finish = () => {
+        if (userData) {
+            userData.hasOnboarded = true;
+            userData.hasCompletedGuide = true;
+        }
         showMainApp();
+        updateUI();
         window.switchTab("home");
+        safeHaptic("selection");
+    };
+
+    if (userData?.hasOnboarded) {
+        // still mark guide complete so they never see the spotlight tour
+        if (userRef && !userData.hasCompletedGuide) {
+            updateDoc(userRef, { hasCompletedGuide: true }).catch(() => {});
+        }
+        finish();
     } else {
-        updateDoc(userRef, { hasOnboarded: true }).then(() => {
-            if (userData) userData.hasOnboarded = true;
-            showMainApp();
-            window.switchTab("home");
-        }).catch(() => {
-            showMainApp();
-            window.switchTab("home");
-        });
+        updateDoc(userRef, { hasOnboarded: true, hasCompletedGuide: true })
+            .then(finish)
+            .catch(finish);
     }
-    safeHaptic("selection");
 };
 
 const _originalRouteUser = typeof routeUser === "function" ? routeUser : function() {};
