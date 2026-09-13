@@ -1536,3 +1536,22 @@ body.guide-running #guide-tooltip * {
     transform: translate(2px, 2px);
     box-shadow: 1px 1px 0 #E74C3C;
 }
+
+/* Full-screen Leaderboard Container */
+.kirakai-fullscreen-modal { 
+    display: none; position: fixed; inset: 0; 
+    background: #0b0b0b; background-image: radial-gradient(#ef233c 1.5px, transparent 1.5px); background-size: 25px 25px;
+    z-index: 100000; flex-direction: column; 
+}
+.kirakai-fullscreen-content {
+    background: #1a1a1a; border: 5px solid #ef233c; 
+    flex: 1; margin: 15px; display: flex; flex-direction: column; padding: 20px;
+    box-shadow: 8px 8px 0px #ef233c; overflow: hidden;
+}
+
+/* Individual User Cards */
+.kirakai-lb-card {
+    background: #000; border: 3px solid #ef233c; box-shadow: 4px 4px 0 #ef233c;
+    padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; 
+    align-items: center; font-weight: 900; font-size: 18px; text-transform: uppercase; color: #fff;
+}

@@ -836,7 +836,8 @@ onSnapshot(userRef, async (docSnap) => {
             tapCoinsEarned: 0,
             lastTapDate: today,
             activeBoosters: {}, 
-            cooldowns: {},      
+            cooldowns: {},
+            partnerClaims: {},          // ← add this
             hasOnboarded: false, 
             hasCompletedGuide: false,
             hasClaimedWelcome: false,
@@ -3242,29 +3243,57 @@ window.claimPartnerGift = async function() {
         amount = 150;
     }
 
-    const now = Date.now();
+        const now = Date.now();
     const newCount = state.count + 1;
     const newResetAt = newCount >= PARTNER_MAX_CLAIMS ? (now + PARTNER_RESET_MS) : (state.resetAt || 0);
 
+    // Build full maps (more reliable than deep-dot paths on new users)
+    const nextPartnerClaims = { ...(userData.partnerClaims || {}) };
+    nextPartnerClaims[currentPartnerId] = { count: newCount, resetAt: newResetAt };
+
+    const nextCooldowns = { ...(userData.cooldowns || {}) };
+    nextCooldowns[`ad_partner_${currentPartnerId}`] = now + (5 * 60 * 1000);
+
+    const userUpdates = {
+        partnerClaims: nextPartnerClaims,
+        cooldowns: nextCooldowns
+    };
+    if (prizeType === "stars") {
+        userUpdates.stars = increment(amount);
+        userData.stars = (userData.stars || 0) + amount;
+    } else {
+        userUpdates.coins = increment(amount);
+        userData.coins = (userData.coins || 0) + amount;
+    }
+
+    // Apply locally first so UI is correct even if a secondary write fails
+    userData.partnerClaims = nextPartnerClaims;
+    userData.cooldowns = nextCooldowns;
+
     try {
-        const userUpdates = {
-            [`partnerClaims.${currentPartnerId}.count`]: newCount,
-            [`partnerClaims.${currentPartnerId}.resetAt`]: newResetAt,
-            [`cooldowns.ad_partner_${currentPartnerId}`]: now + (5 * 60 * 1000)
-        };
-        if (prizeType === "stars") {
-            userUpdates.stars = increment(amount);
-            userData.stars = (userData.stars || 0) + amount;
-        } else {
-            userUpdates.coins = increment(amount);
-            userData.coins = (userData.coins || 0) + amount;
-        }
-
-        if (!userData.partnerClaims) userData.partnerClaims = {};
-        userData.partnerClaims[currentPartnerId] = { count: newCount, resetAt: newResetAt };
-
         await updateDoc(userRef, userUpdates);
+    } catch (err) {
+        console.error("Partner claim user update failed:", err);
+        // Retry with only the essential reward fields (in case rules block maps)
+        try {
+            const fallback = prizeType === "stars"
+                ? { stars: increment(amount) }
+                : { coins: increment(amount) };
+            fallback.partnerClaims = nextPartnerClaims;
+            await updateDoc(userRef, fallback);
+        } catch (err2) {
+            console.error("Partner claim fallback also failed:", err2);
+            safeAlert("Xatolik yuz berdi. Qayta urinib ko'ring.");
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = "REKLAMA KO'RIB OLISH";
+            }
+            return;
+        }
+    }
 
+    // Log the win for the publisher panel (non-blocking)
+    try {
         await addDoc(collection(db, "partner_wins"), {
             userId: user.id.toString(),
             telegramId: user.id.toString(),
@@ -3272,28 +3301,25 @@ window.claimPartnerGift = async function() {
             prizeType,
             amount,
             partner: currentPartnerId,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            day: new Date().toISOString().slice(0, 10)
         });
-
-        partnerLastWin = { prizeType, amount };
-
-        // Exciting animated reveal
-        playPartnerRewardReveal(prizeType, amount);
-
-        const bar = document.getElementById("partner-bottom-bar");
-        if (bar) bar.classList.add("show");
-
-        updatePartnerClaimsUI();
-        updateUI();
-        safeHaptic("notification", "success");
-    } catch (err) {
-        console.error(err);
-        safeAlert("Xatolik yuz berdi. Qayta urinib ko'ring.");
-        if (btn) {
-            btn.disabled = false;
-            btn.innerText = "REKLAMA KO'RIB OLISH";
-        }
+    } catch (logErr) {
+        console.error("partner_wins log failed:", logErr);
+        // Don't block the user reward if only the log fails
     }
+
+    partnerLastWin = { prizeType, amount };
+
+    // Exciting animated reveal
+    playPartnerRewardReveal(prizeType, amount);
+
+    const bar = document.getElementById("partner-bottom-bar");
+    if (bar) bar.classList.add("show");
+
+    updatePartnerClaimsUI();
+    updateUI();
+    safeHaptic("notification", "success");
 };
 
 function playPartnerRewardReveal(prizeType, amount) {
@@ -3378,3 +3404,225 @@ routeUser = function() {
     }
     _originalRouteUser();
 };
+
+
+// ==========================================
+// KIRAKAI LATEST CONTEST (SPIDER-VERSE NEO-BRUTALIST)
+// ==========================================
+async function initKirakaiContest() {
+    // 1. Inject Spider-Verse / Neo Brutalist Styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&display=swap');
+        .kirakai-bg { 
+            background: #0b0b0b; color: #fff; font-family: 'Space Grotesk', sans-serif; 
+            min-height: 100vh; position: fixed; inset: 0; z-index: 99999; 
+            display: flex; flex-direction: column; align-items: center; padding: 20px; overflow-y: auto; 
+            background-image: radial-gradient(#ef233c 1.5px, transparent 1.5px); background-size: 25px 25px; 
+        }
+        .kirakai-card { 
+            background: #1a1a1a; border: 5px solid #ef233c; box-shadow: 10px 10px 0px #ef233c; 
+            padding: 20px; width: 100%; max-width: 400px; margin-bottom: 25px; text-align: center; position: relative; 
+        }
+        .kirakai-btn { 
+            background: #ef233c; color: #fff; border: 4px solid #fff; box-shadow: 6px 6px 0px #fff; 
+            padding: 15px; font-size: 20px; font-weight: 900; text-transform: uppercase; cursor: pointer; 
+            transition: transform 0.1s, box-shadow 0.1s; width: 100%; margin-bottom: 15px; 
+        }
+        .kirakai-btn:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0px #fff; }
+        .kirakai-btn.blue { background: #2b2d42; border-color: #8d99ae; box-shadow: 6px 6px 0px #8d99ae; }
+        .kirakai-btn.blue:active { box-shadow: 2px 2px 0px #8d99ae; }
+        .kirakai-modal { 
+            display: none; position: fixed; inset: 0; background: rgba(11,11,11,0.95); 
+            z-index: 100000; padding: 20px; flex-direction: column; justify-content: center; 
+        }
+        .kirakai-progress-bg { background: #000; border: 3px solid #fff; height: 35px; position: relative; margin: 15px 0; }
+        .kirakai-progress-fill { background: #ef233c; height: 100%; width: 0%; transition: width 0.5s ease; }
+        .kirakai-progress-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; text-shadow: 2px 2px 0 #000; }
+        .kirakai-anim { 
+            position: absolute; font-size: 35px; font-weight: 900; color: #ef233c; 
+            text-shadow: 3px 3px 0 #fff; pointer-events: none; animation: floatUp 1.5s ease-out forwards; opacity: 0; 
+        }
+        @keyframes floatUp { 0% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -120px) scale(1.5); } }
+        .kirakai-lb-item { display: flex; justify-content: space-between; border-bottom: 3px dashed #ef233c; padding: 12px 0; font-size: 18px; font-weight: 700; }
+    `;
+    document.head.appendChild(style);
+
+    // 2. Build DOM
+    const container = document.createElement('div');
+    container.className = 'kirakai-bg';
+    container.innerHTML = `
+        <h1 style="font-size:36px; font-weight:900; margin: 10px 0 30px; text-shadow: 4px 4px 0 #ef233c;">TAPPYSTARS</h1>
+        
+        <div class="kirakai-card">
+            <h2 style="font-size: 28px; font-weight: 900; margin-top:0; text-transform: uppercase;">Maxsus Tanlov</h2>
+            <p style="font-size: 18px; font-weight: 700; line-height: 1.4;">10 ta g'olib 1 tadan yulduz oladi!<br><span style="color:#ef233c; font-size: 22px;">Ertaga tugaydi!</span></p>
+            
+            <div class="kirakai-progress-bg">
+                <div class="kirakai-progress-fill" id="kira-progress-bar"></div>
+                <div class="kirakai-progress-text">Jami chiptalar: <span id="kira-total-tickets" style="margin-left: 5px;">0</span></div>
+            </div>
+        </div>
+
+        <div style="width: 100%; max-width: 400px;">
+            <button class="kirakai-btn" id="btn-participate">Qatnashish</button>
+            <button class="kirakai-btn blue" id="btn-leaderboard">Reyting</button>
+        </div>
+
+        <!-- Participate Modal -->
+        <div class="kirakai-modal" id="modal-participate">
+            <div class="kirakai-card" style="margin: auto; padding-bottom: 40px;">
+                <h2 style="font-size: 32px; text-transform: uppercase; text-shadow: 3px 3px 0 #ef233c;">Qoidalar</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+            <div style="background: #ef233c; color: #fff; padding: 12px; border: 3px solid #fff; box-shadow: 4px 4px 0 #fff; text-align: left; font-weight: 700; font-size: 16px;">
+                <span style="font-size: 22px; vertical-align: middle; margin-right: 8px;">🎫</span> Chipta olish uchun reklama ko'ring.
+            </div>
+            
+            <div style="background: #2b2d42; color: #fff; padding: 12px; border: 3px solid #8d99ae; box-shadow: 4px 4px 0 #8d99ae; text-align: left; font-weight: 700; font-size: 16px;">
+                <span style="font-size: 22px; vertical-align: middle; margin-right: 8px;">⏳</span> Har bir reklama orasida 10 daqiqa kutish vaqti bor.
+            </div>
+            
+            <div style="background: #000; color: #fff; padding: 12px; border: 3px solid #ef233c; box-shadow: 4px 4px 0 #ef233c; text-align: left; font-weight: 700; font-size: 16px;">
+                <span style="font-size: 22px; vertical-align: middle; margin-right: 8px;">🏆</span> Eng ko'p chipta yig'gan 10 ishtirokchi 1 tadan yulduz yutadi.
+            </div>
+        </div>
+                <button class="kirakai-btn" id="btn-watch-ad-kira" style="margin-top: 30px;">Reklama Ko'rish <br> (+1 Chipta)</button>
+                <button class="kirakai-btn blue" onclick="document.getElementById('modal-participate').style.display='none'">Orqaga</button>
+                <div id="ticket-anim-container" style="position: absolute; top: 40%; left: 50%;"></div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Modal -->
+        <div class="kirakai-modal" id="modal-leaderboard">
+            <div class="kirakai-card" style="margin: auto; max-height: 85vh; display: flex; flex-direction: column;">
+                <h2 style="font-size: 28px; text-transform: uppercase; text-shadow: 3px 3px 0 #ef233c;">Reyting</h2>
+                <div id="kira-lb-list" style="flex: 1; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 10px;">
+                    Yuklanmoqda...
+                </div>
+                <button class="kirakai-btn blue" onclick="document.getElementById('modal-leaderboard').style.display='none'">Orqaga</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(container);
+
+    // 3. Database References (Isolated)
+    const contestUserRef = doc(db, "contest_kirakai_users", user.id.toString());
+    const contestGlobalRef = doc(db, "contest_kirakai_global", "stats");
+    let contestUserData = { tickets: 0, lastAdTime: 0 };
+
+    // 4. Sync Global Stats
+    onSnapshot(contestGlobalRef, (docSnap) => {
+        let total = docSnap.exists() ? docSnap.data().totalTickets : 0;
+        document.getElementById('kira-total-tickets').innerText = total;
+        const pct = Math.min(100, (total / 5000) * 100); // Visual bar scale (adjust 5000 as needed)
+        document.getElementById('kira-progress-bar').style.width = pct + '%';
+    });
+
+    // 5. Initialize/Sync User Data
+    onSnapshot(contestUserRef, async (docSnap) => {
+        if (docSnap.exists()) {
+            contestUserData = docSnap.data();
+        } else {
+            await setDoc(contestUserRef, {
+                telegramId: user.id.toString(),
+                name: user.first_name || "Konchi",
+                tickets: 0,
+                lastAdTime: 0
+            });
+        }
+    });
+
+    // 6. UI Interactions
+    document.getElementById('btn-participate').onclick = () => {
+        document.getElementById('modal-participate').style.display = 'flex';
+        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    };
+
+    document.getElementById('btn-leaderboard').onclick = async () => {
+        document.getElementById('modal-leaderboard').style.display = 'flex';
+        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        
+        const lbList = document.getElementById('kira-lb-list');
+        lbList.innerHTML = 'Yuklanmoqda...';
+        
+        try {
+            const q = query(collection(db, "contest_kirakai_users"), orderBy("tickets", "desc"), limit(50));
+            const querySnapshot = await getDocs(q);
+            let html = '';
+            let rank = 1;
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if(data.tickets > 0) {
+                    html += `<div class="kirakai-lb-item"><span>#${rank} ${data.name}</span><span>${data.tickets} 🎟️</span></div>`;
+                    rank++;
+                }
+            });
+            lbList.innerHTML = html || 'Hali hech kim chipta olmadi.';
+        } catch (e) {
+            lbList.innerHTML = 'Reytingni yuklashda xatolik.';
+        }
+    };
+
+    document.getElementById('btn-watch-ad-kira').onclick = async () => {
+        const now = Date.now();
+        const cooldown = 10 * 60 * 1000; // 10 minutes
+        
+        if (now - contestUserData.lastAdTime < cooldown) {
+            const waitMin = Math.ceil((cooldown - (now - contestUserData.lastAdTime)) / 60000);
+            safeAlert(`Iltimos, ${waitMin} daqiqa kuting.`, true);
+            return;
+        }
+
+        if (!window.Adsgram) {
+            safeAlert("Reklama tizimi hozircha ishlamayapti.", true);
+            return;
+        }
+
+        try {
+            const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
+            await AdController.show().then(async () => {
+                // Update specific contest database
+                await updateDoc(contestUserRef, { tickets: increment(1), lastAdTime: Date.now() });
+                
+                await updateDoc(contestGlobalRef, { totalTickets: increment(1) })
+                    .catch(async () => await setDoc(contestGlobalRef, { totalTickets: 1 }));
+
+                // Trigger Animation
+                const anim = document.createElement('div');
+                anim.className = 'kirakai-anim';
+                anim.innerText = '+1 Chipta!';
+                document.getElementById('ticket-anim-container').appendChild(anim);
+                setTimeout(() => anim.remove(), 1500);
+
+                if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }).catch(() => {
+                safeAlert("Reklama to'liq ko'rilmadi.", true);
+            });
+        } catch(e) {
+            safeAlert("Reklamani yuklashda xatolik.", true);
+        }
+    };
+}
+
+// ==========================================
+// ROUTER: DETECT CONTEST LINK
+// ==========================================
+(function checkKirakaiContestRoute() {
+    const urlString = window.location.href.toLowerCase();
+    // Triggers if link has ?id=kirakailatest or #kirakailatest
+    if (urlString.includes('kirakailatest')) {
+        // Hide standard app wrappers cleanly
+        const style = document.createElement('style');
+        style.innerHTML = `
+            #app-content, #bottom-nav, #top-bar, #onboarding-modal, #gameplay-modal { 
+                display: none !important; 
+            }
+            body { background: #0b0b0b !important; }
+        `;
+        document.head.appendChild(style);
+        
+        // Execute isolated contest setup
+        initKirakaiContest();
+    }
+})();
