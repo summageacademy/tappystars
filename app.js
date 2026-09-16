@@ -3626,3 +3626,508 @@ async function initKirakaiContest() {
         initKirakaiContest();
     }
 })();
+// ==========================================
+// CONTEST-CONCEPT (BEAR PRIZE — NEO-BRUTALIST)
+// ==========================================
+async function initContestConcept() {
+    // 1. Inject refined Spider-Verse / Neo-Brutalist styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&display=swap');
+
+        .concept-bg {
+            background: #0b0b0b;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 16px 40px;
+            overflow-y: auto;
+            background-image: radial-gradient(#ef233c 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+
+        .concept-logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin: 6px 0 18px;
+            text-shadow: 3px 3px 0 #ef233c;
+            text-transform: uppercase;
+        }
+
+        .concept-hero {
+            background: #141414;
+            border: 5px solid #ef233c;
+            box-shadow: 10px 10px 0 #ef233c;
+            width: 100%;
+            max-width: 380px;
+            padding: 22px 18px 28px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 22px;
+        }
+
+        .concept-hero-tag {
+            display: inline-block;
+            background: #ef233c;
+            color: #fff;
+            font-weight: 900;
+            font-size: 11px;
+            letter-spacing: 2px;
+            padding: 5px 12px;
+            border: 2px solid #fff;
+            transform: rotate(-2deg);
+            margin-bottom: 10px;
+        }
+
+        .concept-hero-title {
+            font-size: 26px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 6px;
+            line-height: 1.15;
+            text-shadow: 2px 2px 0 #ef233c;
+        }
+
+        .concept-hero-sub {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c8c8c8;
+            line-height: 1.4;
+            margin: 0 0 18px;
+        }
+
+        /* Circular progress around the bear — arc from bottom-left to bottom-right */
+        .concept-prize-wrap {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 14px;
+        }
+
+        .concept-prize-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(135deg); /* start of visible arc at bottom-left */
+            pointer-events: none;
+        }
+
+        .concept-prize-track {
+            fill: none;
+            stroke: #2a2a2a;
+            stroke-width: 12;
+            stroke-linecap: round;
+        }
+
+        .concept-prize-fill {
+            fill: none;
+            stroke: #ef233c;
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 0 999;
+            transition: stroke-dasharray 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 6px rgba(239, 35, 60, 0.55));
+        }
+
+        /* Invisible container — only the bear image is visible */
+        .concept-prize-img-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .concept-prize-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
+        }
+
+        .concept-ticket-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .concept-ticket-label {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+        .concept-ticket-val {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px 0 #ef233c;
+        }
+
+        .concept-actions {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .concept-btn {
+            background: #ef233c;
+            color: #fff;
+            border: 4px solid #fff;
+            box-shadow: 6px 6px 0 #fff;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            font-family: inherit;
+            width: 100%;
+        }
+        .concept-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0 #fff;
+        }
+        .concept-btn.blue {
+            background: #2b2d42;
+            border-color: #8d99ae;
+            box-shadow: 6px 6px 0 #8d99ae;
+        }
+        .concept-btn.blue:active {
+            box-shadow: 2px 2px 0 #8d99ae;
+        }
+
+        .concept-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 11, 11, 0.96);
+            z-index: 100000;
+            padding: 20px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .concept-modal-card {
+            background: #141414;
+            border: 5px solid #ef233c;
+            box-shadow: 10px 10px 0 #ef233c;
+            padding: 24px 18px 28px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            position: relative;
+            max-height: 88vh;
+            overflow-y: auto;
+        }
+
+        .concept-modal-title {
+            font-size: 26px;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 #ef233c;
+            margin: 0 0 18px;
+        }
+
+        .concept-rule {
+            text-align: left;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.35;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 3px solid #fff;
+            box-shadow: 4px 4px 0 #fff;
+        }
+        .concept-rule.red { background: #ef233c; color: #fff; border-color: #fff; box-shadow: 4px 4px 0 #fff; }
+        .concept-rule.dark { background: #000; color: #fff; border-color: #ef233c; box-shadow: 4px 4px 0 #ef233c; }
+        .concept-rule.blue { background: #2b2d42; color: #fff; border-color: #8d99ae; box-shadow: 4px 4px 0 #8d99ae; }
+
+        .concept-lb-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px dashed #ef233c;
+            padding: 12px 4px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .concept-lb-item.gold { color: #FFD700; }
+        .concept-lb-item.me { background: rgba(239, 35, 60, 0.15); outline: 2px solid #ef233c; outline-offset: -2px; }
+
+        .concept-anim {
+            position: absolute;
+            font-size: 32px;
+            font-weight: 900;
+            color: #ef233c;
+            text-shadow: 3px 3px 0 #fff;
+            pointer-events: none;
+            animation: conceptFloat 1.4s ease-out forwards;
+            opacity: 0;
+            left: 50%;
+            top: 42%;
+        }
+        @keyframes conceptFloat {
+            0% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -110px) scale(1.4); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Arc: radius 86 → circumference ~540.35
+    // We show a 270° bottom arc (from bottom-left → bottom → bottom-right)
+    const ARC_FULL = 405; // ~270° of the circle
+    const ARC_R = 86;
+    const ARC_C = 2 * Math.PI * ARC_R;
+
+    // 2. Build DOM
+    const container = document.createElement('div');
+    container.className = 'concept-bg';
+    container.innerHTML = `
+        <div class="concept-logo">TAPPYSTARS</div>
+
+        <div class="concept-hero">
+            <span class="concept-hero-tag">TADBIR</span>
+            <h2 class="concept-hero-title">Ayiq Sovg'asi Tanlovi</h2>
+            <p class="concept-hero-sub">Eng ko'p chipta yig'gan o'yinchi<br><strong style="color:#ef233c">Ayiq sovg'asi</strong>ni oladi.</p>
+
+            <div class="concept-prize-wrap">
+                <svg class="concept-prize-svg" viewBox="0 0 200 200">
+                    <circle class="concept-prize-track" cx="100" cy="100" r="${ARC_R}"
+                        stroke-dasharray="${ARC_FULL} ${ARC_C}" />
+                    <circle class="concept-prize-fill" id="concept-progress-arc" cx="100" cy="100" r="${ARC_R}"
+                        stroke-dasharray="0 ${ARC_C}" />
+                </svg>
+                <div class="concept-prize-img-box">
+                    <img src="images/bear.webp" alt="Bear Gift" onerror="this.style.display='none'; this.parentElement.innerHTML='🐻';">
+                </div>
+            </div>
+
+            <div class="concept-ticket-row">
+                <span class="concept-ticket-label">Jami chiptalar</span>
+                <span class="concept-ticket-val" id="concept-total-tickets">0</span>
+            </div>
+        </div>
+
+        <div class="concept-actions">
+            <button class="concept-btn" id="concept-btn-participate">Qatnashish</button>
+            <button class="concept-btn blue" id="concept-btn-leaderboard">Reyting</button>
+        </div>
+
+        <!-- Participate Modal -->
+        <div class="concept-modal" id="concept-modal-participate">
+            <div class="concept-modal-card">
+                <h2 class="concept-modal-title">Qoidalar</h2>
+
+                <div class="concept-rule red">
+                    🎫 Chipta olish uchun reklama ko'ring. <strong>+1 chipta</strong>
+                </div>
+                <div class="concept-rule blue">
+                    ⏳ Har bir reklama orasida 10 daqiqa kutish vaqti bor.
+                </div>
+                <div class="concept-rule dark">
+                    🏆 Eng ko'p chipta yig'gan o'yinchi <strong>Ayiq sovg'asi</strong>ni oladi.
+                </div>
+
+                <button class="concept-btn" id="concept-btn-watch-ad" style="margin-top: 22px;">
+                    Reklama Ko'rish<br><span style="font-size:14px;font-weight:700;">(+1 Chipta)</span>
+                </button>
+                <button class="concept-btn blue" style="margin-top:10px;" onclick="document.getElementById('concept-modal-participate').style.display='none'">
+                    Orqaga
+                </button>
+                <div id="concept-ticket-anim"></div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Modal -->
+        <div class="concept-modal" id="concept-modal-leaderboard">
+            <div class="concept-modal-card" style="display:flex;flex-direction:column;max-height:85vh;">
+                <h2 class="concept-modal-title">Reyting</h2>
+                <div id="concept-lb-list" style="flex:1;overflow-y:auto;text-align:left;margin-bottom:16px;">
+                    Yuklanmoqda...
+                </div>
+                <button class="concept-btn blue" onclick="document.getElementById('concept-modal-leaderboard').style.display='none'">
+                    Orqaga
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(container);
+
+    // 3. Isolated Firebase refs
+    const contestUserRef = doc(db, "contest_concept_users", user.id.toString());
+    const contestGlobalRef = doc(db, "contest_concept_global", "stats");
+    let contestUserData = { tickets: 0, lastAdTime: 0 };
+
+    // Visual target for the arc (tweak as needed)
+    const PROGRESS_TARGET = 3000;
+
+    function setArcProgress(total) {
+        const pct = Math.min(1, total / PROGRESS_TARGET);
+        const filled = pct * ARC_FULL;
+        const el = document.getElementById('concept-progress-arc');
+        if (el) el.setAttribute('stroke-dasharray', `${filled} ${ARC_C}`);
+    }
+
+    // 4. Global stats
+    onSnapshot(contestGlobalRef, (docSnap) => {
+        const total = docSnap.exists() ? (docSnap.data().totalTickets || 0) : 0;
+        const valEl = document.getElementById('concept-total-tickets');
+        if (valEl) valEl.innerText = total.toLocaleString();
+        setArcProgress(total);
+    });
+
+    // 5. User data
+    onSnapshot(contestUserRef, async (docSnap) => {
+        if (docSnap.exists()) {
+            contestUserData = docSnap.data();
+        } else {
+            await setDoc(contestUserRef, {
+                telegramId: user.id.toString(),
+                name: user.first_name || "Konchi",
+                tickets: 0,
+                lastAdTime: 0
+            });
+        }
+    });
+
+    // 6. Interactions
+    document.getElementById('concept-btn-participate').onclick = () => {
+        document.getElementById('concept-modal-participate').style.display = 'flex';
+        if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    };
+
+    document.getElementById('concept-btn-leaderboard').onclick = async () => {
+        document.getElementById('concept-modal-leaderboard').style.display = 'flex';
+        if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+
+        const lbList = document.getElementById('concept-lb-list');
+        lbList.innerHTML = 'Yuklanmoqda...';
+
+        try {
+            const q = query(collection(db, "contest_concept_users"), orderBy("tickets", "desc"), limit(50));
+            const snap = await getDocs(q);
+            let html = '';
+            let rank = 1;
+            const myId = user.id.toString();
+
+            snap.forEach((docSnap) => {
+                const data = docSnap.data();
+                if ((data.tickets || 0) <= 0) return;
+                const isMe = docSnap.id === myId;
+                let cls = 'concept-lb-item';
+                if (rank === 1) cls += ' gold';
+                if (isMe) cls += ' me';
+                html += `<div class="${cls}"><span>#${rank} ${data.name || "Noma'lum"}</span><span>${data.tickets} 🎟️</span></div>`;
+                rank++;
+            });
+            lbList.innerHTML = html || '<p style="text-align:center;font-weight:700;padding:24px 0;">Hali hech kim chipta olmadi.</p>';
+        } catch (e) {
+            lbList.innerHTML = '<p style="text-align:center;font-weight:700;">Reytingni yuklashda xatolik.</p>';
+        }
+    };
+
+    document.getElementById('concept-btn-watch-ad').onclick = async () => {
+        const now = Date.now();
+        const cooldown = 10 * 60 * 1000; // 10 minutes
+
+        if (now - (contestUserData.lastAdTime || 0) < cooldown) {
+            const waitMin = Math.ceil((cooldown - (now - contestUserData.lastAdTime)) / 60000);
+            safeAlert(`Iltimos, ${waitMin} daqiqa kuting.`, true);
+            return;
+        }
+
+        if (!window.Adsgram) {
+            safeAlert("Reklama tizimi hozircha ishlamayapti.", true);
+            return;
+        }
+
+        try {
+            const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
+            await AdController.show().then(async () => {
+                await updateDoc(contestUserRef, {
+                    tickets: increment(1),
+                    lastAdTime: Date.now()
+                });
+
+                await updateDoc(contestGlobalRef, { totalTickets: increment(1) })
+                    .catch(async () => await setDoc(contestGlobalRef, { totalTickets: 1 }));
+
+                contestUserData.tickets = (contestUserData.tickets || 0) + 1;
+                contestUserData.lastAdTime = Date.now();
+
+                const host = document.getElementById('concept-ticket-anim');
+                if (host) {
+                    const anim = document.createElement('div');
+                    anim.className = 'concept-anim';
+                    anim.innerText = '+1 Chipta!';
+                    host.appendChild(anim);
+                    setTimeout(() => anim.remove(), 1500);
+                }
+
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }).catch(() => {
+                safeAlert("Reklama to'liq ko'rilmadi.", true);
+            });
+        } catch (e) {
+            safeAlert("Reklamani yuklashda xatolik.", true);
+        }
+    };
+}
+
+// ==========================================
+// ROUTER: DETECT CONTEST LINKS
+// ==========================================
+(function checkContestRoutes() {
+    const urlString = window.location.href.toLowerCase();
+
+    const hideMainApp = () => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            #app-content, #bottom-nav, #top-bar, #onboarding-modal, #gameplay-modal, #partner-page {
+                display: none !important;
+            }
+            body { background: #0b0b0b !important; }
+        `;
+        document.head.appendChild(style);
+    };
+
+    if (urlString.includes('kirakailatest')) {
+        hideMainApp();
+        initKirakaiContest();
+        return;
+    }
+
+    // New contest: contest-concept (query, hash, or startapp)
+    if (urlString.includes('contest-concept')) {
+        hideMainApp();
+        initContestConcept();
+        return;
+    }
+})();
