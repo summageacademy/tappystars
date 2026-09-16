@@ -3626,9 +3626,6 @@ async function initKirakaiContest() {
         initKirakaiContest();
     }
 })();
-// ==========================================
-// CONTEST-CONCEPT (BEAR PRIZE — NEO-BRUTALIST)
-// ==========================================
 async function initContestConcept() {
     // 1. Inject refined Spider-Verse / Neo-Brutalist styles
     const style = document.createElement('style');
@@ -3704,7 +3701,6 @@ async function initContestConcept() {
             margin: 0 0 18px;
         }
 
-        /* Circular progress around the bear — arc from bottom-left to bottom-right */
         .concept-prize-wrap {
             position: relative;
             width: 200px;
@@ -3717,7 +3713,7 @@ async function initContestConcept() {
             inset: 0;
             width: 100%;
             height: 100%;
-            transform: rotate(135deg); /* start of visible arc at bottom-left */
+            transform: rotate(135deg);
             pointer-events: none;
         }
 
@@ -3738,7 +3734,6 @@ async function initContestConcept() {
             filter: drop-shadow(0 0 6px rgba(239, 35, 60, 0.55));
         }
 
-        /* Invisible container — only the bear image is visible */
         .concept-prize-img-box {
             position: absolute;
             top: 50%;
@@ -3786,6 +3781,23 @@ async function initContestConcept() {
             text-shadow: 2px 2px 0 #ef233c;
         }
 
+        .concept-my-tickets {
+            margin-top: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #000;
+            border: 3px solid #ef233c;
+            box-shadow: 4px 4px 0 #ef233c;
+            padding: 8px 14px;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .concept-my-tickets svg {
+            flex-shrink: 0;
+        }
+
         .concept-actions {
             width: 100%;
             max-width: 380px;
@@ -3820,6 +3832,11 @@ async function initContestConcept() {
         }
         .concept-btn.blue:active {
             box-shadow: 2px 2px 0 #8d99ae;
+        }
+        .concept-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .concept-modal {
@@ -3864,10 +3881,37 @@ async function initContestConcept() {
             margin-bottom: 10px;
             border: 3px solid #fff;
             box-shadow: 4px 4px 0 #fff;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .concept-rule svg {
+            flex-shrink: 0;
+            margin-top: 2px;
         }
         .concept-rule.red { background: #ef233c; color: #fff; border-color: #fff; box-shadow: 4px 4px 0 #fff; }
         .concept-rule.dark { background: #000; color: #fff; border-color: #ef233c; box-shadow: 4px 4px 0 #ef233c; }
         .concept-rule.blue { background: #2b2d42; color: #fff; border-color: #8d99ae; box-shadow: 4px 4px 0 #8d99ae; }
+
+        .concept-how {
+            background: #ef233c;
+            color: #fff;
+            border: 4px solid #fff;
+            box-shadow: 6px 6px 0 #fff;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            font-weight: 900;
+            font-size: 16px;
+            line-height: 1.3;
+            text-align: left;
+        }
+        .concept-how span {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
 
         .concept-lb-item {
             display: flex;
@@ -3883,7 +3927,7 @@ async function initContestConcept() {
 
         .concept-anim {
             position: absolute;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 900;
             color: #ef233c;
             text-shadow: 3px 3px 0 #fff;
@@ -3892,17 +3936,27 @@ async function initContestConcept() {
             opacity: 0;
             left: 50%;
             top: 42%;
+            white-space: nowrap;
         }
         @keyframes conceptFloat {
             0% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -110px) scale(1.4); }
+            100% { opacity: 0; transform: translate(-50%, -110px) scale(1.35); }
+        }
+
+        .concept-icon {
+            display: inline-block;
+            vertical-align: middle;
         }
     `;
     document.head.appendChild(style);
 
-    // Arc: radius 86 → circumference ~540.35
-    // We show a 270° bottom arc (from bottom-left → bottom → bottom-right)
-    const ARC_FULL = 405; // ~270° of the circle
+    // Simple neo-brutalist icons (no emoji)
+    const ICON_TICKET = `<svg class="concept-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 7v10M17 7v10M3 12h2M19 12h2"/></svg>`;
+    const ICON_WAIT = `<svg class="concept-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`;
+    const ICON_TROPHY = `<svg class="concept-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg>`;
+    const ICON_AD = `<svg class="concept-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3V9z"/></svg>`;
+
+    const ARC_FULL = 405;
     const ARC_R = 86;
     const ARC_C = 2 * Math.PI * ARC_R;
 
@@ -3925,7 +3979,7 @@ async function initContestConcept() {
                         stroke-dasharray="0 ${ARC_C}" />
                 </svg>
                 <div class="concept-prize-img-box">
-                    <img src="images/bear.webp" alt="Bear Gift" onerror="this.style.display='none'; this.parentElement.innerHTML='🐻';">
+                    <img src="images/bear.webp" alt="Bear Gift" onerror="this.style.display='none'; this.parentElement.innerHTML='BEAR';">
                 </div>
             </div>
 
@@ -3933,32 +3987,36 @@ async function initContestConcept() {
                 <span class="concept-ticket-label">Jami chiptalar</span>
                 <span class="concept-ticket-val" id="concept-total-tickets">0</span>
             </div>
+
+            <div class="concept-my-tickets" id="concept-my-tickets-box">
+                ${ICON_TICKET}
+                <span>Sizning chiptalaringiz: <strong id="concept-my-tickets">0</strong></span>
+            </div>
         </div>
 
         <div class="concept-actions">
-            <button class="concept-btn" id="concept-btn-participate">Qatnashish</button>
+            <button class="concept-btn" id="concept-btn-participate">Chipta olish</button>
             <button class="concept-btn blue" id="concept-btn-leaderboard">Reyting</button>
         </div>
 
         <!-- Participate Modal -->
         <div class="concept-modal" id="concept-modal-participate">
             <div class="concept-modal-card">
-                <h2 class="concept-modal-title">Qoidalar</h2>
+                <h2 class="concept-modal-title">Qanday olish</h2>
 
                 <div class="concept-rule red">
-                    🎫 Chipta olish uchun reklama ko'ring. <strong>+1 chipta</strong>
-                </div>
-                <div class="concept-rule blue">
-                    ⏳ Har bir reklama orasida 10 daqiqa kutish vaqti bor.
+                    ${ICON_AD}
+                    <div>Har bir to'liq ko'rilgan reklama = <strong>+1 chipta</strong></div>
                 </div>
                 <div class="concept-rule dark">
-                    🏆 Eng ko'p chipta yig'gan o'yinchi <strong>Ayiq sovg'asi</strong>ni oladi.
+                    ${ICON_TROPHY}
+                    <div>Eng ko'p chipta yig'gan o'yinchi <strong>Ayiq sovg'asi</strong>ni oladi.</div>
                 </div>
 
-                <button class="concept-btn" id="concept-btn-watch-ad" style="margin-top: 22px;">
-                    Reklama Ko'rish<br><span style="font-size:14px;font-weight:700;">(+1 Chipta)</span>
+                <button class="concept-btn" id="concept-btn-watch-ad" style="margin-top: 18px;">
+                    Reklama ko'rish
                 </button>
-                <button class="concept-btn blue" style="margin-top:10px;" onclick="document.getElementById('concept-modal-participate').style.display='none'">
+                <button class="concept-btn blue" style="margin-top:10px;" id="concept-btn-back-participate">
                     Orqaga
                 </button>
                 <div id="concept-ticket-anim"></div>
@@ -3972,7 +4030,7 @@ async function initContestConcept() {
                 <div id="concept-lb-list" style="flex:1;overflow-y:auto;text-align:left;margin-bottom:16px;">
                     Yuklanmoqda...
                 </div>
-                <button class="concept-btn blue" onclick="document.getElementById('concept-modal-leaderboard').style.display='none'">
+                <button class="concept-btn blue" id="concept-btn-back-lb">
                     Orqaga
                 </button>
             </div>
@@ -3980,13 +4038,40 @@ async function initContestConcept() {
     `;
     document.body.appendChild(container);
 
+    document.getElementById('concept-btn-back-participate').onclick = () => {
+        document.getElementById('concept-modal-participate').style.display = 'none';
+    };
+    document.getElementById('concept-btn-back-lb').onclick = () => {
+        document.getElementById('concept-modal-leaderboard').style.display = 'none';
+    };
+
     // 3. Isolated Firebase refs
     const contestUserRef = doc(db, "contest_concept_users", user.id.toString());
     const contestGlobalRef = doc(db, "contest_concept_global", "stats");
-    let contestUserData = { tickets: 0, lastAdTime: 0 };
+    let contestUserData = { tickets: 0, lastAdTime: 0, recentAdTimes: [] };
 
-    // Visual target for the arc (tweak as needed)
+    const WINDOW_MS = 10 * 60 * 1000; // 10 minutes rolling window
+    const COOLDOWN_SHORT = 1 * 60 * 1000;  // 1 min when ≤2 ads in window
+    const COOLDOWN_LONG = 10 * 60 * 1000;  // 10 min when >2 ads in window
     const PROGRESS_TARGET = 3000;
+
+    function pruneRecentAds(times, now) {
+        const arr = Array.isArray(times) ? times : [];
+        return arr.filter(t => typeof t === 'number' && (now - t) < WINDOW_MS);
+    }
+
+    function getCooldownMs(data, now) {
+        const recent = pruneRecentAds(data.recentAdTimes, now);
+        // >2 ads already in the last 10 min → long cooldown; otherwise short
+        return recent.length > 2 ? COOLDOWN_LONG : COOLDOWN_SHORT;
+    }
+
+    function remainingCooldownMs(data, now) {
+        const last = data.lastAdTime || 0;
+        if (!last) return 0;
+        const need = getCooldownMs(data, now);
+        return Math.max(0, need - (now - last));
+    }
 
     function setArcProgress(total) {
         const pct = Math.min(1, total / PROGRESS_TARGET);
@@ -3994,6 +4079,31 @@ async function initContestConcept() {
         const el = document.getElementById('concept-progress-arc');
         if (el) el.setAttribute('stroke-dasharray', `${filled} ${ARC_C}`);
     }
+
+    function updateMyTicketsUI() {
+        const el = document.getElementById('concept-my-tickets');
+        if (el) el.innerText = (contestUserData.tickets || 0).toLocaleString();
+    }
+
+    function updateWatchButtonUI() {
+        const btn = document.getElementById('concept-btn-watch-ad');
+        if (!btn) return;
+        const now = Date.now();
+        const remain = remainingCooldownMs(contestUserData, now);
+        if (remain > 0) {
+            const sec = Math.ceil(remain / 1000);
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            btn.disabled = true;
+            btn.innerHTML = `Kuting<br><span style="font-size:13px;font-weight:700;">${m}:${String(s).padStart(2, '0')}</span>`;
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = `Reklama ko'rish`;
+        }
+    }
+
+    // Tick cooldown label while modal is open
+    setInterval(updateWatchButtonUI, 1000);
 
     // 4. Global stats
     onSnapshot(contestGlobalRef, (docSnap) => {
@@ -4007,19 +4117,29 @@ async function initContestConcept() {
     onSnapshot(contestUserRef, async (docSnap) => {
         if (docSnap.exists()) {
             contestUserData = docSnap.data();
+            if (!Array.isArray(contestUserData.recentAdTimes)) {
+                contestUserData.recentAdTimes = contestUserData.lastAdTime
+                    ? [contestUserData.lastAdTime]
+                    : [];
+            }
         } else {
             await setDoc(contestUserRef, {
                 telegramId: user.id.toString(),
                 name: user.first_name || "Konchi",
                 tickets: 0,
-                lastAdTime: 0
+                lastAdTime: 0,
+                recentAdTimes: []
             });
+            contestUserData = { tickets: 0, lastAdTime: 0, recentAdTimes: [] };
         }
+        updateMyTicketsUI();
+        updateWatchButtonUI();
     });
 
     // 6. Interactions
     document.getElementById('concept-btn-participate').onclick = () => {
         document.getElementById('concept-modal-participate').style.display = 'flex';
+        updateWatchButtonUI();
         if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
     };
 
@@ -4044,7 +4164,7 @@ async function initContestConcept() {
                 let cls = 'concept-lb-item';
                 if (rank === 1) cls += ' gold';
                 if (isMe) cls += ' me';
-                html += `<div class="${cls}"><span>#${rank} ${data.name || "Noma'lum"}</span><span>${data.tickets} 🎟️</span></div>`;
+                html += `<div class="${cls}"><span>#${rank} ${data.name || "Noma'lum"}</span><span>${data.tickets} ${ICON_TICKET}</span></div>`;
                 rank++;
             });
             lbList.innerHTML = html || '<p style="text-align:center;font-weight:700;padding:24px 0;">Hali hech kim chipta olmadi.</p>';
@@ -4055,11 +4175,11 @@ async function initContestConcept() {
 
     document.getElementById('concept-btn-watch-ad').onclick = async () => {
         const now = Date.now();
-        const cooldown = 10 * 60 * 1000; // 10 minutes
-
-        if (now - (contestUserData.lastAdTime || 0) < cooldown) {
-            const waitMin = Math.ceil((cooldown - (now - contestUserData.lastAdTime)) / 60000);
+        const remain = remainingCooldownMs(contestUserData, now);
+        if (remain > 0) {
+            const waitMin = Math.max(1, Math.ceil(remain / 60000));
             safeAlert(`Iltimos, ${waitMin} daqiqa kuting.`, true);
+            updateWatchButtonUI();
             return;
         }
 
@@ -4068,35 +4188,52 @@ async function initContestConcept() {
             return;
         }
 
+        const btn = document.getElementById('concept-btn-watch-ad');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = `Yuklanmoqda...`;
+        }
+
         try {
             const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
             await AdController.show().then(async () => {
+                const stamp = Date.now();
+                const pruned = pruneRecentAds(contestUserData.recentAdTimes, stamp);
+                pruned.push(stamp);
+
                 await updateDoc(contestUserRef, {
                     tickets: increment(1),
-                    lastAdTime: Date.now()
+                    lastAdTime: stamp,
+                    recentAdTimes: pruned
                 });
 
                 await updateDoc(contestGlobalRef, { totalTickets: increment(1) })
                     .catch(async () => await setDoc(contestGlobalRef, { totalTickets: 1 }));
 
                 contestUserData.tickets = (contestUserData.tickets || 0) + 1;
-                contestUserData.lastAdTime = Date.now();
+                contestUserData.lastAdTime = stamp;
+                contestUserData.recentAdTimes = pruned;
+
+                updateMyTicketsUI();
+                updateWatchButtonUI();
 
                 const host = document.getElementById('concept-ticket-anim');
                 if (host) {
                     const anim = document.createElement('div');
                     anim.className = 'concept-anim';
-                    anim.innerText = '+1 Chipta!';
+                    anim.innerHTML = `${ICON_TICKET} +1 chipta`;
                     host.appendChild(anim);
                     setTimeout(() => anim.remove(), 1500);
                 }
 
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             }).catch(() => {
-                safeAlert("Reklama to'liq ko'rilmadi.", true);
+                safeAlert("Reklama to'liq ko'rilmadi. Chipta berilmadi.", true);
+                updateWatchButtonUI();
             });
         } catch (e) {
             safeAlert("Reklamani yuklashda xatolik.", true);
+            updateWatchButtonUI();
         }
     };
 }
