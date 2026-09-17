@@ -50,6 +50,24 @@
 
             <!-- SUB-TAB 1: CLICKER -->
             <div id="home-subtab-clicker" class="subtab-content active">
+
+                <!-- WIDE SPIN BANNER -->
+                <button type="button" class="spin-banner" id="spin-banner" onclick="openSpinModal()">
+                    <div class="spin-banner-stripe"></div>
+                    <div class="spin-banner-body">
+                        <div class="spin-banner-left">
+                            <span class="spin-banner-tag">FREE SPINS</span>
+                            <span class="spin-banner-title">SPIN &amp; WIN</span>
+                            <span class="spin-banner-sub">Coins · Stars · Boosters</span>
+                        </div>
+                        <div class="spin-banner-right">
+                            <div class="spin-banner-count"><span id="spin-count">0</span></div>
+                            <div class="spin-banner-count-label">SPINS</div>
+                        </div>
+                    </div>
+                    <div class="spin-banner-cta">TAP TO SPIN →</div>
+                </button>
+
                 <div class="mining-container">
                     <div class="mining-circle" id="mine-btn">
                         <svg class="main-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
@@ -407,30 +425,38 @@
     <nav class="bottom-nav" id="bottom-nav" style="display: none;">
         <div class="nav-item active" onclick="switchTab('home')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span class="nav-label">Home</span>
         </div>
         <div class="nav-item" onclick="switchTab('boosters')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span class="nav-label">Boost</span>
         </div>
         <div class="nav-item" onclick="switchTab('earn')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+            <span class="nav-label">Race</span>
         </div>
         <div class="nav-item" onclick="switchTab('news')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            <span class="nav-label">Boxes</span>
         </div>
         <div class="nav-item" onclick="switchTab('profile')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span class="nav-label">Profile</span>
         </div>
     </nav>
 
-    <div id="onboarding-modal" class="overlay fullscreen-overlay">
-        <div class="fullscreen-content">
+    <div id="onboarding-modal" class="overlay fullscreen-overlay" style="z-index: 10000;">
+        <div class="fullscreen-content onboarding-content">
             <div id="slide-1" class="slide active">
+                <div class="onboard-tag">STEP 1 / 3</div>
                 <img src="images/diamond.webp" alt="Welcome" class="onboarding-img">
                 <h2 data-i18n="onboarding_slide1_title">Welcome to TappyStars</h2>
                 <p data-i18n="onboarding_slide1_desc">Mine coins daily, race on the highway, and redeem Telegram Gifts.</p>
-                <button class="action-btn primary-btn big-btn" onclick="nextSlide(2)" data-i18n="onboarding_next">Next</button>
+                <button type="button" class="action-btn primary-btn big-btn onboard-btn" onclick="window.nextSlide(2)" data-i18n="onboarding_next">Next</button>
+                <button type="button" class="onboard-skip" onclick="window.skipOnboarding()">Skip</button>
             </div>
             <div id="slide-2" class="slide">
+                <div class="onboard-tag">STEP 2 / 3</div>
                 <svg class="onboarding-img" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="8" y="5" width="44" height="90" rx="10" fill="#7B2C2C" stroke="#141414" stroke-width="4"/>
                     <path d="M 10 32 L 10 18 C 10 10 18 6 30 6 C 42 6 50 10 50 18 L 50 32 Z" fill="#141414"/>
@@ -439,13 +465,15 @@
                 </svg>
                 <h2 data-i18n="onboarding_slide2_title">Earn & Upgrade</h2>
                 <p data-i18n="onboarding_slide2_desc">Drive in the highway minigame, collect coins, and upgrade your garage!</p>
-                <button class="action-btn primary-btn big-btn" onclick="nextSlide(3)" data-i18n="onboarding_next">Next</button>
+                <button type="button" class="action-btn primary-btn big-btn onboard-btn" onclick="window.nextSlide(3)" data-i18n="onboarding_next">Next</button>
+                <button type="button" class="onboard-skip" onclick="window.skipOnboarding()">Skip</button>
             </div>
             <div id="slide-3" class="slide">
+                <div class="onboard-tag">STEP 3 / 3</div>
                 <img src="images/box.webp" alt="Gifts" class="onboarding-img">
                 <h2 data-i18n="onboarding_slide3_title">The Marketplace</h2>
                 <p data-i18n="onboarding_slide3_desc">Spend your Stars on real Telegram Gifts sent directly to your account.</p>
-                <button class="action-btn primary-btn big-btn" onclick="finishOnboarding()" data-i18n="onboarding_start">Start Playing</button>
+                <button type="button" class="action-btn primary-btn big-btn onboard-btn" onclick="window.finishOnboarding()" data-i18n="onboarding_start">Start Playing</button>
             </div>
         </div>
     </div>
@@ -750,6 +778,44 @@
         <nav class="partner-bottom-bar" id="partner-bottom-bar">
             <button class="partner-collect-btn" onclick="collectPartnerBonuses()">BONUSLARNI OLISH → ASOSIY</button>
         </nav>
+    </div>
+
+    
+    <!-- SPIN WHEEL MODAL -->
+    <div id="spin-modal" class="overlay spin-overlay" style="display:none;">
+        <div class="spin-sheet">
+            <button type="button" class="spin-close" onclick="closeSpinModal()" aria-label="Close">✕</button>
+
+            <div class="spin-sheet-top">
+                <span class="spin-sheet-tag">LUCKY WHEEL</span>
+                <h2 class="spin-sheet-title">SPIN TO WIN</h2>
+                <p class="spin-sheet-sub">Land a prize every spin. Coins, Stars or a free booster.</p>
+            </div>
+
+            <div class="spin-stage">
+                <div class="spin-pointer"></div>
+                <div class="spin-wheel-ring">
+                    <div class="spin-wheel" id="spin-wheel">
+                        <div class="sw-label" style="--i:0">100</div>
+                        <div class="sw-label" style="--i:1">1⭐</div>
+                        <div class="sw-label" style="--i:2">250</div>
+                        <div class="sw-label" style="--i:3">2⭐</div>
+                        <div class="sw-label" style="--i:4">500</div>
+                        <div class="sw-label" style="--i:5">BOOST</div>
+                        <div class="sw-label" style="--i:6">150</div>
+                        <div class="sw-label" style="--i:7">3⭐</div>
+                        <div class="spin-hub"><span id="spin-modal-count">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="spin-result" class="spin-result" style="display:none;"></div>
+
+            <div class="spin-actions">
+                <button type="button" class="spin-btn-primary" id="btn-do-spin" onclick="doSpin()">SPIN NOW</button>
+                <button type="button" class="spin-btn-ad" id="btn-earn-spin" onclick="earnSpinWithAd()">WATCH AD · GET +1 SPIN</button>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="app.js"></script>

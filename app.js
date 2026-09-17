@@ -800,6 +800,8 @@ onSnapshot(userRef, async (docSnap) => {
         if (!userData.ownedCars) userData.ownedCars = ["car_runner"];
         if (!userData.currentCar) userData.currentCar = "car_runner";
         if (!userData.carStats) userData.carStats = { speed: 1, smoothness: 1 };
+        if (typeof userData.spins !== 'number') userData.spins = 1;
+        if (typeof userData.streak !== 'number') userData.streak = 0;
 
         // Sync identity only (never touches coins/stars/cars)
         const identityPatch = {};
@@ -825,6 +827,7 @@ onSnapshot(userRef, async (docSnap) => {
             fetchLeaderboard();
             startLoopTimer();
             initPreviewHighwayAnimation();
+            try { processDailyLogin(); updateSpinUI(); } catch(e) {}
         }
     } else {
         const initialPayload = { 
@@ -844,7 +847,11 @@ onSnapshot(userRef, async (docSnap) => {
             lastAutoTapTime: 0,
             ownedCars: ["car_runner"],
             currentCar: "car_runner",
-            carStats: { speed: 1, smoothness: 1 }
+            carStats: { speed: 1, smoothness: 1 },
+            spins: 1,
+            streak: 0,
+            lastLoginDate: null,
+            lastDailySpinDate: null
         };
         await setDoc(userRef, initialPayload);
     }
@@ -1792,20 +1799,44 @@ window.exitGameToMenu = () => {
 };
 
 window.nextSlide = (slideNumber) => {
-    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-    document.getElementById(`slide-${slideNumber}`).classList.add('active');
-    safeHaptic('selection');
+    try {
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById('slide-' + slideNumber);
+        if (target) target.classList.add('active');
+        safeHaptic('selection');
+    } catch (e) {
+        console.warn('nextSlide error', e);
+    }
 };
 
 window.finishOnboarding = async () => {
-    await updateDoc(userRef, { hasOnboarded: true });
-    document.getElementById('onboarding-modal').style.display = 'none';
+    // Always progress UI first so user is never stuck
+    try {
+        const modal = document.getElementById('onboarding-modal');
+        if (modal) modal.style.display = 'none';
+    } catch (e) {}
     showMainApp();
-    setTimeout(() => {
-        if (userData && !userData.hasCompletedGuide) {
-            startGuide();
+    if (userData) userData.hasOnboarded = true;
+    safeHaptic('notification', 'success');
+
+    // Persist in background — never block the player
+    try {
+        if (userRef) {
+            updateDoc(userRef, { hasOnboarded: true }).catch(() => {});
         }
-    }, 400);
+    } catch (e) {}
+
+    setTimeout(() => {
+        try {
+            if (userData && !userData.hasCompletedGuide && typeof startGuide === 'function') {
+                startGuide();
+            }
+        } catch (e) {}
+    }, 500);
+};
+
+window.skipOnboarding = () => {
+    window.finishOnboarding();
 };
 
 window.claimGift = async () => {
@@ -4268,3 +4299,222 @@ async function initContestConcept() {
         return;
     }
 })();
+
+// ==========================================
+// SPINS + DAILY STREAK (RETENTION)
+// ==========================================
+const SPIN_REWARDS = [
+    { type: 'coins', amount: 100, label: '+100 Coins' },
+    { type: 'stars', amount: 1, label: '+1 Star' },
+    { type: 'coins', amount: 250, label: '+250 Coins' },
+    { type: 'stars', amount: 2, label: '+2 Stars' },
+    { type: 'coins', amount: 500, label: '+500 Coins' },
+    { type: 'boost', amount: 1, label: '30m MultiTap' },
+    { type: 'coins', amount: 150, label: '+150 Coins' },
+    { type: 'stars', amount: 3, label: '+3 Stars' }
+];
+
+function ensureSpinFields() {
+    if (!userData) return;
+    if (typeof userData.spins !== 'number') userData.spins = 0;
+    if (typeof userData.streak !== 'number') userData.streak = 0;
+}
+
+function processDailyLogin() {
+    if (!userData) return;
+    ensureSpinFields();
+    const today = getTodayDate();
+    const last = userData.lastLoginDate || null;
+
+    if (last === today) {
+        updateSpinUI();
+        return;
+    }
+
+    // consecutive day?
+    let newStreak = 1;
+    if (last) {
+        const lastD = new Date(last + 'T00:00:00');
+        const todayD = new Date(today + 'T00:00:00');
+        const diff = (todayD - lastD) / 86400000;
+        if (diff === 1) newStreak = (userData.streak || 0) + 1;
+    }
+
+    const freeSpin = (userData.lastDailySpinDate !== today) ? 1 : 0;
+    userData.streak = newStreak;
+    userData.lastLoginDate = today;
+    if (freeSpin) {
+        userData.spins = (userData.spins || 0) + 1;
+        userData.lastDailySpinDate = today;
+    }
+
+    updateSpinUI();
+
+    try {
+        if (userRef) {
+            updateDoc(userRef, {
+                streak: newStreak,
+                lastLoginDate: today,
+                spins: userData.spins,
+                lastDailySpinDate: userData.lastDailySpinDate || today
+            }).catch(() => {});
+        }
+    } catch (e) {}
+
+    if (freeSpin) {
+        setTimeout(() => {
+            safeAlert('Daily free spin ready! Open SPIN NOW on Home.', true);
+        }, 800);
+    }
+}
+
+function updateSpinUI() {
+    ensureSpinFields();
+    const spins = userData?.spins || 0;
+    const streak = userData?.streak || 0;
+    const elSpin = document.getElementById('spin-count');
+    const elModal = document.getElementById('spin-modal-count');
+    const elStreak = document.getElementById('streak-count');
+    if (elSpin) elSpin.innerText = spins;
+    if (elModal) elModal.innerText = spins;
+    if (elStreak) elStreak.innerText = streak;
+}
+
+window.openSpinModal = () => {
+    ensureSpinFields();
+    updateSpinUI();
+    const modal = document.getElementById('spin-modal');
+    if (modal) modal.style.display = 'flex';
+    const res = document.getElementById('spin-result');
+    if (res) res.style.display = 'none';
+    safeHaptic('selection');
+};
+
+window.closeSpinModal = () => {
+    const modal = document.getElementById('spin-modal');
+    if (modal) modal.style.display = 'none';
+};
+
+window.earnSpinWithAd = async () => {
+    if (!userData) return;
+    if (!window.Adsgram) {
+        safeAlert('Ads are currently unavailable.', true);
+        return;
+    }
+    const btn = document.getElementById('btn-earn-spin');
+    if (btn) { btn.disabled = true; btn.innerText = 'Loading...'; }
+    try {
+        const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
+        await AdController.show().then(async () => {
+            ensureSpinFields();
+            userData.spins = (userData.spins || 0) + 1;
+            updateSpinUI();
+            try {
+                if (userRef) await updateDoc(userRef, { spins: increment(1) });
+            } catch (e) {}
+            safeHaptic('notification', 'success');
+            safeAlert('+1 Spin earned!', true);
+        }).catch(() => {
+            safeAlert('Ad not completed. No spin given.', true);
+        });
+    } catch (e) {
+        safeAlert('Could not load ad.', true);
+    } finally {
+        if (btn) { btn.disabled = false; btn.innerText = 'WATCH AD FOR +1 SPIN'; }
+    }
+};
+
+let isSpinning = false;
+window.doSpin = async () => {
+    if (isSpinning || !userData) return;
+    ensureSpinFields();
+    if ((userData.spins || 0) < 1) {
+        safeAlert('No spins left. Watch an ad to earn one.', true);
+        return;
+    }
+
+    isSpinning = true;
+    const btn = document.getElementById('btn-do-spin');
+    if (btn) btn.disabled = true;
+
+    // spend spin
+    userData.spins -= 1;
+    updateSpinUI();
+    try {
+        if (userRef) await updateDoc(userRef, { spins: increment(-1) });
+    } catch (e) {}
+
+    const prizeIndex = Math.floor(Math.random() * SPIN_REWARDS.length);
+    const prize = SPIN_REWARDS[prizeIndex];
+    // wheel segments are 45deg each; pointer at top. Final rotation lands prize under pointer.
+    const segmentAngle = 45;
+    const base = 360 * 5; // 5 full spins
+    const target = base + (360 - (prizeIndex * segmentAngle) - segmentAngle / 2);
+    const wheel = document.getElementById('spin-wheel');
+    if (wheel) {
+        wheel.style.transition = 'none';
+        wheel.style.transform = 'rotate(0deg)';
+        // force reflow
+        void wheel.offsetWidth;
+        wheel.style.transition = 'transform 4s cubic-bezier(0.15, 0.85, 0.25, 1)';
+        wheel.style.transform = `rotate(${target}deg)`;
+    }
+
+    setTimeout(async () => {
+        // grant prize
+        try {
+            if (prize.type === 'coins') {
+                userData.coins = (userData.coins || 0) + prize.amount;
+                if (userRef) await updateDoc(userRef, { coins: increment(prize.amount) });
+            } else if (prize.type === 'stars') {
+                userData.stars = (userData.stars || 0) + prize.amount;
+                if (userRef) await updateDoc(userRef, { stars: increment(prize.amount) });
+            } else if (prize.type === 'boost') {
+                const now = Date.now();
+                if (!userData.activeBoosters) userData.activeBoosters = {};
+                userData.activeBoosters.multitap = now + 30 * 60 * 1000;
+                if (userRef) {
+                    await updateDoc(userRef, { [`activeBoosters.multitap`]: userData.activeBoosters.multitap });
+                }
+            }
+        } catch (e) {
+            console.warn('Prize grant error', e);
+        }
+        updateUI();
+        updateSpinUI();
+        const res = document.getElementById('spin-result');
+        if (res) {
+            res.style.display = 'block';
+            res.innerText = 'You won: ' + prize.label;
+        }
+        safeHaptic('notification', 'success');
+        isSpinning = false;
+        if (btn) btn.disabled = false;
+    }, 4200);
+};
+
+// Hook into user load
+const _origRouteUserForSpin = typeof routeUser === 'function' ? routeUser : null;
+if (_origRouteUserForSpin) {
+    // already patched elsewhere; call process after snapshot via updateUI hook
+}
+
+// Call processDailyLogin after userData is ready
+const _spinHookInterval = setInterval(() => {
+    if (userData && isAppInitialized) {
+        processDailyLogin();
+        clearInterval(_spinHookInterval);
+    }
+}, 400);
+
+// Keep UI in sync
+const _origUpdateUI = typeof updateUI === 'function' ? updateUI : null;
+if (typeof window.updateUI === 'function') {
+    const prev = window.updateUI;
+    window.updateUI = function() {
+        prev();
+        updateSpinUI();
+    };
+} else if (typeof updateUI === 'function') {
+    // will be window later
+}
