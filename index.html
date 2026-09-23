@@ -9,14 +9,13 @@
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
-    <header class="top-bar" id="top-bar" style="display: none; align-items: center; justify-content: space-between; padding: 10px 15px;">
-        <!-- Currency Left -->
+    <!-- TOP BAR -->
+    <header class="top-bar" id="top-bar" style="display: none;">
         <div class="currency-badge">
             <svg class="icon coin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
             <span id="coin-bal">0</span>
         </div>
 
-        <!-- Minimalist Language Dropdown -->
         <div class="custom-dropdown" id="langDropdown">
             <button class="dropdown-trigger" onclick="toggleLangMenu(event)">
                 <span id="selected-lang">English</span>
@@ -31,790 +30,511 @@
             </div>
         </div>
 
-        <!-- Currency Right -->
         <div class="currency-badge star-glow">
             <svg class="icon star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
             <span id="star-bal">0</span>
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main id="app-content" style="display: none;">
-        <!-- HOME SECTION WITH SUB-TABS -->
-        <section id="home" class="tab-content active">
-            <!-- Sub-tab Switcher Buttons -->
-            <div class="sub-tab-switcher">
-                <button id="subtab-btn-clicker" class="sub-tab-btn active" onclick="switchHomeSubTab('clicker')" data-i18n="clicker">Clicker</button>
-                <button id="subtab-btn-garage" class="sub-tab-btn" onclick="switchHomeSubTab('garage')" data-i18n="garage">Garage</button>
+
+        <!-- ========== EARN ========== -->
+        <section id="earn" class="tab-content active">
+            <div class="league-card glass-card" id="league-card-earn" onclick="openLeagueModal()">
+                <img id="league-img-earn" src="images/bear.webp" alt="League" class="league-card-img">
+                <div class="league-card-mid">
+                    <span class="league-card-label" data-i18n="your_league">Your League</span>
+                    <span class="league-card-name" id="league-name-earn">Bear</span>
+                </div>
+                <svg class="league-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
 
-            <!-- SUB-TAB 1: CLICKER -->
-            <div id="home-subtab-clicker" class="subtab-content active">
-
-                <!-- WIDE SPIN BANNER -->
-                <button type="button" class="spin-banner" id="spin-banner" onclick="openSpinModal()">
-                    <div class="spin-banner-stripe"></div>
-                    <div class="spin-banner-body">
-                        <div class="spin-banner-left">
-                            <span class="spin-banner-tag">FREE SPINS</span>
-                            <span class="spin-banner-title">SPIN &amp; WIN</span>
-                            <span class="spin-banner-sub">Coins · Stars · Boosters</span>
-                        </div>
-                        <div class="spin-banner-right">
-                            <div class="spin-banner-count"><span id="spin-count">0</span></div>
-                            <div class="spin-banner-count-label">SPINS</div>
-                        </div>
-                    </div>
-                    <div class="spin-banner-cta">TAP TO SPIN →</div>
-                </button>
-
-                <div class="mining-container">
-                    <div class="mining-circle" id="mine-btn">
-                        <svg class="main-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
-                    </div>
-                    <p class="mining-subtitle" data-i18n="tap_to_mine">Tap to mine coins</p>
+            <div class="mining-container">
+                <div class="mining-circle" id="mine-btn">
+                    <svg class="main-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
                 </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px;">
-                    <div class="glass-card" style="flex-direction: column; justify-content: center; padding: 15px; margin-bottom: 0;">
-                        <span style="font-size: 0.75em; color: var(--text-muted); font-weight: 700; text-transform: uppercase;" data-i18n="mining_power">Mining Power</span>
-                        <span style="font-size: 1.25em; font-weight: 800; margin-top: 6px; color: var(--text-main);">+<span id="mine-rate">1</span> / tap</span>
-                    </div>
-                    <div class="glass-card" style="flex-direction: column; justify-content: center; padding: 15px; margin-bottom: 0;">
-                        <span style="font-size: 0.75em; color: var(--text-muted); font-weight: 700; text-transform: uppercase;" data-i18n="daily_limit">Daily Limit</span>
-                        <span style="font-size: 1.25em; font-weight: 800; margin-top: 6px; color: var(--text-main);"><span id="tap-coins-val">0</span> / 1000</span>
-                    </div>
-                </div>
+                <p class="mining-subtitle" data-i18n="tap_to_mine">Tap to mine coins</p>
+            </div>
 
-                <div class="active-boosts-section">
-                    <h4 class="section-subtitle" data-i18n="active_boosters">Active Boosters</h4>
-                    <div id="active-boosts-list" class="active-boosts-list">
-                        <p class="no-boosts" data-i18n="no_boosters">No active boosters running.</p>
-                    </div>
+            <div class="stats-row">
+                <div class="glass-card stat-box">
+                    <span class="stat-label" data-i18n="mining_power">Mining Power</span>
+                    <span class="stat-value">+<span id="mine-rate">1</span> / tap</span>
                 </div>
-
-                <div class="leaderboard-preview-section" style="margin-top: 30px;">
-                    <h4 class="section-subtitle" style="font-weight: 800; margin-bottom: 15px;" data-i18n="top_miners">Top Miners</h4>
-                    <div class="glass-card" style="flex-direction: column; align-items: stretch; padding: 15px; gap: 15px;">
-                        <div id="leaderboard-preview-list" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                            <p class="text-muted" style="text-align: center; margin-top: 10px;">Loading...</p>
-                        </div>
-                        <button class="action-btn primary-btn" onclick="openLeaderboard()" style="width: 100%;" data-i18n="see_all">See All</button>
-                    </div>
+                <div class="glass-card stat-box">
+                    <span class="stat-label" data-i18n="energy_label">Energy</span>
+                    <span class="stat-value" id="energy-val">1000</span>
                 </div>
             </div>
 
-            <!-- SUB-TAB 2: GARAGE -->
-            <div id="home-subtab-garage" class="subtab-content" style="display: none;">
-                <div class="glass-card garage-stage-card">
-                    <div class="garage-3d-stage">
-                        <div id="garage-car-render" class="pseudo-3d-car-container"></div>
-                    </div>
-                    <h3 id="garage-car-title" style="font-size: 1.4em; font-weight: 900; margin-top: 10px;">Street Runner</h3>
-                    <p id="garage-car-desc" style="color: var(--text-muted); font-size: 0.85em; font-weight: 600;">Standard highway vehicle</p>
+            <div class="active-boosts-section">
+                <h4 class="section-subtitle" data-i18n="active_boosters">Active Boosters</h4>
+                <div id="active-boosts-list" class="active-boosts-list">
+                    <p class="no-boosts" data-i18n="no_boosters">No active boosters running.</p>
+                </div>
+            </div>
+        </section>
 
-                    <button class="action-btn primary-btn" onclick="switchGarageCar()" style="margin-top: 15px; width: 100%;" data-i18n="change_car">Change Car</button>
+        <!-- ========== TASKS ========== -->
+        <section id="tasks" class="tab-content">
+            <div class="league-card glass-card" id="league-card-tasks" onclick="openLeagueModal()">
+                <img id="league-img-tasks" src="images/bear.webp" alt="League" class="league-card-img">
+                <div class="league-card-mid">
+                    <span class="league-card-label" data-i18n="your_league">Your League</span>
+                    <span class="league-card-name" id="league-name-tasks">Bear</span>
+                </div>
+                <svg class="league-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+
+            <div class="sub-tab-switcher" id="tasks-tabs">
+                <button class="sub-tab-btn active" data-tab="daily" onclick="switchTasksTab('daily')" data-i18n="tab_daily">Daily</button>
+                <button class="sub-tab-btn" data-tab="leagues" onclick="switchTasksTab('leagues')" data-i18n="tab_leagues">Leagues</button>
+                <button class="sub-tab-btn" data-tab="referrals" onclick="switchTasksTab('referrals')" data-i18n="tab_referrals">Referrals</button>
+            </div>
+
+            <!-- Daily tasks -->
+            <div id="tasks-daily" class="tasks-panel active">
+                <div class="glass-card card-vertical task-card" id="task-daily-ad1">
+                    <div class="card-center">
+                        <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3V9z"/></svg>
+                        <div class="card-info">
+                            <h3 data-i18n="task_watch_1">Watch 1 Ad</h3>
+                            <p data-i18n="task_reward_1star">+1 Star</p>
+                        </div>
+                    </div>
+                    <button class="action-btn" id="btn-task-ad1" style="background:#FF9800;color:#1C1C1C;" onclick="doDailyTask('ad1')" data-i18n="watch_ad">Watch Ad</button>
                 </div>
 
-                <div class="upgrades-container">
-                    <h4 class="section-subtitle" style="margin-top: 20px; margin-bottom: 20px;" data-i18n="vehicle_upgrades">Vehicle Performance Upgrades</h4>
-                    
-                    <div class="glass-card upgrade-card">
-                        <div class="card-left">
-                            <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                            <div class="card-info">
-                                <h3><span data-i18n="speed_level">Speed Level</span> <span id="speed-lvl-val">1</span></h3>
-                                <p data-i18n="speed_desc">Higher speed +10% coins</p>
-                            </div>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <button class="action-btn" id="btn-upgrade-speed" onclick="upgradeCarStat('speed')">1000 C</button>
-                            <button class="action-btn" style="background: #FF9800; color: black; font-size: 0.8em;" onclick="upgradeCarStatAd('speed')" data-i18n="watch_ad">Watch Ad</button>
+                <div class="glass-card card-vertical task-card" id="task-daily-ad3">
+                    <div class="card-center">
+                        <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3V9z"/></svg>
+                        <div class="card-info">
+                            <h3 data-i18n="task_watch_3">Watch 3 Ads</h3>
+                            <p data-i18n="task_reward_3stars">+3 Stars</p>
                         </div>
                     </div>
+                    <div class="progress-bg"><div class="progress-fill" id="prog-task-ad3"></div><div class="progress-text" id="prog-task-ad3-txt">0 / 3</div></div>
+                    <button class="action-btn" id="btn-task-ad3" style="background:#FF9800;color:#1C1C1C;" onclick="doDailyTask('ad3')" data-i18n="watch_ad">Watch Ad</button>
+                </div>
 
-                    <div class="glass-card upgrade-card">
-                        <div class="card-left">
-                            <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
-                            <div class="card-info">
-                                <h3><span data-i18n="smooth_level">Smoothy Level</span> <span id="smooth-lvl-val">1</span></h3>
-                                <p data-i18n="smooth_desc">Smoother lane switching</p>
-                            </div>
+                <div class="glass-card card-vertical task-card" id="task-daily-tap500">
+                    <div class="card-center">
+                        <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+                        <div class="card-info">
+                            <h3 data-i18n="task_tap_500">Mine 500 Coins Today</h3>
+                            <p data-i18n="task_reward_2stars">+2 Stars</p>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <button class="action-btn" id="btn-upgrade-smooth" onclick="upgradeCarStat('smoothness')">1000 C</button>
-                            <button class="action-btn" style="background: #FF9800; color: black; font-size: 0.8em;" onclick="upgradeCarStatAd('smoothness')" data-i18n="watch_ad">Watch Ad</button>
-                        </div>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" id="prog-task-tap500"></div><div class="progress-text" id="prog-task-tap500-txt">0 / 500</div></div>
+                    <button class="action-btn" id="btn-task-tap500" onclick="claimDailyTask('tap500')" data-i18n="claim">Claim</button>
+                </div>
+            </div>
+
+            <!-- Leagues rewards -->
+            <div id="tasks-leagues" class="tasks-panel" style="display:none;">
+                <div id="league-rewards-list"></div>
+            </div>
+
+            <!-- Referrals -->
+            <div id="tasks-referrals" class="tasks-panel" style="display:none;">
+                <div class="glass-card card-vertical" style="text-align:center;">
+                    <img src="images/bear.webp" alt="Bear" style="width:80px;height:80px;object-fit:contain;margin:0 auto 10px;">
+                    <h3 style="font-weight:900;margin-bottom:8px;" data-i18n="ref_title">Invite Friends</h3>
+                    <p style="color:var(--text-muted);font-size:0.9em;margin-bottom:14px;" data-i18n="ref_desc">Invite 10 friends and claim a free Bear Gift for every 10 referrals.</p>
+                    <div class="progress-bg"><div class="progress-fill" id="prog-ref"></div><div class="progress-text" id="prog-ref-txt">0 / 10</div></div>
+                    <p style="margin-top:12px;font-weight:800;font-size:0.95em;"><span data-i18n="ref_count">Your referrals</span>: <strong id="ref-count-val">0</strong></p>
+                    <button class="action-btn primary-btn" style="width:100%;margin-top:12px;" onclick="shareReferral()" data-i18n="ref_share">Share Invite Link</button>
+                </div>
+                <div id="ref-claim-area" style="display:none;margin-top:16px;">
+                    <div class="glass-card gift-item" style="flex-direction:column;align-items:center;gap:10px;">
+                        <img src="images/bear.webp" alt="Bear" class="tg-gift-img">
+                        <p style="font-weight:800;" data-i18n="ref_ready">Bear Gift Ready!</p>
+                        <button class="action-btn primary-btn" id="btn-ref-claim" onclick="claimReferralBear()" data-i18n="claim">Claim</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="boosters" class="tab-content">
-            <h2 style="font-weight: 900; margin-bottom: 15px; text-align: center;" data-i18n="power_boosters">Power Boosters</h2>
-            
-            <!-- Ad Boosters -->
-            <div class="glass-card">
-                <div class="card-left">
+        <!-- ========== BOOSTS ========== -->
+        <section id="boosts" class="tab-content">
+            <h2 style="font-weight:900;margin-bottom:15px;text-align:center;" data-i18n="power_boosters">Power Boosters</h2>
+
+            <div class="glass-card card-vertical">
+                <div class="card-center">
                     <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                     <div class="card-info">
                         <h3 data-i18n="auto_tap">Auto Tap</h3>
                         <p data-i18n="auto_tap_desc">+1 Coin / sec (30 mins)</p>
                     </div>
                 </div>
-                <button class="action-btn" style="background: #FF9800; color: black;" id="btn-boost-auto" onclick="buyBoosterAd('auto')" data-i18n="watch_ad">Watch Ad</button>
+                <div class="card-actions">
+                    <button class="action-btn" style="background:#FF9800;color:black;" id="btn-boost-auto" onclick="buyBoosterAd('auto')" data-i18n="watch_ad">Watch Ad</button>
+                </div>
             </div>
 
-            <div class="glass-card">
-                <div class="card-left">
+            <div class="glass-card card-vertical">
+                <div class="card-center">
                     <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     <div class="card-info">
                         <h3 data-i18n="multitap">Multi-Tap</h3>
                         <p data-i18n="multitap_desc">+2 Coins / tap (30 mins)</p>
                     </div>
                 </div>
-                <button class="action-btn" style="background: #FF9800; color: black;" id="btn-boost-multitap" onclick="buyBoosterAd('multitap')" data-i18n="watch_ad">Watch Ad</button>
+                <div class="card-actions">
+                    <button class="action-btn" style="background:#FF9800;color:black;" id="btn-boost-multitap" onclick="buyBoosterAd('multitap')" data-i18n="watch_ad">Watch Ad</button>
+                </div>
             </div>
 
-            <div class="glass-card">
-                <div class="card-left">
-                    <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15v-7a6 6 0 1 1 12 0v7M6 15a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3v-2H6v2zm12 0a3 3 0 0 1-3 3h0a3 3 0 0 1-3-3v-2h6v2z"></path></svg>
+            <div class="glass-card card-vertical">
+                <div class="card-center">
+                    <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     <div class="card-info">
-                        <h3 data-i18n="coin_magnet">Coin Magnet</h3>
-                        <p data-i18n="magnet_desc">Attracts nearby coins</p>
+                        <h3 data-i18n="energy_boost">Restore Energy</h3>
+                        <p data-i18n="energy_boost_desc">Refill energy to full instantly</p>
                     </div>
                 </div>
-                <button class="action-btn" style="background: #FF9800; color: black;" id="btn-boost-magnet" onclick="buyBoosterAd('magnet')" data-i18n="watch_ad">Watch Ad</button>
-            </div>
-
-            <!-- Premium Coin Boosters -->
-            <div class="glass-card">
-                <div class="card-left">
-                    <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    <div class="card-info">
-                        <h3 data-i18n="highway_shield">Highway Shield</h3>
-                        <p data-i18n="shield_desc">Survives 1 free crash</p>
-                    </div>
+                <div class="card-actions">
+                    <button class="action-btn" style="background:#FF9800;color:black;" id="btn-boost-energy" onclick="buyEnergyRestoreAd()" data-i18n="watch_ad">Watch Ad</button>
                 </div>
-                <button class="action-btn" id="btn-boost-shield" onclick="buyBooster('shield', 1500)">1500 C</button>
-            </div>
-
-            <div class="glass-card">
-                <div class="card-left">
-                    <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9z"></path><path d="M11 3v18"></path><path d="M2 9h20"></path></svg>
-                    <div class="card-info">
-                        <h3 data-i18n="double_coins">2x Minigame Coins</h3>
-                        <p data-i18n="double_desc">Doubles all reward</p>
-                    </div>
-                </div>
-                <button class="action-btn" id="btn-boost-double" onclick="buyBooster('double', 2000)">2000 C</button>
             </div>
 
             <p class="cooldown-note" data-i18n="cooldown_note">Boosters active for 30 mins. 15-minute buying cooldown per booster.</p>
         </section>
 
-        <!-- EARN / HIGHWAY MINIGAME PREVIEW SECTION -->
-        <section id="earn" class="tab-content">
-            <div class="earn-preview-container glass-card">
-                <h2 style="font-weight: 900; margin-bottom: 10px;" data-i18n="highway_rush">Highway Rush</h2>
-                <p style="color: var(--text-muted); font-size: 0.9em; text-align: center; margin-bottom: 15px;" data-i18n="highway_desc">Dodge heavy traffic and collect coins on the track!</p>
-                
-                <div class="preview-highway-box">
-                    <canvas id="preview-highway-canvas" width="280" height="180"></canvas>
+        <!-- ========== BOXES ========== -->
+        <section id="boxes" class="tab-content">
+            <div class="spin-section glass-card" id="spin-section" style="flex-direction:column;align-items:stretch;padding:16px;margin-bottom:20px;">
+                <div class="spin-section-head">
+                    <span class="spin-section-tag">LUCKY SPIN</span>
+                    <h3 class="spin-section-title">SPIN &amp; WIN</h3>
+                    <p class="spin-section-sub">Coins · Stars</p>
                 </div>
-
-                <button class="action-btn primary-btn big-btn" onclick="startHighwayGame()" style="margin-top: 15px; width: 100%;" data-i18n="play_now">
-                    PLAY NOW
-                </button>
-            </div>
-
-            <div class="glass-card" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                <h3 style="font-size: 1.1em; font-weight: 800;" data-i18n="how_to_play">How to Play</h3>
-                <ul style="padding-left: 20px; font-size: 0.9em; color: var(--text-muted); line-height: 1.6;">
-                    <li data-i18n="how_to_play_1">Use Left and Right buttons to change lanes.</li>
-                    <li data-i18n="how_to_play_2">Avoid oncoming traffic cars. Traffic density builds over time.</li>
-                    <li data-i18n="how_to_play_3">Grab gold coins to boost your profile coin balance.</li>
-                    <li data-i18n="how_to_play_4">Upgrade Speed & Smoothness in your Garage for better gameplay!</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- USER PROFILE SECTION -->
-        <section id="profile" class="tab-content">
-            <h2 id="profile-greeting" style="text-align: center; margin-bottom: 25px; font-weight: 900; font-size: 1.8em; color: var(--text-main);" data-i18n="hello_miner">Hello, Miner!</h2>
-            
-            <div class="glass-card exchange-card">
-                <div class="card-info">
-                    <h3 data-i18n="currency_exchange">Currency Exchange</h3>
-                    <p data-i18n="exchange_rate">1500 Coins = 1 Star</p>
-                </div>
-                <button class="action-btn primary-btn" onclick="openExchangeModal()" data-i18n="exchange_btn">Exchange</button>
-            </div>
-            
-            <button class="action-btn primary-btn full-width marketplace-btn" onclick="openMarketplace()" style="margin: 15px auto 10px; width: 100%;" data-i18n="open_marketplace">
-                Open Marketplace
-            </button>
-
-            <button class="action-btn primary-btn full-width" onclick="openDealership()" style="margin: 0 auto 20px; width: 100%; background: #2196F3; border-color: var(--border-hard);" data-i18n="car_dealership">
-                Car Dealership
-            </button>
-
-            <div style="display: flex; justify-content: center; gap: 20px; margin: 12px 0 18px; font-size: 0.85em;">
-                <span onclick="openLegalModal('privacy')" style="color: var(--text-muted); text-decoration: underline; cursor: pointer;" data-i18n="privacy_policy">Privacy Policy</span>
-                <span onclick="openLegalModal('terms')" style="color: var(--text-muted); text-decoration: underline; cursor: pointer;" data-i18n="terms_of_service">Terms of Service</span>
-            </div>
-
-            <h3 class="section-title" data-i18n="my_purchases">My Purchases</h3>
-            <div id="purchases-list" class="purchases-list">
-                <p class="empty-state" data-i18n="no_purchases">No purchases yet.</p>
-            </div>
-        </section>
-
-        <!-- NEWS SECTION -->
-        <section id="news" class="tab-content">
-            <!-- BEAR RACE PROMO CARD -->
-            <div class="contest-promo" onclick="openContestModal()">
-                <div class="contest-promo-stripe"></div>
-                <div class="contest-promo-body">
-                    <div class="contest-promo-top">
-                        <span class="contest-promo-tag">EVENT</span>
-                        <h2 class="contest-promo-title" data-i18n="contest_title">BEAR RACE</h2>
+                <div class="spin-reel-wrap" id="spin-reel-wrap" hidden>
+                    <div class="spin-pointer-down"></div>
+                    <div class="spin-reel-viewport">
+                        <div class="spin-reel-track" id="spin-reel-track"></div>
                     </div>
-                    <p class="contest-promo-sub" data-i18n="contest_subtitle">TOP 2 COIN KINGS WIN BEAR GIFTS</p>
-                    <div class="contest-promo-prizes">
-                        <div class="contest-promo-bear">
-                            <img src="images/bear.webp" alt="">
-                            <span>1ST</span>
-                        </div>
-                        <div class="contest-promo-vs">VS</div>
-                        <div class="contest-promo-bear">
-                            <img src="images/bear.webp" alt="">
-                            <span>2ND</span>
-                        </div>
-                    </div>
-                    <button class="contest-promo-btn" data-i18n="contest_view">ENTER</button>
                 </div>
+                <div id="spin-result-inline" class="spin-result-inline" style="display:none;"></div>
+                <button type="button" class="action-btn primary-btn" id="btn-spin-main" onclick="startSpinFlow()" style="width:100%;margin-top:12px;">SPIN</button>
             </div>
-            <h3 class="section-title" style="margin-top: 25px;" data-i18n="mystery_chests">Mystery Chests</h3>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.85em; margin-bottom: 15px;" data-i18n="chests_subtitle">Unlock chests for random Coin & Star prizes!</p>
+
+            <h3 class="section-title" data-i18n="mystery_chests">Mystery Chests</h3>
+            <p style="text-align:center;color:var(--text-muted);font-size:0.85em;margin-bottom:15px;" data-i18n="chests_subtitle">Unlock chests for random Coin & Star prizes!</p>
 
             <div id="chests-container">
-                <!-- Small Chest -->
                 <div class="glass-card chest-card" id="chest-card-small">
                     <div class="chest-header">
                         <div class="chest-icon-wrapper">
-                            <svg class="chest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M2 8h20M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M12 12v3"/></svg>
+                            <img src="images/bear.webp" alt="Small" class="chest-img-icon">
                             <div>
-                                <h3 style="font-weight: 800;" data-i18n="small_box">Small Box</h3>
-                                <p style="font-size: 0.8em; color: var(--text-muted);" data-i18n="watch_1_ad">Watch 1 Ad</p>
+                                <h3 style="font-weight:800;" data-i18n="small_box">Small Box</h3>
+                                <p style="font-size:0.8em;color:var(--text-muted);" data-i18n="watch_1_ad">Watch 1 Ad</p>
                             </div>
                         </div>
                     </div>
-                    <button class="action-btn" id="btn-chest-small" onclick="handleChest('small', 1)" style="background: #FF9800; color: black;" data-i18n="watch_ad">Watch Ad</button>
+                    <button class="action-btn" id="btn-chest-small" onclick="handleChest('small', 1)" style="background:#FF9800;color:black;" data-i18n="watch_ad">Watch Ad</button>
                 </div>
 
-                <!-- Medium Chest -->
                 <div class="glass-card chest-card" id="chest-card-medium">
                     <div class="chest-header">
                         <div class="chest-icon-wrapper">
-                            <svg class="chest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M2 8h20M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M12 12v3"/></svg>
+                            <img src="images/box.webp" alt="Medium" class="chest-img-icon">
                             <div>
-                                <h3 style="font-weight: 800;" data-i18n="medium_box">Medium Box</h3>
-                                <p style="font-size: 0.8em; color: var(--text-muted);" data-i18n="watch_2_ads">Watch 2 Ads</p>
+                                <h3 style="font-weight:800;" data-i18n="medium_box">Medium Box</h3>
+                                <p style="font-size:0.8em;color:var(--text-muted);" data-i18n="watch_2_ads">Watch 2 Ads</p>
                             </div>
                         </div>
                     </div>
                     <div class="progress-bg"><div class="progress-fill" id="prog-med-fill"></div><div class="progress-text" id="prog-med-txt">0 / 2</div></div>
-                    <button class="action-btn" id="btn-chest-medium" onclick="handleChest('medium', 2)" style="background: #FF9800; color: black;" data-i18n="watch_ad">Watch Ad</button>
+                    <button class="action-btn" id="btn-chest-medium" onclick="handleChest('medium', 2)" style="background:#FF9800;color:black;" data-i18n="watch_ad">Watch Ad</button>
                 </div>
 
-                <!-- Mega Chest -->
                 <div class="glass-card chest-card" id="chest-card-mega">
                     <div class="chest-header">
                         <div class="chest-icon-wrapper">
-                            <svg class="chest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M2 8h20M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M12 12v3"/></svg>
+                            <img src="images/diamond.webp" alt="Mega" class="chest-img-icon">
                             <div>
-                                <h3 style="font-weight: 800;" data-i18n="mega_box">Mega Box</h3>
-                                <p style="font-size: 0.8em; color: var(--text-muted);" data-i18n="watch_3_ads">Watch 3 Ads</p>
+                                <h3 style="font-weight:800;" data-i18n="mega_box">Mega Box</h3>
+                                <p style="font-size:0.8em;color:var(--text-muted);" data-i18n="watch_3_ads">Watch 3 Ads</p>
                             </div>
                         </div>
                     </div>
                     <div class="progress-bg"><div class="progress-fill" id="prog-mega-fill"></div><div class="progress-text" id="prog-mega-txt">0 / 3</div></div>
-                    <button class="action-btn" id="btn-chest-mega" onclick="handleChest('mega', 3)" style="background: #FF9800; color: black;" data-i18n="watch_ad">Watch Ad</button>
+                    <button class="action-btn" id="btn-chest-mega" onclick="handleChest('mega', 3)" style="background:#FF9800;color:black;" data-i18n="watch_ad">Watch Ad</button>
                 </div>
             </div>
 
-            <h2 style="margin-bottom: 15px; font-weight: 800;" data-i18n="daily_rewards">Daily Rewards</h2>
-    
-            <div class="glass-card chest-card" style="margin-bottom: 30px;">
+            <h2 style="margin-bottom:15px;font-weight:800;" data-i18n="daily_rewards">Daily Rewards</h2>
+            <div class="glass-card chest-card" style="margin-bottom:30px;">
                 <div class="chest-header">
                     <div class="chest-icon-wrapper">
                         <svg class="icon coin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
                         <div>
-                            <h3 style="font-weight: 800;" data-i18n="free_coins_200">200 Free Coins</h3>
-                            <p style="font-size: 0.8em; color: var(--text-muted);" data-i18n="watch_2_ads">Watch 2 Ads</p>
+                            <h3 style="font-weight:800;" data-i18n="free_coins_200">200 Free Coins</h3>
+                            <p style="font-size:0.8em;color:var(--text-muted);" data-i18n="watch_2_ads">Watch 2 Ads</p>
                         </div>
                     </div>
                 </div>
                 <div class="progress-bg"><div class="progress-fill" id="prog-news-fill"></div><div class="progress-text" id="prog-news-txt">0 / 2</div></div>
-                <button class="action-btn" id="btn-news-reward" onclick="handleNewsReward()" style="background: #FF9800; color: black;" data-i18n="watch_ad">Watch Ad</button>
+                <button class="action-btn" id="btn-news-reward" onclick="handleNewsReward()" style="background:#FF9800;color:black;" data-i18n="watch_ad">Watch Ad</button>
+            </div>
+        </section>
+
+        <!-- ========== ACCOUNT ========== -->
+        <section id="account" class="tab-content">
+            <h2 id="profile-greeting" style="text-align:center;margin-bottom:20px;font-weight:900;font-size:1.8em;" data-i18n="hello_miner">Hello, Miner!</h2>
+
+            <div class="sub-tab-switcher" id="account-tabs">
+                <button class="sub-tab-btn active" data-tab="general" onclick="switchAccountTab('general')" data-i18n="tab_general">General</button>
+                <button class="sub-tab-btn" data-tab="gifts" onclick="switchAccountTab('gifts')" data-i18n="tab_gifts">Gifts</button>
+                <button class="sub-tab-btn" data-tab="history" onclick="switchAccountTab('history')" data-i18n="tab_history">History</button>
+            </div>
+
+            <!-- General -->
+            <div id="account-general" class="account-panel active">
+                <div class="glass-card card-vertical" style="gap:10px;">
+                    <div class="stat-line"><span data-i18n="stat_coins">Coins</span><strong id="stat-coins">0</strong></div>
+                    <div class="stat-line"><span data-i18n="stat_stars">Stars</span><strong id="stat-stars">0</strong></div>
+                    <div class="stat-line"><span data-i18n="stat_clicks">Total Clicks</span><strong id="stat-clicks">0</strong></div>
+                    <div class="stat-line"><span data-i18n="stat_tgid">Telegram ID</span><strong id="stat-tgid">—</strong></div>
+                    <div class="stat-line"><span data-i18n="stat_league">League</span><strong id="stat-league">Bear</strong></div>
+                </div>
+
+                <div class="glass-card exchange-card exchange-card-yellow" style="margin-top:16px;">
+                    <div class="card-info">
+                        <h3 data-i18n="currency_exchange">Turn Coins into Stars</h3>
+                        <p data-i18n="exchange_rate" style="font-weight: bold; color:rgb(44, 44, 44)">Exchange every 1000 coins for 1 Telegram Star</p>
+                    </div>
+                    <button class="action-btn primary-btn" onclick="openExchangeModal()" data-i18n="exchange_btn">Exchange</button>
+                </div>
+
+                <div style="display:flex;justify-content:center;gap:20px;margin:18px 0;font-size:0.85em;">
+                    <span onclick="openLegalModal('privacy')" style="color:var(--text-muted);text-decoration:underline;cursor:pointer;" data-i18n="privacy_policy">Privacy Policy</span>
+                    <span onclick="openLegalModal('terms')" style="color:var(--text-muted);text-decoration:underline;cursor:pointer;" data-i18n="terms_of_service">Terms of Service</span>
+                </div>
+
+                <div class="leaderboard-preview-section" style="margin-top:10px;">
+                    <h4 class="section-subtitle" style="font-weight:800;margin-bottom:15px;" data-i18n="top_miners">Top Miners</h4>
+                    <div class="glass-card" style="flex-direction:column;align-items:stretch;padding:15px;gap:15px;">
+                        <div id="leaderboard-preview-list" style="display:flex;flex-direction:column;gap:8px;width:100%;">
+                            <p class="text-muted" style="text-align:center;margin-top:10px;">Loading...</p>
+                        </div>
+                        <button class="action-btn primary-btn" onclick="openLeaderboard()" style="width:100%;" data-i18n="see_all">See All</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gifts marketplace -->
+            <div id="account-gifts" class="account-panel" style="display:none;">
+                <p class="subtitle" style="text-align:center;color:var(--text-muted);margin-bottom:16px;font-weight:500;" data-i18n="gifts_subtitle">Exchange Stars for real Telegram Gifts</p>
+                <div class="gift-grid">
+                    <div class="glass-card gift-item">
+                        <img src="images/bear.webp" alt="Bear" class="tg-gift-img">
+                        <p>Bear</p>
+                        <button class="action-btn" id="btn-gift-bear" onclick="buyGift('Bear Gift', 25)">25 ⭐</button>
+                    </div>
+                    <div class="glass-card gift-item">
+                        <img src="images/box.webp" alt="Gift Box" class="tg-gift-img">
+                        <p>Gift Box</p>
+                        <button class="action-btn" onclick="buyGift('Gift Box', 35)">35 ⭐</button>
+                    </div>
+                    <div class="glass-card gift-item">
+                        <img src="images/bouquette.webp" alt="Bouquet" class="tg-gift-img">
+                        <p>Bouquet</p>
+                        <button class="action-btn" onclick="buyGift('Bouquet Gift', 75)">75 ⭐</button>
+                    </div>
+                    <div class="glass-card gift-item">
+                        <img src="images/rose.webp" alt="Rose" class="tg-gift-img">
+                        <p>Rose</p>
+                        <button class="action-btn" onclick="buyGift('Rose Gift', 75)">75 ⭐</button>
+                    </div>
+                    <div class="glass-card gift-item">
+                        <img src="images/diamond.webp" alt="Diamond" class="tg-gift-img">
+                        <p>Diamond</p>
+                        <button class="action-btn" onclick="buyGift('Diamond Gift', 110)">110 ⭐</button>
+                    </div>
+                    <div class="glass-card gift-item">
+                        <img src="images/trophy.webp" alt="Trophy" class="tg-gift-img">
+                        <p>Trophy</p>
+                        <button class="action-btn" onclick="buyGift('Trophy Gift', 110)">110 ⭐</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div id="account-history" class="account-panel" style="display:none;">
+                <h3 class="section-title" data-i18n="my_purchases">My Purchases</h3>
+                <div id="purchases-list" class="purchases-list">
+                    <p class="empty-state" data-i18n="no_purchases">No purchases yet.</p>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- FULLSCREEN HIGHWAY GAMEPLAY MODAL -->
-    <div id="gameplay-modal" class="overlay fullscreen-overlay" style="display: none; background: #ECE8E1;">
-        <div class="gameplay-container">
-            <canvas id="game-canvas"></canvas>
-
-            <div class="game-controls">
-                <button class="game-ctrl-btn" id="ctrl-left">◀</button>
-                <button class="game-ctrl-btn" id="ctrl-right">▶</button>
-            </div>
-
-            <div class="game-hud">
-                <div class="game-hud-badge">
-                    <svg viewBox="0 0 24 24" fill="#FFD700" stroke="#1C1C1C" stroke-width="2.5" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg>
-                    <span id="game-score">0</span>
-                </div>
-                <div class="game-hud-badge">
-                    <svg viewBox="0 0 24 24" fill="#E74C3C" stroke="#1C1C1C" stroke-width="2.5" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                    <span id="game-speed-disp">1x</span>
-                </div>
-            </div>
-
-            <div id="game-over-screen" class="game-over-card" style="display: none;">
-                <h2>CRASHED</h2>
-                <div class="game-earned-badge">
-                    <svg viewBox="0 0 24 24" fill="#FFD700" stroke="#1C1C1C" stroke-width="2.5" style="width:24px;height:24px;vertical-align:middle;margin-right:8px;"><circle cx="12" cy="12" r="10"></circle></svg>
-                    +<span id="final-coins-val">0</span>
-                </div>
-
-                <div class="game-over-rows" style="display: flex; flex-direction: column; gap: 20px; margin-top: 25px; width: 100%; padding: 0 10px;">
-                    <!-- Row 2: Play Again (Muted Slate Blue) -->
-                    <button class="action-btn game-over-btn" id="btn-restart-game" onclick="restartGame()" style="background: #546E7A; color: #FFFFFF; width: 100%; border: 3px solid #1C1C1C; box-shadow: 4px 4px 0px #1C1C1C; padding: 14px 20px; font-size: 1.1em; font-weight: 900; border-radius: 12px; display: flex; justify-content: center; align-items: center;">
-                        Play Again
-                    </button>
-
-                    <!-- Row 3: Return to Main Menu (Muted Light Grey) -->
-                    <button class="action-btn game-over-btn" id="btn-main-menu" onclick="showMainMenu()" style="background: #CFD8DC; color: #1C1C1C; width: 100%; border: 3px solid #1C1C1C; box-shadow: 4px 4px 0px #1C1C1C; padding: 14px 20px; font-size: 1.1em; font-weight: 900; border-radius: 12px; display: flex; justify-content: center; align-items: center;">
-                        Main Menu
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CAR DEALERSHIP MODAL -->
-    <div id="dealership-modal" class="overlay marketplace-fullscreen">
-        <div class="marketplace-content">
-            <h2 style="color: var(--text-main); margin-top: 20px; font-weight: 900;">Car Dealership</h2>
-            <p class="subtitle" style="color: var(--text-muted); margin-bottom: 20px;">Unlock new rides with your Coins</p>
-            
-            <div id="dealership-grid" class="dealership-grid" style="padding-bottom: 100px;"></div>
-        </div>
-        
-        <nav class="marketplace-bottom-bar">
-            <button class="action-btn primary-btn" onclick="closeDealership()" style="width: 100%;">
-                Back to Profile
-            </button>
-        </nav>
-    </div>
-
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav" id="bottom-nav" style="display: none;">
-        <div class="nav-item active" onclick="switchTab('home')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-            <span class="nav-label">Home</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('boosters')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            <span class="nav-label">Boost</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('earn')">
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav" id="bottom-nav" style="display:none;">
+        <div class="nav-item active" data-tab="earn" onclick="switchTab('earn')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
-            <span class="nav-label">Race</span>
+            <span class="nav-label" data-i18n="nav_earn">Earn</span>
         </div>
-        <div class="nav-item" onclick="switchTab('news')">
+        <div class="nav-item" data-tab="tasks" onclick="switchTab('tasks')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span class="nav-label" data-i18n="nav_tasks">Tasks</span>
+        </div>
+        <div class="nav-item" data-tab="boosts" onclick="switchTab('boosts')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span class="nav-label" data-i18n="nav_boosts">Boosts</span>
+        </div>
+        <div class="nav-item" data-tab="boxes" onclick="switchTab('boxes')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
-            <span class="nav-label">Boxes</span>
+            <span class="nav-label" data-i18n="nav_boxes">Boxes</span>
         </div>
-        <div class="nav-item" onclick="switchTab('profile')">
+        <div class="nav-item" data-tab="account" onclick="switchTab('account')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span class="nav-label">Profile</span>
+            <span class="nav-label" data-i18n="nav_account">Account</span>
         </div>
     </nav>
 
-    <div id="onboarding-modal" class="overlay fullscreen-overlay" style="z-index: 10000;">
+    <!-- LEAGUE INFO MODAL -->
+    <div id="league-modal" class="overlay marketplace-fullscreen" style="display:none;">
+        <div class="marketplace-content league-modal-content">
+            <div class="league-nav-row">
+                <button class="league-nav-btn" id="league-prev" onclick="shiftLeague(-1)">◀</button>
+                <div class="league-modal-center">
+                    <img id="league-modal-img" src="images/bear.webp" alt="League" class="league-modal-img">
+                    <h2 id="league-modal-name" class="league-modal-name">Bear</h2>
+                    <p id="league-modal-range" class="league-modal-range">1 – 999 clicks</p>
+                    <p id="league-modal-desc" class="league-modal-desc"></p>
+                    <div class="league-reward-card-ui" id="league-modal-reward">
+                        <span class="league-reward-label">REWARD</span>
+                        <span class="league-reward-amount" id="league-modal-reward-amount">500 Coins</span>
+                    </div>
+                </div>
+                <button class="league-nav-btn" id="league-next" onclick="shiftLeague(1)">▶</button>
+            </div>
+            <p class="league-tip" data-i18n="league_tip">Reach each league to unlock big coin rewards in the Tasks section!</p>
+        </div>
+        <nav class="marketplace-bottom-bar">
+            <button class="action-btn primary-btn" onclick="closeLeagueModal()" style="width:100%;" data-i18n="back">Close</button>
+        </nav>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div id="onboarding-modal" class="overlay fullscreen-overlay" style="z-index:10000;">
         <div class="fullscreen-content onboarding-content">
             <div id="slide-1" class="slide active">
-                <div class="onboard-tag">STEP 1 / 3</div>
                 <img src="images/diamond.webp" alt="Welcome" class="onboarding-img">
                 <h2 data-i18n="onboarding_slide1_title">Welcome to TappyStars</h2>
-                <p data-i18n="onboarding_slide1_desc">Mine coins daily, race on the highway, and redeem Telegram Gifts.</p>
+                <p class="onboard-desc" data-i18n="onboarding_slide1_desc">Mine coins daily, complete tasks, and redeem Telegram Gifts.</p>
                 <button type="button" class="action-btn primary-btn big-btn onboard-btn" onclick="window.nextSlide(2)" data-i18n="onboarding_next">Next</button>
                 <button type="button" class="onboard-skip" onclick="window.skipOnboarding()">Skip</button>
             </div>
             <div id="slide-2" class="slide">
-                <div class="onboard-tag">STEP 2 / 3</div>
-                <svg class="onboarding-img" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="8" y="5" width="44" height="90" rx="10" fill="#7B2C2C" stroke="#141414" stroke-width="4"/>
-                    <path d="M 10 32 L 10 18 C 10 10 18 6 30 6 C 42 6 50 10 50 18 L 50 32 Z" fill="#141414"/>
-                    <path d="M 14 34 L 46 34 L 42 46 L 18 46 Z" fill="#1A2530"/>
-                    <rect x="16" y="47" width="28" height="22" rx="3" fill="#4A1D1D"/>
-                </svg>
-                <h2 data-i18n="onboarding_slide2_title">Earn & Upgrade</h2>
-                <p data-i18n="onboarding_slide2_desc">Drive in the highway minigame, collect coins, and upgrade your garage!</p>
+                <img src="images/bear.webp" alt="Leagues" class="onboarding-img">
+                <h2 data-i18n="onboarding_slide2_title">Climb the Leagues</h2>
+                <p class="onboard-desc" data-i18n="onboarding_slide2_desc">Tap more to reach higher leagues and claim big coin rewards.</p>
                 <button type="button" class="action-btn primary-btn big-btn onboard-btn" onclick="window.nextSlide(3)" data-i18n="onboarding_next">Next</button>
                 <button type="button" class="onboard-skip" onclick="window.skipOnboarding()">Skip</button>
             </div>
             <div id="slide-3" class="slide">
-                <div class="onboard-tag">STEP 3 / 3</div>
                 <img src="images/box.webp" alt="Gifts" class="onboarding-img">
                 <h2 data-i18n="onboarding_slide3_title">The Marketplace</h2>
-                <p data-i18n="onboarding_slide3_desc">Spend your Stars on real Telegram Gifts sent directly to your account.</p>
+                <p class="onboard-desc" data-i18n="onboarding_slide3_desc">Spend your Stars on real Telegram Gifts sent to your account.</p>
                 <button type="button" class="action-btn primary-btn big-btn onboard-btn" onclick="window.finishOnboarding()" data-i18n="onboarding_start">Start Playing</button>
             </div>
         </div>
     </div>
 
-    <!-- Privacy / Terms Fullscreen Modal -->
-    <div id="legal-modal" class="overlay marketplace-fullscreen" style="display: none;">
-        <div class="marketplace-content" style="padding: 20px 20px 100px; text-align: left;">
-            <h2 id="legal-title" style="font-weight: 900; margin-bottom: 20px; text-align: center;"></h2>
-            <div id="legal-content" style="font-size: 0.92em; line-height: 1.55; color: var(--text-main);"></div>
+    <!-- LEGAL -->
+    <div id="legal-modal" class="overlay marketplace-fullscreen" style="display:none;">
+        <div class="marketplace-content" style="padding:20px 20px 100px;text-align:left;">
+            <h2 id="legal-title" style="font-weight:900;margin-bottom:20px;text-align:center;"></h2>
+            <div id="legal-content" style="font-size:0.92em;line-height:1.55;color:var(--text-main);"></div>
         </div>
         <nav class="marketplace-bottom-bar">
-            <button class="action-btn primary-btn" onclick="closeLegalModal()" style="width: 100%;" data-i18n="back">Back</button>
+            <button class="action-btn primary-btn" onclick="closeLegalModal()" style="width:100%;" data-i18n="back">Back</button>
         </nav>
     </div>
 
-    <div id="gift-confirm-modal" class="overlay marketplace-fullscreen" style="display: none;">
-        <div class="marketplace-content" style="display: flex; flex-direction: column; height: 100%; padding: 20px 20px 120px;">
-            <h2 style="font-weight: 900; margin-top: 10px;" data-i18n="gift_confirm_title">Confirm Gift Purchase</h2>
-            <p style="color: var(--text-muted); margin-bottom: 25px; margin-top: 20px;" data-i18n="gift_confirm_subtitle">
-                The gift will be sent to the Telegram account you enter below
-            </p>
-
-            <div class="glass-card" style="flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 20px;">
-                <span style="font-weight: 700; font-size: 0.9em;" data-i18n="enter_username">Telegram Username</span>
-                <input id="gift-username-input" type="text" placeholder="@username"
-                    style="font-size: 1.3em; font-weight: 700; border: 2px solid var(--border-hard); border-radius: 10px; padding: 14px; outline: none; width: 100%;">
-                <p style="font-size: 0.85em; color: var(--text-muted); margin-top: 4px;" data-i18n="gift_delivery_note">
-                    Gifts are usually delivered within 7–10 days to the account you specify.
-                </p>
+    <!-- GIFT CONFIRM -->
+    <div id="gift-confirm-modal" class="overlay marketplace-fullscreen" style="display:none;">
+        <div class="marketplace-content" style="display:flex;flex-direction:column;height:100%;padding:20px 20px 120px;">
+            <h2 style="font-weight:900;margin-top:10px;" data-i18n="gift_confirm_title">Confirm Gift Purchase</h2>
+            <p style="color:var(--text-muted);margin-bottom:25px;margin-top:20px;" data-i18n="gift_confirm_subtitle">The gift will be sent to the Telegram account you enter below</p>
+            <div class="glass-card" style="flex-direction:column;align-items:stretch;gap:12px;margin-bottom:20px;">
+                <span style="font-weight:700;font-size:0.9em;" data-i18n="enter_username">Telegram Username</span>
+                <input id="gift-username-input" type="text" placeholder="@username" style="font-size:1.3em;font-weight:700;border:2px solid var(--border-hard);border-radius:0;padding:14px;outline:none;width:100%;">
+                <p style="font-size:0.85em;color:var(--text-muted);margin-top:4px;" data-i18n="gift_delivery_note">Gifts are usually delivered within 7–10 days to the account you specify.</p>
             </div>
-
-            <div id="gift-confirm-summary" class="glass-card" style="flex-direction: column; gap: 8px; margin-bottom: 20px; background: #FFF8E7;">
-                <!-- filled by JS -->
-            </div>
-
-            <button class="action-btn primary-btn" style="width: 100%; margin-top: auto;" onclick="confirmGiftPurchase()" data-i18n="confirm_purchase">
-                Confirm & Buy
-            </button>
+            <div id="gift-confirm-summary" class="glass-card" style="flex-direction:column;gap:8px;margin-bottom:20px;background:#FFF8E7;"></div>
+            <button class="action-btn primary-btn" style="width:100%;margin-top:auto;" onclick="confirmGiftPurchase()" data-i18n="confirm_purchase">Confirm & Buy</button>
         </div>
         <nav class="marketplace-bottom-bar">
-            <button class="action-btn" onclick="closeGiftConfirmModal()" style="width: 100%; background: #CFD8DC;" data-i18n="cancel">Cancel</button>
+            <button class="action-btn" onclick="closeGiftConfirmModal()" style="width:100%;background:#CFD8DC;" data-i18n="cancel">Cancel</button>
         </nav>
     </div>
 
-    <!-- GIFT MODAL -->
-    <div id="gift-modal" class="overlay">
-        <div class="gift-box-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2" style="width: 60px; height: 60px; margin-bottom: 10px;"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
-            <h2>Wanderer Bonus!</h2>
-            <p>Thanks for exploring TappyStars!</p>
-            <div class="reward-amount">+1,000 Coins</div>
-            <button class="action-btn primary-btn" onclick="claimGift()">Claim My Bonus</button>
-        </div>
-    </div>
-
-    <!-- BEAR RACE CONTEST MODAL -->
-    <div id="contest-modal" class="overlay contest-fullscreen" style="display: none;">
-        <div class="contest-scroll">
-            <div class="contest-header">
-                <span class="contest-header-tag">EVENT</span>
-                <h1 id="contest-modal-title" data-i18n="contest_modal_title">BEAR RACE</h1>
-            </div>
-
-            <!-- PRIZES -->
-            <div class="contest-prizes-block">
-                <h3 id="contest-prizes-title" data-i18n="contest_prizes_title">THE PRIZES</h3>
-                <div class="contest-prizes-row">
-                    <div class="contest-prize-card contest-prize-gold">
-                        <div class="contest-prize-place" id="contest-prize-1-label" data-i18n="contest_prize_1">1ST PLACE</div>
-                        <img src="images/bear.webp" alt="" class="contest-prize-img">
-                        <div class="contest-prize-name" id="contest-prize-1-name" data-i18n="contest_prize_bear">BEAR GIFT</div>
-                    </div>
-                    <div class="contest-prize-card contest-prize-silver">
-                        <div class="contest-prize-place" id="contest-prize-2-label" data-i18n="contest_prize_2">2ND PLACE</div>
-                        <img src="images/bear.webp" alt="" class="contest-prize-img">
-                        <div class="contest-prize-name" id="contest-prize-2-name" data-i18n="contest_prize_bear">BEAR GIFT</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- STEPS / RULES -->
-            <div class="contest-steps">
-                <div class="contest-step">
-                    <div class="contest-step-num" id="contest-step1-num">01</div>
-                    <div class="contest-step-txt" id="contest-step1-txt" data-i18n="contest_step1">Mine coins. Race. Open chests. Stack as many as you can.</div>
-                </div>
-                <div class="contest-step">
-                    <div class="contest-step-num" id="contest-step2-num">02</div>
-                    <div class="contest-step-txt" id="contest-step2-txt" data-i18n="contest_step2">The two players with the most coins take the prizes.</div>
-                </div>
-                <div class="contest-step">
-                    <div class="contest-step-num" id="contest-step3-num">03</div>
-                    <div class="contest-step-txt" id="contest-step3-txt" data-i18n="contest_step3">1st place and 2nd place each get one Bear Gift.</div>
-                </div>
-                <div class="contest-step">
-                    <div class="contest-step-num" id="contest-step4-num">04</div>
-                    <div class="contest-step-txt" id="contest-step4-txt" data-i18n="contest_step4">Winners are announced and gifts are sent after the race ends.</div>
-                </div>
-            </div>
-
-            <!-- YOUR RANK -->
-            <div id="contest-sticky-user" class="contest-sticky"></div>
-
-            <!-- LEADERBOARD -->
-            <h3 id="contest-lb-title" class="contest-lb-heading" data-i18n="contest_leaderboard">COIN KINGS</h3>
-            <div id="contest-leaderboard-list" class="contest-lb-list"></div>
-        </div>
-
-        <nav class="contest-bottom-bar">
-            <button id="contest-back-btn" class="contest-back-btn" onclick="closeContestModal()" data-i18n="contest_back">BACK</button>
-        </nav>
-    </div>
-
-    <!-- Full-screen Exchange Modal (crypto style) -->
+    <!-- EXCHANGE -->
     <div id="exchange-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content" style="display:flex;flex-direction:column;height:100%;padding:20px 20px 120px;">
-            <h2 style="font-weight:900;margin-top:10px;" data-i18n="exchange_title">Exchange Coins</h2>
+            <h2 style="font-weight:900;margin-top:10px;" data-i18n="exchange_title">Turn Coins into Stars</h2>
             <p style="color:var(--text-muted);margin-bottom:25px;" data-i18n="exchange_subtitle">Convert coins into Stars</p>
-
-            <!-- You Pay -->
             <div class="glass-card" style="flex-direction:column;align-items:stretch;gap:12px;margin-bottom:15px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <span style="font-weight:700;font-size:0.9em;" data-i18n="you_pay">You pay</span>
                     <button class="action-btn" style="padding:6px 14px;font-size:0.8em;" onclick="setMaxCoins()" data-i18n="max">MAX</button>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;">
-                    <input id="exchange-input" type="number" min="0" step="100" placeholder="0"
-                        style="flex:1;font-size:1.6em;font-weight:900;border:none;background:transparent;outline:none;color:var(--text-main);"
-                        oninput="updateExchangePreview()">
+                    <input id="exchange-input" type="number" min="0" step="100" placeholder="0" style="flex:1;font-size:1.6em;font-weight:900;border:none;background:transparent;outline:none;color:var(--text-main);" oninput="updateExchangePreview()">
                     <span style="font-weight:800;" data-i18n="coins">Coins</span>
                 </div>
-                <div style="font-size:0.85em;color:var(--text-muted);">
-                    Balance: <span id="exchange-balance">0</span>
-                </div>
+                <div style="font-size:0.85em;color:var(--text-muted);">Balance: <span id="exchange-balance">0</span></div>
             </div>
-
-            <!-- Arrow -->
             <div style="text-align:center;font-size:1.8em;margin:5px 0;">=</div>
-
-            <!-- You Receive -->
             <div class="glass-card" style="flex-direction:column;align-items:stretch;gap:12px;margin-bottom:20px;background:#FFF8E7;">
                 <span style="font-weight:700;font-size:0.9em;" data-i18n="you_receive">You receive</span>
                 <div style="display:flex;align-items:center;gap:10px;">
                     <span id="exchange-stars-preview" style="font-size:1.6em;font-weight:900;">0</span>
                     <span style="font-weight:800;" data-i18n="stars">Stars</span>
                 </div>
-                <div style="font-size:0.85em;color:var(--text-muted);" data-i18n="rate_info">1 500 Coins = 1 Star</div>
+                <div style="font-size:0.85em;color:var(--text-muted);" data-i18n="rate_info">Exchange every 1000 coins for 1 Telegram Star</div>
             </div>
-
-            <button class="action-btn primary-btn" style="width:100%;margin-top:auto;" onclick="confirmExchange()" data-i18n="confirm_exchange">
-                Confirm Exchange
-            </button>
+            <button class="action-btn primary-btn" style="width:100%;margin-top:auto;" onclick="confirmExchange()" data-i18n="confirm_exchange">Confirm Exchange</button>
         </div>
-
         <nav class="marketplace-bottom-bar">
             <button class="action-btn primary-btn" onclick="closeExchangeModal()" style="width:100%;" data-i18n="back">Back</button>
         </nav>
     </div>
-    <!-- MARKETPLACE MODAL -->
-    <div id="marketplace-modal" class="overlay marketplace-fullscreen">
-        <div class="marketplace-content">
-            <h2 style="color: var(--text-main); margin-bottom: 5px; margin-top: 20px;">Telegram Gifts</h2>
-            <p class="subtitle" style="color: var(--text-muted); margin-bottom: 20px; font-weight: 500;">Exchange Stars for real profile gifts</p>
-            
-            <div class="gift-grid" style="padding-bottom: 100px;">
-                <div class="glass-card gift-item">
-                    <img src="images/bear.webp" alt="Star Gift" class="tg-gift-img">
-                    <p style="color: var(--text-main);">Bear</p>
-                    <button class="action-btn" onclick="buyGift('Bear Gift', 25)">25 ⭐</button>
-                </div>
-                <div class="glass-card gift-item">
-                    <img src="images/box.webp" alt="Lollipop" class="tg-gift-img">
-                    <p style="color: var(--text-main);">Gift Box</p>
-                    <button class="action-btn" onclick="buyGift('Gift Box', 35)">35 ⭐</button>
-                </div>
-                <div class="glass-card gift-item">
-                    <img src="images/bouquette.webp" alt="Doge" class="tg-gift-img">
-                    <p style="color: var(--text-main);">Bouquet</p>
-                    <button class="action-btn" onclick="buyGift('Bouquet Gift', 75)">75 ⭐</button>
-                </div>
-                <div class="glass-card gift-item">
-                    <img src="images/rose.webp" alt="Premium" class="tg-gift-img">
-                    <p style="color: var(--text-main);">Rose</p>
-                    <button class="action-btn" onclick="buyGift('Rose Gift', 75)">75 ⭐</button>
-                </div>
-                <div class="glass-card gift-item">
-                    <img src="images/diamond.webp" alt="Mystery Box" class="tg-gift-img">
-                    <p style="color: var(--text-main);">Diamond</p>
-                    <button class="action-btn" onclick="buyGift('Diamond Gift', 110)">110 ⭐</button>
-                </div>
-                <div class="glass-card gift-item">
-                    <img src="images/trophy.webp" alt="Crown" class="tg-gift-img">
-                    <p style="color: var(--text-main);">Trophy</p>
-                    <button class="action-btn" onclick="buyGift('Trophy Gift', 110)">110 ⭐</button>
-                </div>
-            </div>
-        </div>
-        
-        <nav class="marketplace-bottom-bar">
-            <button class="action-btn primary-btn" onclick="closeMarketplace()" style="width: 100%;">
-                Back to Profile
-            </button>
-        </nav>
-    </div>
 
-    <!-- CUSTOM ALERT MODAL -->
-    <div id="custom-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 9999; justify-content: center; align-items: flex-end; padding-bottom: 110px;">
-        <div style="background: #FFD700; border: 3px solid var(--border-hard); box-shadow: 6px 6px 0px var(--border-hard); border-radius: 12px; display: flex; flex-direction: column; width: 90%; max-width: 350px; padding: 20px; text-align: center; gap: 15px; animation: popIn 0.2s ease; pointer-events: auto;">
-            <p id="custom-modal-text" style="font-size: 1.05em; font-weight: 800; color: #1C1C1C; line-height: 1.4; margin: 0;"></p>
-            <button id="custom-modal-btn" class="action-btn" onclick="closeModal()" style="width: 100%; padding: 12px; margin: 0; background: #FFFFFF; color: #1C1C1C; font-weight: 800; border: 2px solid #1C1C1C; box-shadow: 4px 4px 0px #1C1C1C;">OK</button>
-        </div>
-    </div>
-
-    <!-- FULLSCREEN LEADERBOARD MODAL -->
+    <!-- LEADERBOARD -->
     <div id="leaderboard-modal" class="overlay marketplace-fullscreen">
-        <div class="marketplace-content" style="padding: 0; display: flex; flex-direction: column; height: 100%;">
-            <h2 style="color: var(--text-main); margin-top: 15px; font-weight: 900;">Global Top 30</h2>
-            
-            <!-- YELLOW TOP USER CARD BANNER -->
-            <div id="sticky-user-card" class="glass-card" style="margin: 15px 20px; position: sticky; top: 0; z-index: 10; background: #FFD700; border: 3px solid #1C1C1C; box-shadow: 4px 4px 0px #1C1C1C; padding: 12px 16px;"></div>
-            
-            <div id="full-leaderboard-list" style="padding: 0 20px 100px 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px;"></div>
+        <div class="marketplace-content" style="padding:0;display:flex;flex-direction:column;height:100%;">
+            <h2 style="color:var(--text-main);margin-top:15px;font-weight:900;">Global Top 30</h2>
+            <div id="sticky-user-card" class="glass-card" style="margin:15px 20px;position:sticky;top:0;z-index:10;background:#FFD700;border:3px solid #1C1C1C;box-shadow:4px 4px 0px #1C1C1C;padding:12px 16px;"></div>
+            <div id="full-leaderboard-list" style="padding:0 20px 100px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px;"></div>
         </div>
         <nav class="marketplace-bottom-bar">
-            <button class="action-btn primary-btn" onclick="closeLeaderboard()" style="width: 100%;">Back to App</button>
+            <button class="action-btn primary-btn" onclick="closeLeaderboard()" style="width:100%;">Back to App</button>
         </nav>
     </div>
 
-    <!-- Chest Reward Modal -->
-    <div id="chest-reward-modal" class="overlay chest-reward-overlay" onclick="handleChestModalBackdropClick(event)" style="display: none;">
+    <!-- CHEST REWARD -->
+    <div id="chest-reward-modal" class="overlay chest-reward-overlay" onclick="handleChestModalBackdropClick(event)" style="display:none;">
         <div class="glass-card chest-reward-card">
-            <h2 id="chest-reward-title" data-i18n="you_won" style="font-size: 2.2em; font-weight: 900; margin-bottom: 5px;">You Won!</h2>
-            <p id="chest-reward-sub" data-i18n="congrats" style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 25px;">Congratulations! You received:</p>
-            
+            <h2 id="chest-reward-title" data-i18n="you_won" style="font-size:2.2em;font-weight:900;margin-bottom:5px;">You Won!</h2>
+            <p id="chest-reward-sub" data-i18n="congrats" style="color:var(--text-muted);font-size:0.9em;margin-bottom:25px;">Congratulations! You received:</p>
             <div id="chest-reward-icon" class="chest-reward-icon">🎁</div>
             <div id="chest-reward-amount" class="chest-reward-amount">+0</div>
-            
             <button class="action-btn primary-btn thanks-btn" id="chest-reward-thanks-btn" onclick="closeChestRewardModal()" data-i18n="thanks">Thanks!</button>
         </div>
     </div>
 
-    <!-- INTERACTIVE NEW-USER GUIDE (spotlight tour) -->
-    <div id="guide-overlay" class="guide-overlay" style="display: none;" aria-hidden="true">
-        <div id="guide-spotlight" class="guide-spotlight"></div>
-        <div id="guide-tooltip" class="guide-tooltip">
-            <div class="guide-tooltip-top">
-                <span class="guide-location" id="guide-location"></span>
-                <span class="guide-step-indicator" id="guide-step-indicator">1 / 6</span>
-            </div>
-            <h3 id="guide-title" class="guide-title"></h3>
-            <p id="guide-desc" class="guide-desc"></p>
-            <div class="guide-actions">
-                <button type="button" class="action-btn guide-skip-btn" id="guide-skip-btn" onclick="skipGuide()">Skip</button>
-                <button type="button" class="action-btn primary-btn guide-next-btn" id="guide-next-btn" onclick="nextGuideStep()">Next</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PARTNER LANDING (YULDASHEV / ABDURASHIDOV) -->
-    <div id="partner-page" class="partner-page">
-        <div class="partner-inner">
-            <div class="partner-brand">
-                <div class="partner-brand-tag" id="partner-brand-tag">RASMIY HAMKOR</div>
-                <h1 class="partner-brand-title" id="partner-brand-title">YULDASHEV<br><span class="partner-x">×</span><br>TAPPY STARS</h1>
-            </div>
-
-            <div class="partner-gift-machine">
-                <div class="partner-gift-icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- gift box base -->
-                        <rect x="10" y="28" width="44" height="28" rx="3" fill="#E74C3C" stroke="#1C1C1C" stroke-width="3"/>
-                        <!-- lid -->
-                        <rect x="8" y="20" width="48" height="12" rx="2" fill="#C0392B" stroke="#1C1C1C" stroke-width="3"/>
-                        <!-- vertical ribbon -->
-                        <rect x="28" y="20" width="8" height="36" fill="#FFD700" stroke="#1C1C1C" stroke-width="2"/>
-                        <!-- horizontal ribbon on lid -->
-                        <rect x="8" y="24" width="48" height="5" fill="#FFD700" stroke="#1C1C1C" stroke-width="1.5"/>
-                        <!-- bow left -->
-                        <path d="M32 20 C24 8 14 12 20 18 C24 20 28 18 32 20Z" fill="#FFD700" stroke="#1C1C1C" stroke-width="2"/>
-                        <!-- bow right -->
-                        <path d="M32 20 C40 8 50 12 44 18 C40 20 36 18 32 20Z" fill="#FFD700" stroke="#1C1C1C" stroke-width="2"/>
-                        <!-- bow center knot -->
-                        <circle cx="32" cy="20" r="3.5" fill="#F5A623" stroke="#1C1C1C" stroke-width="2"/>
-                    </svg>
-                </div>
-                <h2 class="partner-gift-title">Hamkor sovg'asi</h2>
-                <p class="partner-gift-desc">Reklama ko'ring va coins yoki stars oling</p>
-                <div class="partner-claims-left" id="partner-claims-left">2 ta imkoniyat qoldi</div>
-                <div class="partner-timer" id="partner-timer" style="display:none;"></div>
-                <button class="partner-claim-btn" id="partner-claim-btn" onclick="claimPartnerGift()">REKLAMA KO'RIB OLISH</button>
-            </div>
-
-            <div class="partner-reward-box" id="partner-reward-box">
-                <div class="partner-confetti" id="partner-confetti" aria-hidden="true"></div>
-                <div class="partner-reward-icon" id="partner-reward-icon" aria-hidden="true">🎁</div>
-                <div class="partner-reward-label">SIZ OLDINGIZ!</div>
-                <div class="partner-reward-amount" id="partner-reward-amount">+00</div>
-                <div class="partner-reward-sub">Asosiy menyuga o'ting — balans yangilandi</div>
-            </div>
-        </div>
-
-        <nav class="partner-bottom-bar" id="partner-bottom-bar">
-            <button class="partner-collect-btn" onclick="collectPartnerBonuses()">BONUSLARNI OLISH → ASOSIY</button>
-        </nav>
-    </div>
-
-    
-    <!-- SPIN WHEEL MODAL -->
-    <div id="spin-modal" class="overlay spin-overlay" style="display:none;">
-        <div class="spin-sheet">
-            <button type="button" class="spin-close" onclick="closeSpinModal()" aria-label="Close">✕</button>
-
-            <div class="spin-sheet-top">
-                <span class="spin-sheet-tag">LUCKY WHEEL</span>
-                <h2 class="spin-sheet-title">SPIN TO WIN</h2>
-                <p class="spin-sheet-sub">Land a prize every spin. Coins, Stars or a free booster.</p>
-            </div>
-
-            <div class="spin-stage">
-                <div class="spin-pointer"></div>
-                <div class="spin-wheel-ring">
-                    <div class="spin-wheel" id="spin-wheel">
-                        <div class="sw-label" style="--i:0">100</div>
-                        <div class="sw-label" style="--i:1">1⭐</div>
-                        <div class="sw-label" style="--i:2">250</div>
-                        <div class="sw-label" style="--i:3">2⭐</div>
-                        <div class="sw-label" style="--i:4">500</div>
-                        <div class="sw-label" style="--i:5">BOOST</div>
-                        <div class="sw-label" style="--i:6">150</div>
-                        <div class="sw-label" style="--i:7">3⭐</div>
-                        <div class="spin-hub"><span id="spin-modal-count">0</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="spin-result" class="spin-result" style="display:none;"></div>
-
-            <div class="spin-actions">
-                <button type="button" class="spin-btn-primary" id="btn-do-spin" onclick="doSpin()">SPIN NOW</button>
-                <button type="button" class="spin-btn-ad" id="btn-earn-spin" onclick="earnSpinWithAd()">WATCH AD · GET +1 SPIN</button>
-            </div>
+    <!-- CUSTOM ALERT -->
+    <div id="custom-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:transparent;z-index:9999;justify-content:center;align-items:flex-end;padding-bottom:110px;">
+        <div style="background:#FFD700;border:3px solid var(--border-hard);box-shadow:6px 6px 0px var(--border-hard);border-radius:0;display:flex;flex-direction:column;width:90%;max-width:350px;padding:20px;text-align:center;gap:15px;animation:popIn 0.2s ease;pointer-events:auto;">
+            <p id="custom-modal-text" style="font-size:1.05em;font-weight:800;color:#1C1C1C;line-height:1.4;margin:0;"></p>
+            <button id="custom-modal-btn" class="action-btn" onclick="closeModal()" style="width:100%;padding:12px;margin:0;background:#FFFFFF;color:#1C1C1C;font-weight:800;border:2px solid #1C1C1C;box-shadow:4px 4px 0px #1C1C1C;">OK</button>
         </div>
     </div>
 
