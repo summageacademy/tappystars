@@ -129,6 +129,9 @@ const TRANSLATIONS = {
         claimed: "Claimed",
         done_today: "Done today",
         share_text: "Join me on TappyStars and mine coins together!",
+        buy_boosters: "Buy Boosters",
+        ads_limit_reached: "Daily ad limit reached",
+        ads_reset_in: "Resets in",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -236,6 +239,9 @@ const TRANSLATIONS = {
         claimed: "Получено",
         done_today: "Сделано сегодня",
         share_text: "Присоединяйся ко мне в TappyStars!",
+        buy_boosters: "Купить бустеры",
+        ads_limit_reached: "Дневной лимит рекламы",
+        ads_reset_in: "Сброс через",
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -343,6 +349,9 @@ const TRANSLATIONS = {
         claimed: "Olingan",
         done_today: "Bugun bajarildi",
         share_text: "TappyStars da menga qo'shiling!",
+        buy_boosters: "Buster sotib olish",
+        ads_limit_reached: "Kunlik reklama limiti",
+        ads_reset_in: "Qayta ochiladi",
     }
 };
 
@@ -699,6 +708,7 @@ function updateDailyTasksUI() {
             btnT.style.background = '';
         }
     }
+    updateAllAdButtons();
 }
 
 window.doDailyTask = async (taskId) => {
@@ -765,7 +775,184 @@ window.claimDailyTask = async (taskId) => {
     }
 };
 
+// ========== ADS DAILY LIMIT (10 / day, Tashkent reset) ==========
+const ADS_DAILY_LIMIT = 10;
+
+function ensureAdsFields() {
+    if (!userData) return;
+    const today = getTashkentDate();
+    if (userData.adsDate !== today) {
+        userData.adsDate = today;
+        userData.adsToday = 0;
+        try {
+            if (userRef) {
+                updateDoc(userRef, { adsDate: today, adsToday: 0 }).catch(() => {});
+            }
+        } catch (e) {}
+    }
+    if (typeof userData.adsToday !== 'number') userData.adsToday = 0;
+}
+
+function canWatchAd() {
+    ensureAdsFields();
+    return (userData?.adsToday || 0) < ADS_DAILY_LIMIT;
+}
+
+function msUntilTashkentMidnight() {
+    const now = new Date();
+    // Tashkent = UTC+5
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    const tashMs = utcMs + 5 * 60 * 60000;
+    const tash = new Date(tashMs);
+    const nextMidnight = new Date(tash);
+    nextMidnight.setHours(24, 0, 0, 0);
+    return Math.max(0, nextMidnight.getTime() - tashMs);
+}
+
+function formatAdsCooldown() {
+    const ms = msUntilTashkentMidnight();
+    const totalSec = Math.ceil(ms / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+async function recordAdWatch() {
+    if (!userData) return;
+    ensureAdsFields();
+    userData.adsToday = (userData.adsToday || 0) + 1;
+    try {
+        await updateDoc(userRef, {
+            adsToday: userData.adsToday,
+            adsDate: userData.adsDate || getTashkentDate(),
+            totalAdsWatched: increment(1)
+        });
+    } catch (e) {}
+    updateAllAdButtons();
+    touchActivity();
+}
+
+function updateAllAdButtons() {
+    if (!userData) return;
+    ensureAdsFields();
+    const limited = !canWatchAd();
+    const cooldownLabel = limited
+        ? `${t('ads_reset_in')} ${formatAdsCooldown()}`
+        : null;
+
+    const applyLimit = (btn, defaultTextKey, defaultBg, defaultColor, onclickFn) => {
+        if (!btn) return;
+        if (limited) {
+            btn.disabled = true;
+            btn.innerText = cooldownLabel;
+            btn.style.background = '#CFD8DC';
+            btn.style.color = '#1C1C1C';
+            btn.onclick = null;
+        } else if (onclickFn) {
+            // restore only if not already in a "done" state managed elsewhere
+            // callers will re-apply their specific UI after
+        }
+    };
+
+    // Daily task ad1
+    const btn1 = document.getElementById('btn-task-ad1');
+    if (btn1) {
+        const dt = userData.dailyTasks || {};
+        if (dt.ad1) {
+            btn1.disabled = true;
+            btn1.innerText = t('done_today');
+            btn1.style.background = '#CFD8DC';
+            btn1.style.color = '#1C1C1C';
+        } else if (limited) {
+            btn1.disabled = true;
+            btn1.innerText = cooldownLabel;
+            btn1.style.background = '#CFD8DC';
+            btn1.style.color = '#1C1C1C';
+            btn1.onclick = null;
+        } else {
+            btn1.disabled = false;
+            btn1.innerText = t('watch_ad');
+            btn1.style.background = '#FF9800';
+            btn1.style.color = '#1C1C1C';
+            btn1.onclick = () => doDailyTask('ad1');
+        }
+    }
+
+    // Daily task ad3 — only override when waiting for more ads (not claimable/done)
+    const btn3 = document.getElementById('btn-task-ad3');
+    if (btn3) {
+        const dt = userData.dailyTasks || {};
+        const ad3Count = dt.ad3 || 0;
+        if (dt.ad3Claimed) {
+            // leave as done
+        } else if (ad3Count >= 3) {
+            // leave as claim
+        } else if (limited) {
+            btn3.disabled = true;
+            btn3.innerText = cooldownLabel;
+            btn3.style.background = '#CFD8DC';
+            btn3.style.color = '#1C1C1C';
+            btn3.onclick = null;
+        }
+    }
+
+    // Boost buttons
+    ['btn-boost-auto', 'btn-boost-multitap', 'btn-boost-energy'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        if (limited) {
+            btn.disabled = true;
+            btn.innerText = cooldownLabel;
+            btn.style.background = '#CFD8DC';
+            btn.style.color = '#1C1C1C';
+        } else {
+            btn.disabled = false;
+            btn.innerText = t('watch_ad');
+            btn.style.background = '#FF9800';
+            btn.style.color = id === 'btn-boost-energy' || true ? 'black' : '#1C1C1C';
+        }
+    });
+
+    // Chest buttons
+    ['btn-chest-small', 'btn-chest-medium', 'btn-chest-mega', 'btn-news-reward'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        if (limited) {
+            btn.disabled = true;
+            btn.innerText = cooldownLabel;
+            btn.style.background = '#CFD8DC';
+            btn.style.color = '#1C1C1C';
+        } else {
+            btn.disabled = false;
+            btn.innerText = t('watch_ad');
+            btn.style.background = '#FF9800';
+            btn.style.color = 'black';
+        }
+    });
+
+    // Spin button — only override when not already in spin cooldown / spinning
+    const spinBtn = document.getElementById('btn-spin-main');
+    if (spinBtn && !isSpinning) {
+        const remain = remainingSpinAdCooldown();
+        if (limited) {
+            spinBtn.disabled = true;
+            spinBtn.innerText = cooldownLabel;
+            spinBtn.style.background = '#CFD8DC';
+            spinBtn.style.color = '#1C1C1C';
+            spinBtn.onclick = null;
+        } else if (!(remain > 0 && (userData.lastSpinAdTime || 0) > 0)) {
+            // leave spin UI to updateSpinUI
+        }
+    }
+}
+
 async function showAd() {
+    if (!canWatchAd()) {
+        safeAlert(`${t('ads_limit_reached')}. ${t('ads_reset_in')} ${formatAdsCooldown()}`, true);
+        updateAllAdButtons();
+        return false;
+    }
     if (!window.Adsgram) {
         safeAlert('Ads unavailable.', true);
         return false;
@@ -773,6 +960,7 @@ async function showAd() {
     try {
         const AdController = window.Adsgram.init({ blockId: '44503', debug: false });
         await AdController.show();
+        await recordAdWatch();
         return true;
     } catch (e) {
         safeAlert('Ad not completed.', true);
@@ -863,8 +1051,58 @@ let isAppInitialized = false;
 let unsyncedCoins = 0;
 let syncTimer = null;
 let isSyncing = false;
+let lastTouchActivityMs = 0;
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
+
+/** Track last interaction + DAU / MAU flags for admin analytics. */
+async function touchActivity() {
+    if (!userData || !userRef) return;
+    const now = Date.now();
+    // Throttle writes to once per 2 minutes
+    if (now - lastTouchActivityMs < 2 * 60 * 1000 && userData.lastActiveAt) return;
+    lastTouchActivityMs = now;
+
+    const today = getTashkentDate();
+    const monthKey = today.slice(0, 7); // YYYY-MM
+    const updates = { lastActiveAt: now };
+    const prevActive = userData.lastActiveAt || 0;
+    const wasActiveRecently = prevActive && (now - prevActive) < 30 * 60 * 60 * 1000; // 30h
+
+    // DAU: count once per Tashkent day
+    if (userData.dauDate !== today) {
+        updates.dauDate = today;
+        userData.dauDate = today;
+        // Increment global daily counter
+        try {
+            const dauRef = doc(db, 'analytics', `dau_${today}`);
+            await setDoc(dauRef, { count: increment(1), date: today, updatedAt: now }, { merge: true });
+        } catch (e) {}
+    }
+
+    // MAU: count once per calendar month (Tashkent)
+    if (userData.mauMonth !== monthKey) {
+        updates.mauMonth = monthKey;
+        userData.mauMonth = monthKey;
+        try {
+            const mauRef = doc(db, 'analytics', `mau_${monthKey}`);
+            await setDoc(mauRef, { count: increment(1), month: monthKey, updatedAt: now }, { merge: true });
+        } catch (e) {}
+    }
+
+    // Also track "active in last 30h / 31d" snapshot flags for admin queries
+    updates.isDau = true;
+    updates.isMau = true;
+    userData.lastActiveAt = now;
+    userData.isDau = true;
+    userData.isMau = true;
+
+    try {
+        await updateDoc(userRef, updates);
+    } catch (e) {
+        try { await setDoc(userRef, updates, { merge: true }); } catch (e2) {}
+    }
+}
 
 onSnapshot(userRef, async (docSnap) => {
     if (docSnap.exists()) {
@@ -877,6 +1115,7 @@ onSnapshot(userRef, async (docSnap) => {
             stars: 0,
             totalClicks: 0,
             energy: 1000,
+            lastEnergyUpdate: Date.now(),
             todayTapCoins: 0,
             lastTapDate: getTodayDate(),
             boosts: {},
@@ -890,8 +1129,11 @@ onSnapshot(userRef, async (docSnap) => {
             lastSpinAdTime: 0,
             freeBearGift: false,
             chestProgress: { medium: 0, mega: 0, news: 0 },
-            purchases: [],
-            onboardingDone: false
+            onboardingDone: false,
+            adsToday: 0,
+            adsDate: getTashkentDate(),
+            totalAdsWatched: 0,
+            lastActiveAt: Date.now()
         };
         await setDoc(userRef, userData);
     }
@@ -903,12 +1145,20 @@ onSnapshot(userRef, async (docSnap) => {
     if (!userData.claimedLeagues) userData.claimedLeagues = {};
     if (!userData.boosts) userData.boosts = {};
     if (!userData.chestProgress) userData.chestProgress = { medium: 0, mega: 0, news: 0 };
+    if (typeof userData.adsToday !== 'number') userData.adsToday = 0;
+    if (!userData.adsDate) userData.adsDate = getTashkentDate();
+    if (!userData.lastEnergyUpdate) userData.lastEnergyUpdate = Date.now();
+
+    // Catch up offline energy before UI shows
+    applyOfflineEnergyRegen();
 
     ensureDailyFields();
+    ensureAdsFields();
     if (!isAppInitialized) {
         isAppInitialized = true;
         initApp();
         processReferralOnStart();
+        touchActivity();
     }
     updateUI();
 });
@@ -934,6 +1184,7 @@ function initApp() {
     updateBoostUI();
     updateChestUI();
     updateSpinUI();
+    updateAllAdButtons();
     loadLeaderboardPreview();
     loadPurchases();
     startAutoTapLoop();
@@ -948,6 +1199,7 @@ window.switchTab = (tab) => {
     const nav = document.querySelector(`.nav-item[data-tab="${tab}"]`);
     if (nav) nav.classList.add('active');
     safeHaptic('selection');
+    touchActivity();
 
     if (tab === 'tasks') {
         updateDailyTasksUI();
@@ -959,6 +1211,7 @@ window.switchTab = (tab) => {
         loadPurchases();
     }
     if (tab === 'boxes') updateSpinUI();
+    if (tab === 'boosts') updateAllAdButtons();
 };
 
 window.switchTasksTab = (sub) => {
@@ -1000,8 +1253,9 @@ function updateAccountStats() {
 // ========== MINING ==========
 const ENERGY_MAX = 1000;
 const ENERGY_COST = 3;
-const ENERGY_REGEN = 2;
+const ENERGY_REGEN = 2;           // online: +2 every 5s
 const ENERGY_REGEN_MS = 5000;
+const ENERGY_REGEN_OFFLINE = 1;   // offline: +1 every 5s (slower)
 
 function getMineRate() {
     let rate = 1;
@@ -1015,11 +1269,55 @@ function ensureEnergy() {
     if (userData.energy > ENERGY_MAX) userData.energy = ENERGY_MAX;
 }
 
+/** Apply offline (or any gap) energy regen from lastEnergyUpdate at slower offline rate. */
+function applyOfflineEnergyRegen() {
+    if (!userData) return;
+    ensureEnergy();
+    const now = Date.now();
+    const last = userData.lastEnergyUpdate || now;
+    if (last >= now) {
+        userData.lastEnergyUpdate = now;
+        return;
+    }
+    const elapsed = now - last;
+    // Offline rate: +1 every 5 seconds
+    const ticks = Math.floor(elapsed / ENERGY_REGEN_MS);
+    if (ticks > 0 && userData.energy < ENERGY_MAX) {
+        userData.energy = Math.min(ENERGY_MAX, (userData.energy || 0) + ticks * ENERGY_REGEN_OFFLINE);
+    }
+    userData.lastEnergyUpdate = now;
+}
+
+function persistEnergyUpdate() {
+    if (!userData || !userRef) return;
+    userData.lastEnergyUpdate = Date.now();
+    updateDoc(userRef, {
+        energy: userData.energy,
+        lastEnergyUpdate: userData.lastEnergyUpdate
+    }).catch(() => {});
+}
+
+function spawnFloatText(btn, amount) {
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'float-tap-text';
+    el.textContent = `+${amount}`;
+    // Random horizontal offset around center of button
+    const offsetX = (Math.random() - 0.5) * 60;
+    el.style.left = `${rect.left + rect.width / 2 + offsetX}px`;
+    el.style.top = `${rect.top + rect.height / 2 - 10}px`;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('float-tap-go'));
+    setTimeout(() => el.remove(), 900);
+}
+
 function setupMining() {
     const btn = document.getElementById('mine-btn');
     if (!btn) return;
-    btn.onclick = () => {
+    btn.onclick = (e) => {
         if (!userData) return;
+        applyOfflineEnergyRegen();
         ensureEnergy();
         ensureDailyFields();
         if ((userData.energy || 0) < ENERGY_COST) {
@@ -1031,11 +1329,14 @@ function setupMining() {
         userData.coins = (userData.coins || 0) + rate;
         userData.todayTapCoins = (userData.todayTapCoins || 0) + rate;
         userData.totalClicks = (userData.totalClicks || 0) + 1;
+        userData.lastEnergyUpdate = Date.now();
         unsyncedCoins += rate;
+        spawnFloatText(btn, rate);
         updateUI();
         updateLeagueCards();
         safeHaptic('impact', 'light');
         scheduleSync();
+        touchActivity();
     };
 }
 
@@ -1051,7 +1352,8 @@ function scheduleSync() {
             const payload = {
                 totalClicks: userData.totalClicks,
                 energy: userData.energy,
-                todayTapCoins: userData.todayTapCoins || 0
+                todayTapCoins: userData.todayTapCoins || 0,
+                lastEnergyUpdate: userData.lastEnergyUpdate || Date.now()
             };
             if (toSync > 0) payload.coins = increment(toSync);
             await updateDoc(userRef, payload);
@@ -1079,16 +1381,25 @@ function updateUI() {
     updateAccountStats();
 }
 
-// Energy regen: +2 every 5 seconds
+// Online energy regen: +2 every 5 seconds; also keep lastEnergyUpdate fresh
 setInterval(() => {
     if (!userData || !isAppInitialized) return;
     ensureEnergy();
     if (userData.energy < ENERGY_MAX) {
         userData.energy = Math.min(ENERGY_MAX, (userData.energy || 0) + ENERGY_REGEN);
+        userData.lastEnergyUpdate = Date.now();
         const energyEl = document.getElementById('energy-val');
         if (energyEl) energyEl.innerText = Math.floor(userData.energy);
+    } else {
+        userData.lastEnergyUpdate = Date.now();
     }
 }, ENERGY_REGEN_MS);
+
+// Persist energy periodically so offline catch-up is accurate
+setInterval(() => {
+    if (!userData || !isAppInitialized) return;
+    persistEnergyUpdate();
+}, 30000);
 
 // ========== BOOSTERS ==========
 const BOOST_DURATION = 30 * 60 * 1000;
@@ -1106,9 +1417,18 @@ function updateActiveBoosts() {
     const active = [];
     if (boosts.auto && boosts.auto > now) active.push(`Auto Tap (${Math.ceil((boosts.auto - now) / 60000)}m)`);
     if (boosts.multitap && boosts.multitap > now) active.push(`Multi-Tap (${Math.ceil((boosts.multitap - now) / 60000)}m)`);
-    list.innerHTML = active.length
-        ? active.map(a => `<div style="font-weight:700;padding:6px 0;border-bottom:1px dashed #ddd;">${a}</div>`).join('')
-        : `<p class="no-boosts">${t('no_boosters')}</p>`;
+    if (active.length) {
+        list.innerHTML = active.map(a => `<div style="font-weight:700;padding:6px 0;border-bottom:1px dashed #ddd;">${a}</div>`).join('');
+    } else {
+        list.innerHTML = `
+            <button type="button" class="action-btn primary-btn buy-boosters-btn" onclick="switchTab('boosts')">
+                <svg class="buy-boosters-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span data-i18n="buy_boosters">${t('buy_boosters')}</span>
+            </button>`;
+    }
 }
 
 window.buyEnergyRestoreAd = async () => {
@@ -1117,8 +1437,9 @@ window.buyEnergyRestoreAd = async () => {
     if (!ok) return;
     ensureEnergy();
     userData.energy = ENERGY_MAX;
+    userData.lastEnergyUpdate = Date.now();
     try {
-        await updateDoc(userRef, { energy: ENERGY_MAX });
+        await updateDoc(userRef, { energy: ENERGY_MAX, lastEnergyUpdate: userData.lastEnergyUpdate });
     } catch (e) {}
     updateUI();
     safeHaptic('notification', 'success');
@@ -1190,6 +1511,7 @@ function startAutoTapLoop() {
             userData.coins = (userData.coins || 0) + 1;
             userData.todayTapCoins = (userData.todayTapCoins || 0) + 1;
             userData.totalClicks = (userData.totalClicks || 0) + 1;
+            userData.lastEnergyUpdate = Date.now();
             unsyncedCoins += 1;
             updateUI();
             scheduleSync();
@@ -1411,6 +1733,15 @@ function updateSpinUI() {
         btn.innerText = 'SPINNING...';
         return;
     }
+    ensureAdsFields();
+    if (!canWatchAd()) {
+        btn.disabled = true;
+        btn.innerText = `${t('ads_reset_in')} ${formatAdsCooldown()}`;
+        btn.style.background = '#CFD8DC';
+        btn.style.color = '#1C1C1C';
+        btn.onclick = null;
+        return;
+    }
     const remain = remainingSpinAdCooldown();
     // Always need ad; cooldown after last spin
     if (remain > 0 && (userData.lastSpinAdTime || 0) > 0) {
@@ -1430,7 +1761,10 @@ function updateSpinUI() {
 }
 
 setInterval(() => {
-    if (userData && !isSpinning) updateSpinUI();
+    if (userData && !isSpinning) {
+        updateSpinUI();
+        if (!canWatchAd()) updateAllAdButtons();
+    }
 }, 1000);
 
 window.startSpinFlow = async () => {
@@ -1569,8 +1903,10 @@ window.closeGiftConfirmModal = () => {
 window.confirmGiftPurchase = async () => {
     if (!pendingGift || !userData) return;
     const input = document.getElementById('gift-username-input');
-    const username = (input?.value || '').trim();
-    if (!username || username.length < 2) {
+    let username = (input?.value || '').trim();
+    // normalize: strip leading @
+    if (username.startsWith('@')) username = username.slice(1);
+    if (!username || username.length < 2 || username.length > 64) {
         safeAlert(t('username_required'), true);
         return;
     }
@@ -1589,38 +1925,44 @@ window.confirmGiftPurchase = async () => {
         userData.freeBearGift = false;
     }
 
-    const purchase = {
-        name: pendingGift.name,
-        cost,
-        username,
+    const createdAt = new Date().toISOString();
+    const orderPayload = {
+        userId: user.id.toString(),
+        telegramId: user.id.toString(),
+        name: (user.first_name || 'Miner').toString().slice(0, 64),
+        gift: pendingGift.name,
+        giftName: pendingGift.name,
+        cost: Number(cost) || 0,
+        starCost: Number(cost) || 0,
+        username: username,
         status: 'pending',
-        date: new Date().toISOString()
+        state: 'Pending',
+        createdAt,
+        timestamp: createdAt
     };
-    if (!userData.purchases) userData.purchases = [];
-    userData.purchases.unshift(purchase);
 
     try {
+        // User doc: only stars / referral flags — never store purchases array here
         const updates = {
-            purchases: userData.purchases,
-            freeBearGift: userData.freeBearGift,
+            freeBearGift: !!userData.freeBearGift,
             pendingBearClaims: userData.pendingBearClaims || 0
         };
         if (cost > 0) updates.stars = increment(-cost);
         await updateDoc(userRef, updates);
-        await addDoc(collection(db, 'gift_orders'), {
-            userId: user.id.toString(),
-            name: user.first_name || '',
-            gift: pendingGift.name,
-            cost,
-            username,
-            status: 'pending',
-            createdAt: new Date().toISOString()
-        });
-    } catch (e) { console.warn(e); }
+
+        // Source of truth: top-level purchases collection
+        await addDoc(collection(db, 'purchases'), orderPayload);
+    } catch (e) {
+        console.warn('Gift order failed', e);
+        if (cost > 0) userData.stars = (userData.stars || 0) + cost;
+        safeAlert('Order failed. Please try again.', true);
+        return;
+    }
 
     updateUI();
     updateBearGiftButton();
     updateReferralUI();
+    loadPurchases();
     closeGiftConfirmModal();
     safeAlert(t('gift_success'), true);
     safeHaptic('notification', 'success');
@@ -1749,24 +2091,72 @@ window.closeLeaderboard = () => {
     document.getElementById('leaderboard-modal').style.display = 'none';
 };
 
-function loadPurchases() {
+async function loadPurchases() {
     const list = document.getElementById('purchases-list');
-    if (!list || !userData) return;
-    const purchases = userData.purchases || [];
-    if (!purchases.length) {
-        list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
-        return;
+    if (!list) return;
+    list.innerHTML = `<p class="empty-state">Loading...</p>`;
+    try {
+        const q = query(
+            collection(db, 'purchases'),
+            where('userId', '==', user.id.toString()),
+            orderBy('createdAt', 'desc'),
+            limit(50)
+        );
+        const snap = await getDocs(q);
+        if (snap.empty) {
+            list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
+            return;
+        }
+        const rows = [];
+        snap.forEach(d => {
+            const p = d.data();
+            const status = (p.status || p.state || 'pending').toString().toLowerCase();
+            const giftName = p.gift || p.giftName || p.name || 'Gift';
+            const cost = p.cost ?? p.starCost ?? 0;
+            const uname = p.username || '';
+            rows.push(`<div class="glass-card purchase-item">
+                <div>
+                    <strong>${giftName}</strong>
+                    <div style="font-size:0.8em;color:var(--text-muted);">${uname ? '@' + uname : ''} · ${cost}⭐</div>
+                </div>
+                <span class="status-badge status-${status}">${status}</span>
+            </div>`);
+        });
+        list.innerHTML = rows.join('');
+    } catch (e) {
+        console.warn('loadPurchases', e);
+        // Fallback without orderBy if index missing
+        try {
+            const q2 = query(
+                collection(db, 'purchases'),
+                where('userId', '==', user.id.toString()),
+                limit(50)
+            );
+            const snap2 = await getDocs(q2);
+            if (snap2.empty) {
+                list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
+                return;
+            }
+            const items = [];
+            snap2.forEach(d => items.push(d.data()));
+            items.sort((a, b) => String(b.createdAt || b.timestamp || '').localeCompare(String(a.createdAt || a.timestamp || '')));
+            list.innerHTML = items.map(p => {
+                const status = (p.status || p.state || 'pending').toString().toLowerCase();
+                const giftName = p.gift || p.giftName || p.name || 'Gift';
+                const cost = p.cost ?? p.starCost ?? 0;
+                const uname = p.username || '';
+                return `<div class="glass-card purchase-item">
+                    <div>
+                        <strong>${giftName}</strong>
+                        <div style="font-size:0.8em;color:var(--text-muted);">${uname ? '@' + uname : ''} · ${cost}⭐</div>
+                    </div>
+                    <span class="status-badge status-${status}">${status}</span>
+                </div>`;
+            }).join('');
+        } catch (e2) {
+            list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
+        }
     }
-    list.innerHTML = purchases.map(p => {
-        const status = p.status || 'pending';
-        return `<div class="glass-card purchase-item">
-            <div>
-                <strong>${p.name}</strong>
-                <div style="font-size:0.8em;color:var(--text-muted);">${p.username || ''} · ${p.cost || 0}⭐</div>
-            </div>
-            <span class="status-badge status-${status}">${status}</span>
-        </div>`;
-    }).join('');
 }
 
 // ========== ONBOARDING ==========
