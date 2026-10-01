@@ -822,13 +822,41 @@ async function recordAdWatch() {
     if (!userData) return;
     ensureAdsFields();
     userData.adsToday = (userData.adsToday || 0) + 1;
+
+    const updates = {
+        adsToday: userData.adsToday,
+        adsDate: userData.adsDate || getTashkentDate(),
+        totalAdsWatched: increment(1)
+    };
+
+    // If the user was referred and hasn't credited their referrer yet, do it now upon watching an ad
+    if (userData.referredBy && !userData.referralCredited) {
+        updates.referralCredited = true;
+        userData.referralCredited = true;
+
+        try {
+            const refRef = doc(db, 'users', userData.referredBy);
+            const refSnap = await getDoc(refRef);
+            if (refSnap.exists()) {
+                const refData = refSnap.data();
+                const currentCount = refData.referralCount || 0;
+                const newCount = currentCount + 1;
+                const earned = Math.floor(newCount / 10) - Math.floor(currentCount / 10);
+                
+                await updateDoc(refRef, {
+                    referralCount: increment(1),
+                    pendingBearClaims: increment(earned)
+                });
+            }
+        } catch (e) {
+            console.warn('Referrer credit error (Check Firestore Rules)', e);
+        }
+    }
+
     try {
-        await updateDoc(userRef, {
-            adsToday: userData.adsToday,
-            adsDate: userData.adsDate || getTashkentDate(),
-            totalAdsWatched: increment(1)
-        });
+        await updateDoc(userRef, updates);
     } catch (e) {}
+
     updateAllAdButtons();
     touchActivity();
 }
@@ -1018,33 +1046,15 @@ async function processReferralOnStart() {
         if (!startParam.startsWith('ref_')) return;
         const referrerId = startParam.replace('ref_', '');
         if (!referrerId || referrerId === user.id.toString()) return;
-        
-        // Prevent double-crediting
-        if (userData?.referralCredited) return;
 
-        if (!userData?.referredBy) {
-            await updateDoc(userRef, { referredBy: referrerId });
-            userData.referredBy = referrerId;
-        }
+        // If already recorded, do nothing
+        if (userData?.referredBy || userData?.referralCredited) return;
 
-        const refRef = doc(db, 'users', referrerId);
-        const refSnap = await getDoc(refRef);
-        if (refSnap.exists()) {
-            const refData = refSnap.data();
-            const currentCount = refData.referralCount || 0;
-            const newCount = currentCount + 1;
-            const earned = Math.floor(newCount / 10) - Math.floor(currentCount / 10);
-            await updateDoc(refRef, {
-                referralCount: increment(1),
-                pendingBearClaims: increment(earned)
-            });
-        }
-
-        // Mark as credited so it runs only once per user
-        await updateDoc(userRef, { referralCredited: true });
-        userData.referralCredited = true;
+        // Save the referrer ID on the new user's document
+        await updateDoc(userRef, { referredBy: referrerId });
+        userData.referredBy = referrerId;
     } catch (e) {
-        console.warn('Referral process error', e);
+        console.warn('Referral setup error', e);
     }
 }
 
