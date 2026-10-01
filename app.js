@@ -992,7 +992,7 @@ function updateReferralUI() {
 }
 
 window.shareReferral = () => {
-    const botUsername = 'TappyStarsBot'; // change if different
+    const botUsername = 'tappystars_bot';
     const link = `https://t.me/${botUsername}?start=ref_${user.id}`;
     const text = t('share_text');
     if (tg.openTelegramLink) {
