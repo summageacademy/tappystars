@@ -1012,28 +1012,26 @@ window.claimReferralBear = () => {
     openGiftConfirmModal();
 };
 
+// In app_3.js, around line 680, replace the referral processing block with this:
+
 async function processReferralOnStart() {
     try {
         const startParam = tg.initDataUnsafe?.start_param || '';
         if (!startParam.startsWith('ref_')) return;
         const referrerId = startParam.replace('ref_', '');
         if (!referrerId || referrerId === user.id.toString()) return;
-        if (userData?.referredBy) return; // already set
+        if (userData?.referredBy) return;
 
-        // mark this user
         await updateDoc(userRef, { referredBy: referrerId });
         userData.referredBy = referrerId;
 
-        // increment referrer
         const refRef = doc(db, 'users', referrerId);
         const refSnap = await getDoc(refRef);
         if (refSnap.exists()) {
             const refData = refSnap.data();
-            const newCount = (refData.referralCount || 0) + 1;
-            const pending = (refData.pendingBearClaims || 0) + (newCount % 10 === 0 ? 1 : 0);
-            // actually: every time count hits multiple of 10
-            const prevPending = refData.pendingBearClaims || 0;
-            const earned = Math.floor(newCount / 10) - Math.floor((newCount - 1) / 10);
+            const currentCount = refData.referralCount || 0;
+            const newCount = currentCount + 1;
+            const earned = Math.floor(newCount / 10) - Math.floor(currentCount / 10);
             await updateDoc(refRef, {
                 referralCount: increment(1),
                 pendingBearClaims: increment(earned)
