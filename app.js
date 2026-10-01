@@ -1012,18 +1012,20 @@ window.claimReferralBear = () => {
     openGiftConfirmModal();
 };
 
-// In app_3.js, around line 680, replace the referral processing block with this:
-
 async function processReferralOnStart() {
     try {
         const startParam = tg.initDataUnsafe?.start_param || '';
         if (!startParam.startsWith('ref_')) return;
         const referrerId = startParam.replace('ref_', '');
         if (!referrerId || referrerId === user.id.toString()) return;
-        if (userData?.referredBy) return;
+        
+        // Prevent double-crediting
+        if (userData?.referralCredited) return;
 
-        await updateDoc(userRef, { referredBy: referrerId });
-        userData.referredBy = referrerId;
+        if (!userData?.referredBy) {
+            await updateDoc(userRef, { referredBy: referrerId });
+            userData.referredBy = referrerId;
+        }
 
         const refRef = doc(db, 'users', referrerId);
         const refSnap = await getDoc(refRef);
@@ -1037,6 +1039,10 @@ async function processReferralOnStart() {
                 pendingBearClaims: increment(earned)
             });
         }
+
+        // Mark as credited so it runs only once per user
+        await updateDoc(userRef, { referralCredited: true });
+        userData.referralCredited = true;
     } catch (e) {
         console.warn('Referral process error', e);
     }
