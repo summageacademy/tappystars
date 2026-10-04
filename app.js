@@ -829,27 +829,36 @@ async function recordAdWatch() {
         totalAdsWatched: increment(1)
     };
 
-    // If the user was referred and hasn't credited their referrer yet, do it now upon watching an ad
+    // If the user was referred and hasn't been credited yet
     if (userData.referredBy && !userData.referralCredited) {
-        updates.referralCredited = true;
-        userData.referralCredited = true;
-
+        let credited = false;
         try {
             const refRef = doc(db, 'users', userData.referredBy);
             const refSnap = await getDoc(refRef);
+
             if (refSnap.exists()) {
                 const refData = refSnap.data();
                 const currentCount = refData.referralCount || 0;
                 const newCount = currentCount + 1;
                 const earned = Math.floor(newCount / 10) - Math.floor(currentCount / 10);
-                
+
                 await updateDoc(refRef, {
                     referralCount: increment(1),
                     pendingBearClaims: increment(earned)
                 });
+                credited = true;
+            } else {
+                // Referrer doc does not exist yet – do NOT mark as credited
+                console.warn('Referrer document does not exist yet:', userData.referredBy);
             }
         } catch (e) {
-            console.warn('Referrer credit error (Check Firestore Rules)', e);
+            console.warn('Referrer credit error (Check Firestore Rules / network)', e);
+            // Do NOT set referralCredited = true on failure
+        }
+
+        if (credited) {
+            updates.referralCredited = true;
+            userData.referralCredited = true;
         }
     }
 
