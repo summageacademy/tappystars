@@ -829,39 +829,6 @@ async function recordAdWatch() {
         totalAdsWatched: increment(1)
     };
 
-    // If the user was referred and hasn't been credited yet
-    if (userData.referredBy && !userData.referralCredited) {
-        let credited = false;
-        try {
-            const refRef = doc(db, 'users', userData.referredBy);
-            const refSnap = await getDoc(refRef);
-
-            if (refSnap.exists()) {
-                const refData = refSnap.data();
-                const currentCount = refData.referralCount || 0;
-                const newCount = currentCount + 1;
-                const earned = Math.floor(newCount / 10) - Math.floor(currentCount / 10);
-
-                await updateDoc(refRef, {
-                    referralCount: increment(1),
-                    pendingBearClaims: increment(earned)
-                });
-                credited = true;
-            } else {
-                // Referrer doc does not exist yet – do NOT mark as credited
-                console.warn('Referrer document does not exist yet:', userData.referredBy);
-            }
-        } catch (e) {
-            console.warn('Referrer credit error (Check Firestore Rules / network)', e);
-            // Do NOT set referralCredited = true on failure
-        }
-
-        if (credited) {
-            updates.referralCredited = true;
-            userData.referralCredited = true;
-        }
-    }
-
     try {
         await updateDoc(userRef, updates);
     } catch (e) {}
@@ -1798,14 +1765,46 @@ window.startSpinFlow = async () => {
         updateSpinUI();
         return;
     }
-    // Watch ad first, then spin
+
     const btn = document.getElementById('btn-spin-main');
     if (btn) { btn.disabled = true; btn.innerText = 'Loading ad...'; }
+
     const ok = await showAd();
     if (!ok) {
         updateSpinUI();
         return;
     }
+
+    // --- Referral credit (ONLY on successful spin ad) ---
+    if (userData.referredBy && !userData.referralCredited) {
+        try {
+            const refRef = doc(db, 'users', userData.referredBy);
+            const refSnap = await getDoc(refRef);
+
+            if (refSnap.exists()) {
+                const refData = refSnap.data();
+                const currentCount = refData.referralCount || 0;
+                const newCount = currentCount + 1;
+                const earned = Math.floor(newCount / 10) - Math.floor(currentCount / 10);
+
+                await updateDoc(refRef, {
+                    referralCount: increment(1),
+                    pendingBearClaims: increment(earned)
+                });
+
+                // Only mark as credited AFTER successful update
+                userData.referralCredited = true;
+                await updateDoc(userRef, { referralCredited: true });
+            } else {
+                console.warn('Referrer document does not exist yet:', userData.referredBy);
+            }
+        } catch (e) {
+            console.warn('Referrer credit error on spin:', e);
+            // Do NOT set referralCredited on failure → can retry next spin
+        }
+    }
+    // ----------------------------------------------------
+
     userData.lastSpinAdTime = Date.now();
     userData.spinsToday = (userData.spinsToday || 0) + 1;
     try {
@@ -1815,6 +1814,7 @@ window.startSpinFlow = async () => {
             spinDate: userData.spinDate || getTashkentDate()
         });
     } catch (e) {}
+
     doSpinAnimation();
 };
 
