@@ -132,6 +132,10 @@ const TRANSLATIONS = {
         buy_boosters: "Buy Boosters",
         ads_limit_reached: "Daily ad limit reached",
         ads_reset_in: "Resets in",
+        ref_step1: "Share your invite link with friends.",
+        ref_step2: "Referrals count only after your friend watches an ad & does at least 1 spin.",
+        ref_step3: "Claim a free Bear Gift for every 10 valid referrals.",
+        buy_gifts: "Buy Gifts",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -242,6 +246,10 @@ const TRANSLATIONS = {
         buy_boosters: "Купить бустеры",
         ads_limit_reached: "Дневной лимит рекламы",
         ads_reset_in: "Сброс через",
+        ref_step1: "Поделитесь ссылкой с друзьями.",
+        ref_step2: "Реферал засчитывается, когда друг смотрит рекламу и делает хотя бы 1 спин.",
+        ref_step3: "Получайте бесплатного Медведя за каждые 10 засчитанных рефералов.",
+        buy_gifts: "Купить подарки"
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -352,6 +360,10 @@ const TRANSLATIONS = {
         buy_boosters: "Buster sotib olish",
         ads_limit_reached: "Kunlik reklama limiti",
         ads_reset_in: "Qayta ochiladi",
+        ref_step1: "Do'stlaringiz bilan taklif havolasini ulashing.",
+        ref_step2: "Referal hisoblanishi uchun do'stingiz reklama ko'rib, kamida 1 ta spin bajarishi shart.",
+        ref_step3: "Har 10 ta tasdiqlangan referal uchun bepul Ayiq oling.",
+        buy_gifts: "Sovg'alar sotib olish",
     }
 };
 
@@ -2127,7 +2139,18 @@ async function loadPurchases() {
         );
         const snap = await getDocs(q);
         if (snap.empty) {
-            list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
+            list.innerHTML = `
+                <div style="text-align: center; padding: 20px 0;">
+                    <p class="empty-state" style="margin-bottom: 12px;">${t('no_purchases')}</p>
+                    <button type="button" class="action-btn primary-btn buy-boosters-btn" onclick="switchAccountTab('gifts')">
+                        <svg class="buy-boosters-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span data-i18n="buy_gifts">${t('buy_gifts')}</span>
+                    </button>
+                </div>
+            `;
             return;
         }
         const rows = [];
@@ -2157,7 +2180,18 @@ async function loadPurchases() {
             );
             const snap2 = await getDocs(q2);
             if (snap2.empty) {
-                list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
+                list.innerHTML = `
+                    <div style="text-align: center; padding: 20px 0;">
+                        <p class="empty-state" style="margin-bottom: 12px;">${t('no_purchases')}</p>
+                        <button type="button" class="action-btn primary-btn buy-boosters-btn" onclick="switchAccountTab('gifts')">
+                            <svg class="buy-boosters-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span data-i18n="buy_gifts">${t('buy_gifts')}</span>
+                        </button>
+                    </div>
+                `;
                 return;
             }
             const items = [];
