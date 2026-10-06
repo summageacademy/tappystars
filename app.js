@@ -101,8 +101,8 @@ const TRANSLATIONS = {
         task_watch_3: "Watch 3 Ads",
         task_tap_500: "Mine 500 Coins Today",
         task_reward_1star: "+1 Star",
-        task_reward_3stars: "+3 Stars",
-        task_reward_2stars: "+2 Stars",
+        task_reward_3stars: "+1500 Coins",
+        task_reward_2stars: "+700 Coins",
         ref_title: "Invite Friends",
         ref_desc: "Invite 10 friends and claim a free Bear Gift for every 10 referrals.",
         ref_count: "Your referrals",
@@ -215,8 +215,8 @@ const TRANSLATIONS = {
         task_watch_3: "Смотреть 3 рекламы",
         task_tap_500: "Добыть 500 монет сегодня",
         task_reward_1star: "+1 Звезда",
-        task_reward_3stars: "+3 Звезды",
-        task_reward_2stars: "+2 Звезды",
+        task_reward_3stars: "+1500 Монет",
+        task_reward_2stars: "+700 Монет",
         ref_title: "Пригласите друзей",
         ref_desc: "Пригласите 10 друзей и получите бесплатный подарок Медведь за каждые 10.",
         ref_count: "Ваши рефералы",
@@ -329,8 +329,8 @@ const TRANSLATIONS = {
         task_watch_3: "3 reklama ko'rish",
         task_tap_500: "Bugun 500 tanga qazish",
         task_reward_1star: "+1 Yulduz",
-        task_reward_3stars: "+3 Yulduz",
-        task_reward_2stars: "+2 Yulduz",
+        task_reward_3stars: "+1500 Tanga",
+        task_reward_2stars: "+700 Tanga",
         ref_title: "Do'stlarni taklif qiling",
         ref_desc: "10 do'st taklif qiling va har 10 ta uchun bepul Ayiq sovg'asi oling.",
         ref_count: "Sizning referallaringiz",
@@ -494,8 +494,8 @@ function formatCompact(n) {
 const LEAGUES = [
     { id: 'bear', name: 'Bear', min: 0, max: 999, image: 'images/bear.webp', reward: 500, descKey: 'league_bear_desc' },
     { id: 'giftbox', name: 'Gift Box', min: 1000, max: 9999, image: 'images/box.webp', reward: 2500, descKey: 'league_giftbox_desc' },
-    { id: 'bouquet', name: 'Bouquet', min: 10000, max: 99999, image: 'images/bouquette.webp', reward: 15000, descKey: 'league_bouquet_desc' },
-    { id: 'diamond', name: 'Diamond', min: 100000, max: 499999, image: 'images/diamond.webp', reward: 75000, descKey: 'league_diamond_desc' },
+    { id: 'bouquet', name: 'Bouquet', min: 10000, max: 99999, image: 'images/bouquette.webp', reward: 10000, descKey: 'league_bouquet_desc' },
+    { id: 'diamond', name: 'Diamond', min: 100000, max: 499999, image: 'images/diamond.webp', reward: 40000, descKey: 'league_diamond_desc' },
 ];
 
 function getLeagueForClicks(clicks) {
@@ -765,25 +765,25 @@ window.claimDailyTask = async (taskId) => {
     if (taskId === 'ad3') {
         if (dt.ad3Claimed || (dt.ad3 || 0) < 3) return;
         dt.ad3Claimed = true;
-        userData.stars = (userData.stars || 0) + 3;
+        userData.coins = (userData.coins || 0) + 1500;
         try {
-            await updateDoc(userRef, { stars: increment(3), dailyTasks: dt });
+            await updateDoc(userRef, { coins: increment(1500), dailyTasks: dt });
         } catch (e) {}
         updateUI();
         updateDailyTasksUI();
         safeHaptic('notification', 'success');
-        safeAlert('+3 Stars!', false);
+        safeAlert('+1500 Coins!', false);
     } else if (taskId === 'tap500') {
         if (dt.tap500Claimed || (userData.todayTapCoins || 0) < 500) return;
         dt.tap500Claimed = true;
-        userData.stars = (userData.stars || 0) + 2;
+        userData.coins = (userData.coins || 0) + 700;
         try {
-            await updateDoc(userRef, { stars: increment(2), dailyTasks: dt });
+            await updateDoc(userRef, { coins: increment(700), dailyTasks: dt });
         } catch (e) {}
         updateUI();
         updateDailyTasksUI();
         safeHaptic('notification', 'success');
-        safeAlert('+2 Stars!', false);
+        safeAlert('+700 Coins!', false);
     }
 };
 
@@ -1630,15 +1630,14 @@ const ICON_COIN = `<svg class="spin-card-icon-img" viewBox="0 0 24 24" fill="non
 const ICON_STAR = `<svg class="spin-card-icon-img" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
 const SPIN_POOL = [
-    { type: 'coins', amount: 200, label: '+200', weight: 22, cls: '' },
-    { type: 'coins', amount: 250, label: '+250', weight: 18, cls: '' },
-    { type: 'coins', amount: 300, label: '+300', weight: 16, cls: '' },
-    { type: 'coins', amount: 400, label: '+400', weight: 12, cls: '' },
+    { type: 'coins', amount: 200, label: '+200', weight: 30, cls: '' },
+    { type: 'coins', amount: 250, label: '+250', weight: 25, cls: '' },
+    { type: 'coins', amount: 300, label: '+300', weight: 20, cls: '' },
+    { type: 'coins', amount: 400, label: '+400', weight: 15, cls: '' },
     { type: 'coins', amount: 500, label: '+500', weight: 10, cls: '' },
-    { type: 'stars', amount: 1,  label: '1', weight: 12, cls: 'star' },
-    { type: 'stars', amount: 5,  label: '5', weight: 6,  cls: 'star' },
-    { type: 'stars', amount: 10, label: '10', weight: 3,  cls: 'star' },
-    { type: 'stars', amount: 15, label: '15', weight: 1,  cls: 'star' }
+    { type: 'stars', amount: 1,  label: '1', weight: 0.5, cls: 'star' },
+    { type: 'stars', amount: 5,  label: '5', weight: 0.15, cls: 'star' },
+    { type: 'stars', amount: 10, label: '10', weight: 0.05, cls: 'star' }
 ];
 
 const SPIN_COOLDOWN_SHORT = 2 * 60 * 1000;  // first 3 spins / day
