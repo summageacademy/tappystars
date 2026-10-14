@@ -89,7 +89,7 @@ const TRANSLATIONS = {
         nav_earn: "Earn",
         nav_tasks: "Tasks",
         nav_boosts: "Boosts",
-        nav_boxes: "Boxes",
+        nav_boxes: "NFT",
         nav_account: "Account",
         tab_daily: "Daily",
         tab_leagues: "Leagues",
@@ -122,10 +122,10 @@ const TRANSLATIONS = {
         onboarding_slide3_desc: "Spend your Stars on real Telegram Gifts sent to your account.",
         onboarding_next: "Next",
         onboarding_start: "Start Playing",
-        league_bear_desc: "Starting league. Keep tapping to climb!",
-        league_giftbox_desc: "You're getting serious. Gift Box league unlocked!",
-        league_bouquet_desc: "High achiever! Bouquet league is yours.",
-        league_diamond_desc: "Elite miner. Diamond league — almost legendary!",
+        league_bear_desc: "Starting league — every great miner begins here. Keep tapping to climb higher. Reach this league and claim a 500 Coins reward in the Tasks section!",
+        league_giftbox_desc: "You're getting serious! Gift Box league means real progress. Keep mining and claim a 2,500 Coins reward in Tasks once you unlock it.",
+        league_bouquet_desc: "High achiever territory. Bouquet league shows dedication. Unlock it and claim a 10,000 Coins reward from the Tasks section!",
+        league_diamond_desc: "Elite miner status. Diamond league is almost legendary — unlock it and claim a massive 40,000 Coins reward in Tasks!",
         claimed: "Claimed",
         done_today: "Done today",
         share_text: "Join me on TappyStars and mine coins together!",
@@ -136,6 +136,15 @@ const TRANSLATIONS = {
         ref_step2: "Referrals count only after your friend watches an ad & does at least 1 spin.",
         ref_step3: "Claim a free Bear Gift for every 10 valid referrals.",
         buy_gifts: "Buy Gifts",
+        free_nft: "WIN FREE NFT!",
+        nft_comp_title: "NFT Competition",
+        nft_prize_1st: "Exclusive NFT",
+        nft_comp_desc: "Invite as many people as possible with your link and become first in the leaderboard to win this NFT.",
+        your_invite_link: "Your invite link",
+        nft_step3: "Climb the referral leaderboard — 1st wins the NFT, 2nd & 3rd win Stars.",
+        ref_leaderboard: "Referral Leaderboard",
+        referrals_label: "referrals",
+        your_rank: "Your rank",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -203,7 +212,7 @@ const TRANSLATIONS = {
         nav_earn: "Добыча",
         nav_tasks: "Задания",
         nav_boosts: "Бусты",
-        nav_boxes: "Ящики",
+        nav_boxes: "NFT",
         nav_account: "Аккаунт",
         tab_daily: "Ежедневные",
         tab_leagues: "Лиги",
@@ -236,10 +245,10 @@ const TRANSLATIONS = {
         onboarding_slide3_desc: "Тратьте Звёзды на реальные подарки Telegram.",
         onboarding_next: "Далее",
         onboarding_start: "Начать играть!",
-        league_bear_desc: "Стартовая лига. Продолжайте тапать!",
-        league_giftbox_desc: "Вы серьёзно настроены. Лига Gift Box!",
-        league_bouquet_desc: "Высокий результат! Лига Bouquet ваша.",
-        league_diamond_desc: "Элита. Алмазная лига — почти легенда!",
+        league_bear_desc: "Стартовая лига — здесь начинается путь каждого майнера. Продолжайте тапать, чтобы подняться выше. Достигните этой лиги и получите 500 монет в разделе Задания!",
+        league_giftbox_desc: "Вы серьёзно настроены! Лига Gift Box — признак прогресса. Продолжайте майнить и заберите 2500 монет в Заданиях после открытия.",
+        league_bouquet_desc: "Территория высоких достижений. Лига Bouquet показывает вашу преданность. Откройте её и получите 10 000 монет в Заданиях!",
+        league_diamond_desc: "Статус элиты. Алмазная лига — почти легенда. Откройте её и получите огромную награду 40 000 монет в Заданиях!",
         claimed: "Получено",
         done_today: "Сделано сегодня",
         share_text: "Присоединяйся ко мне в TappyStars!",
@@ -249,7 +258,16 @@ const TRANSLATIONS = {
         ref_step1: "Поделитесь ссылкой с друзьями.",
         ref_step2: "Реферал засчитывается, когда друг смотрит рекламу и делает хотя бы 1 спин.",
         ref_step3: "Получайте бесплатного Медведя за каждые 10 засчитанных рефералов.",
-        buy_gifts: "Купить подарки"
+        buy_gifts: "Купить подарки",
+        free_nft: "БЕСПЛАТНЫЙ NFT",
+        nft_comp_title: "NFT-соревнование",
+        nft_prize_1st: "Эксклюзивный NFT",
+        nft_comp_desc: "Приглашайте как можно больше друзей по своей ссылке и займите первое место в таблице лидеров, чтобы выиграть этот NFT.",
+        your_invite_link: "Ваша ссылка-приглашение",
+        nft_step3: "Поднимайтесь в таблице рефералов — 1-е место получает NFT, 2-е и 3-е — Звёзды.",
+        ref_leaderboard: "Таблица рефералов",
+        referrals_label: "рефералов",
+        your_rank: "Ваш ранг",
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -317,7 +335,7 @@ const TRANSLATIONS = {
         nav_earn: "Ishlash",
         nav_tasks: "Vazifa",
         nav_boosts: "Busters",
-        nav_boxes: "Qutilar",
+        nav_boxes: "NFT",
         nav_account: "Akkaunt",
         tab_daily: "Kunlik",
         tab_leagues: "Ligalar",
@@ -350,10 +368,10 @@ const TRANSLATIONS = {
         onboarding_slide3_desc: "Yulduzlarni haqiqiy Telegram sovg'alariga sarflang.",
         onboarding_next: "Keyingi",
         onboarding_start: "O'ynashni boshlash!",
-        league_bear_desc: "Boshlang'ich liga. Davom eting!",
-        league_giftbox_desc: "Jiddiy o'yinchi. Gift Box ligasi!",
-        league_bouquet_desc: "Yuqori natija! Bouquet ligasi sizniki.",
-        league_diamond_desc: "Elita. Olmos ligasi — deyarli afsona!",
+        league_bear_desc: "Boshlang'ich liga — har bir konchi shu yerdan boshlaydi. Yuqoriroq chiqish uchun davom eting. Ushbu ligaga yetib, Tasks bo'limida 500 tanga oling!",
+        league_giftbox_desc: "Jiddiy o'yinchi! Gift Box ligasi — haqiqiy progress. Qazishni davom ettiring va ochilgach Tasks da 2500 tanga oling.",
+        league_bouquet_desc: "Yuqori natijalar hududi. Bouquet ligasi sadoqatingizni ko'rsatadi. Ochib, Tasks da 10 000 tanga mukofotini oling!",
+        league_diamond_desc: "Elita maqomi. Olmos ligasi — deyarli afsona. Ochib, Tasks da ulkan 40 000 tanga mukofotini oling!",
         claimed: "Olingan",
         done_today: "Bugun bajarildi",
         share_text: "TappyStars da menga qo'shiling!",
@@ -364,6 +382,15 @@ const TRANSLATIONS = {
         ref_step2: "Referal hisoblanishi uchun do'stingiz reklama ko'rib, kamida 1 ta spin bajarishi shart.",
         ref_step3: "Har 10 ta tasdiqlangan referal uchun bepul Ayiq oling.",
         buy_gifts: "Sovg'alar sotib olish",
+        free_nft: "BEPUL NFT OLING!",
+        nft_comp_title: "NFT musobaqasi",
+        nft_prize_1st: "Eksklyuziv NFT",
+        nft_comp_desc: "Havolangiz orqali imkon qadar ko'p odamni taklif qiling va liderlar jadvalida birinchi bo'lib ushbu NFT ni yuting.",
+        your_invite_link: "Sizning taklif havolangiz",
+        nft_step3: "Referallar jadvalida yuqoriga chiqing — 1-o'rin NFT, 2 va 3-o'rin Yulduzlar oladi.",
+        ref_leaderboard: "Referallar jadvali",
+        referrals_label: "referal",
+        your_rank: "Sizning o'rningiz",
     }
 };
 
@@ -413,6 +440,7 @@ function applyLanguage() {
     renderLeagueRewards();
     updateDailyTasksUI();
     updateReferralUI();
+    updateNftCompUI();
 }
 
 function safeHaptic(type, style) {
@@ -492,10 +520,10 @@ function formatCompact(n) {
 
 // ========== LEAGUES ==========
 const LEAGUES = [
-    { id: 'bear', name: 'Bear', min: 0, max: 999, image: 'images/bear.webp', reward: 500, descKey: 'league_bear_desc' },
-    { id: 'giftbox', name: 'Gift Box', min: 1000, max: 9999, image: 'images/box.webp', reward: 2500, descKey: 'league_giftbox_desc' },
-    { id: 'bouquet', name: 'Bouquet', min: 10000, max: 99999, image: 'images/bouquette.webp', reward: 10000, descKey: 'league_bouquet_desc' },
-    { id: 'diamond', name: 'Diamond', min: 100000, max: 499999, image: 'images/diamond.webp', reward: 40000, descKey: 'league_diamond_desc' },
+    { id: 'bear', name: 'Bear', min: 0, max: 999, image: 'images/bear.webp', reward: 500, descKey: 'league_bear_desc', color: '#4A90E2', light: '#E3F0FB' },
+    { id: 'giftbox', name: 'Gift Box', min: 1000, max: 9999, image: 'images/box.webp', reward: 2500, descKey: 'league_giftbox_desc', color: '#2ECC71', light: '#E6F9EE' },
+    { id: 'bouquet', name: 'Bouquet', min: 10000, max: 99999, image: 'images/bouquette.webp', reward: 10000, descKey: 'league_bouquet_desc', color: '#E91E63', light: '#FCE4EC' },
+    { id: 'diamond', name: 'Diamond', min: 100000, max: 499999, image: 'images/diamond.webp', reward: 40000, descKey: 'league_diamond_desc', color: '#9B59B6', light: '#F3E5F5' },
 ];
 
 function getLeagueForClicks(clicks) {
@@ -515,8 +543,20 @@ function updateLeagueCards() {
     ['earn', 'tasks'].forEach(suffix => {
         const img = document.getElementById(`league-img-${suffix}`);
         const name = document.getElementById(`league-name-${suffix}`);
+        const card = document.getElementById(`league-card-${suffix}`);
         if (img) img.src = L.image;
         if (name) name.innerText = L.name;
+        if (card) {
+            // Only the fill color changes — keep neo-brutalist black border + shadow
+            card.style.background = L.color;
+            card.style.borderColor = '';           // leave default (#1C1C1C)
+            card.style.boxShadow = '';             // leave default (4px 4px 0 #1C1C1C)
+            const label = card.querySelector('.league-card-label');
+            const chev = card.querySelector('.league-chevron');
+            if (label) label.style.color = 'rgba(255,255,255,0.85)';
+            if (name) name.style.color = '#FFFFFF';
+            if (chev) chev.style.color = '#FFFFFF';
+        }
     });
     const statLeague = document.getElementById('stat-league');
     if (statLeague) statLeague.innerText = L.name;
@@ -552,13 +592,14 @@ function renderLeagueModal() {
     const name = document.getElementById('league-modal-name');
     const range = document.getElementById('league-modal-range');
     const desc = document.getElementById('league-modal-desc');
-    const reward = document.getElementById('league-modal-reward');
+    const content = document.querySelector('#league-modal .marketplace-content');
     if (img) img.src = L.image;
     if (name) name.innerText = L.name;
     if (range) range.innerText = `${L.min.toLocaleString()} – ${L.max.toLocaleString()} clicks`;
     if (desc) desc.innerText = t(L.descKey);
-    const rewardAmt = document.getElementById('league-modal-reward-amount');
-    if (rewardAmt) rewardAmt.innerText = `${formatCompact(L.reward)} Coins`;
+    if (content) content.style.background = L.light;
+    const modalRoot = document.getElementById('league-modal');
+    if (modalRoot) modalRoot.style.background = L.light;
     const prev = document.getElementById('league-prev');
     const next = document.getElementById('league-next');
     if (prev) prev.disabled = leagueModalIndex === 0;
@@ -618,6 +659,7 @@ window.claimLeagueReward = async (leagueId) => {
     } catch (e) { console.warn(e); }
     updateUI();
     renderLeagueRewards();
+    updateNotificationDots();
     showChestRewardModal('coins', L.reward);
     safeHaptic('notification', 'success');
 };
@@ -650,6 +692,49 @@ function ensureDailyFields() {
     if (!userData.dailyTasks) userData.dailyTasks = { ad1: false, ad3: 0, ad3Claimed: false, tap500Claimed: false };
 }
 
+function setTaskBtnDot(btn, show) {
+    if (!btn) return;
+    let dot = btn.querySelector('.task-btn-dot');
+    if (show) {
+        if (!dot) {
+            dot = document.createElement('span');
+            dot.className = 'task-btn-dot';
+            btn.style.position = 'relative';
+            btn.appendChild(dot);
+        }
+        dot.style.display = 'block';
+    } else if (dot) {
+        dot.style.display = 'none';
+    }
+}
+
+function hasUnclaimedTaskOrReward() {
+    if (!userData) return false;
+    ensureDailyFields();
+    const dt = userData.dailyTasks || {};
+    if (!dt.ad1) return true;
+    if (!dt.ad3Claimed) return true;
+    if (!dt.tap500Claimed) return true;
+    const clicks = userData.totalClicks || 0;
+    const claimed = userData.claimedLeagues || {};
+    for (const L of LEAGUES) {
+        if (clicks >= L.min && !claimed[L.id]) return true;
+    }
+    if ((userData.pendingBearClaims || 0) > 0) return true;
+    return false;
+}
+
+function updateNotificationDots() {
+    const tasksDot = document.getElementById('nav-dot-tasks');
+    const boxesDot = document.getElementById('nav-dot-boxes');
+    if (tasksDot) {
+        tasksDot.style.display = hasUnclaimedTaskOrReward() ? 'block' : 'none';
+    }
+    if (boxesDot) {
+        boxesDot.style.display = 'block';
+    }
+}
+
 function updateDailyTasksUI() {
     if (!userData) return;
     ensureDailyFields();
@@ -662,11 +747,13 @@ function updateDailyTasksUI() {
             btn1.disabled = true;
             btn1.innerText = t('done_today');
             btn1.style.background = '#CFD8DC';
+            setTaskBtnDot(btn1, false);
         } else {
             btn1.disabled = false;
             btn1.innerText = t('watch_ad');
             btn1.style.background = '#FF9800';
             btn1.style.color = '#1C1C1C';
+            setTaskBtnDot(btn1, true);
         }
     }
 
@@ -682,18 +769,21 @@ function updateDailyTasksUI() {
             btn3.disabled = true;
             btn3.innerText = t('done_today');
             btn3.style.background = '#CFD8DC';
+            setTaskBtnDot(btn3, false);
         } else if (ad3Count >= 3) {
             btn3.disabled = false;
             btn3.innerText = t('claim');
             btn3.style.background = '#2ECC71';
             btn3.style.color = '#fff';
             btn3.onclick = () => claimDailyTask('ad3');
+            setTaskBtnDot(btn3, true);
         } else {
             btn3.disabled = false;
             btn3.innerText = t('watch_ad');
             btn3.style.background = '#FF9800';
             btn3.style.color = '#1C1C1C';
             btn3.onclick = () => doDailyTask('ad3');
+            setTaskBtnDot(btn3, true);
         }
     }
 
@@ -709,18 +799,22 @@ function updateDailyTasksUI() {
             btnT.disabled = true;
             btnT.innerText = t('done_today');
             btnT.style.background = '#CFD8DC';
+            setTaskBtnDot(btnT, false);
         } else if (todayTaps >= 500) {
             btnT.disabled = false;
             btnT.innerText = t('claim');
             btnT.style.background = '#2ECC71';
             btnT.style.color = '#fff';
+            setTaskBtnDot(btnT, true);
         } else {
             btnT.disabled = true;
             btnT.innerText = t('claim');
             btnT.style.background = '';
+            setTaskBtnDot(btnT, false);
         }
     }
     updateAllAdButtons();
+    updateNotificationDots();
 }
 
 window.doDailyTask = async (taskId) => {
@@ -1005,6 +1099,7 @@ function updateReferralUI() {
             area.style.display = 'none';
         }
     }
+    updateNotificationDots();
 }
 
 window.shareReferral = () => {
@@ -1027,6 +1122,109 @@ window.claimReferralBear = () => {
     pendingGift = { name: 'Bear Gift', cost: 0, isReferral: true };
     openGiftConfirmModal();
 };
+
+function getReferralInviteLink() {
+    const botUsername = 'tappystars_bot';
+    return `https://t.me/${botUsername}?start=ref_${user.id}`;
+}
+
+window.openNftCompetition = () => {
+    switchTab('boxes');
+    // scroll competition block into view after tab paint
+    requestAnimationFrame(() => {
+        const el = document.getElementById('nft-competition-block');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const main = document.getElementById('app-content');
+        if (main && el) {
+            // ensure near top of main scroll
+            main.scrollTop = Math.max(0, el.offsetTop - 8);
+        }
+    });
+};
+
+function updateNftCompUI() {
+    const input = document.getElementById('nft-ref-link');
+    if (input) input.value = getReferralInviteLink();
+}
+
+async function loadReferralLeaderboard() {
+    const list = document.getElementById('nft-ref-leaderboard');
+    const myRankEl = document.getElementById('nft-ref-my-rank');
+    if (!list) return;
+    list.innerHTML = `<p class="empty-state">Loading...</p>`;
+    try {
+        const q = query(collection(db, 'users'), orderBy('referralCount', 'desc'), limit(30));
+        const snap = await getDocs(q);
+        let html = '';
+        let rank = 1;
+        let myRank = null;
+        const myId = user.id.toString();
+        snap.forEach(d => {
+            const data = d.data();
+            const count = data.referralCount || 0;
+            const isMe = d.id === myId;
+            if (isMe) myRank = rank;
+            const topCls = rank === 1 ? ' nft-lb-top1' : '';
+            const meCls = isMe ? ' nft-lb-me' : '';
+            html += `<div class="glass-card nft-lb-row${topCls}${meCls}">
+                <div class="nft-lb-left">
+                    <span class="nft-lb-rank">#${rank}</span>
+                    <span class="nft-lb-name">${(data.name || 'Miner').toString().slice(0, 24)}</span>
+                </div>
+                <span class="nft-lb-count">${formatCompact(count)} ${t('referrals_label')}</span>
+            </div>`;
+            rank++;
+        });
+        list.innerHTML = html || `<p class="empty-state">—</p>`;
+        if (myRankEl) {
+            const myCount = userData?.referralCount || 0;
+            myRankEl.style.display = 'flex';
+            myRankEl.innerHTML = myRank != null
+                ? `<strong>${t('your_rank')} #${myRank}</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`
+                : `<strong>${t('your_rank')} —</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`;
+        }
+    } catch (e) {
+        console.warn('loadReferralLeaderboard', e);
+        try {
+            const q2 = query(collection(db, 'users'), limit(50));
+            const snap2 = await getDocs(q2);
+            const items = [];
+            snap2.forEach(d => {
+                const data = d.data();
+                items.push({ id: d.id, name: data.name || 'Miner', referralCount: data.referralCount || 0 });
+            });
+            items.sort((a, b) => b.referralCount - a.referralCount);
+            const top = items.slice(0, 30);
+            let html = '';
+            let myRank = null;
+            const myId = user.id.toString();
+            top.forEach((row, i) => {
+                const rank = i + 1;
+                if (row.id === myId) myRank = rank;
+                const topCls = rank === 1 ? ' nft-lb-top1' : '';
+                const meCls = row.id === myId ? ' nft-lb-me' : '';
+                html += `<div class="glass-card nft-lb-row${topCls}${meCls}">
+                    <div class="nft-lb-left">
+                        <span class="nft-lb-rank">#${rank}</span>
+                        <span class="nft-lb-name">${row.name.toString().slice(0, 24)}</span>
+                    </div>
+                    <span class="nft-lb-count">${formatCompact(row.referralCount)} ${t('referrals_label')}</span>
+                </div>`;
+            });
+            list.innerHTML = html || `<p class="empty-state">—</p>`;
+            if (myRankEl) {
+                const myCount = userData?.referralCount || 0;
+                myRankEl.style.display = 'flex';
+                myRankEl.innerHTML = myRank != null
+                    ? `<strong>${t('your_rank')} #${myRank}</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`
+                    : `<strong>${t('your_rank')} —</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`;
+            }
+        } catch (e2) {
+            list.innerHTML = `<p class="empty-state">—</p>`;
+        }
+    }
+}
+
 
 async function processReferralOnStart() {
     try {
@@ -1170,6 +1368,8 @@ function initApp() {
     document.getElementById('top-bar').style.display = 'flex';
     document.getElementById('app-content').style.display = 'block';
     document.getElementById('bottom-nav').style.display = 'flex';
+    const nftSticky = document.getElementById('nft-comp-sticky');
+    if (nftSticky) nftSticky.style.display = 'flex';
 
     if (!userData.onboardingDone) {
         document.getElementById('onboarding-modal').style.display = 'flex';
@@ -1183,10 +1383,12 @@ function initApp() {
     renderLeagueRewards();
     updateDailyTasksUI();
     updateReferralUI();
+    updateNftCompUI();
     updateBoostUI();
     updateChestUI();
     updateSpinUI();
     updateAllAdButtons();
+    updateNotificationDots();
     loadLeaderboardPreview();
     loadPurchases();
     startAutoTapLoop();
@@ -1212,8 +1414,12 @@ window.switchTab = (tab) => {
         updateAccountStats();
         loadPurchases();
     }
-    if (tab === 'boxes') updateSpinUI();
     if (tab === 'boosts') updateAllAdButtons();
+    if (tab === 'boxes') {
+        updateSpinUI();
+        updateNftCompUI();
+        loadReferralLeaderboard();
+    }
 };
 
 window.switchTasksTab = (sub) => {

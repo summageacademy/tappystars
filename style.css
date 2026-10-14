@@ -54,7 +54,7 @@ body {
 main {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 16px 100px;
+    padding: 16px 16px 160px;
 }
 .tab-content { display: none; animation: popIn 0.3s ease; }
 .tab-content.active { display: block; }
@@ -109,12 +109,17 @@ main {
     gap: 14px;
     padding: 14px 16px;
     background: #FFF8E7;
+    transition: background 0.25s ease, border-color 0.25s ease;
+}
+.league-card.league-card-colored {
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.18);
 }
 .league-card-img {
     width: 52px;
     height: 52px;
     object-fit: contain;
     flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(255, 236, 150, 0.55));
 }
 .league-card-mid {
     flex: 1;
@@ -430,30 +435,44 @@ main {
     align-items: center;
     justify-content: center;
     padding-bottom: 100px;
+    transition: background 0.3s ease;
 }
 .league-nav-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
     width: 100%;
     max-width: 400px;
 }
 .league-nav-btn {
-    width: 48px;
-    height: 48px;
-    background: #1C1C1C;
-    color: #FFD700;
-    border: 3px solid #1C1C1C;
-    box-shadow: 3px 3px 0 #FFD700;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    color: #1C1C1C;
+    border: none;
+    box-shadow: none;
     font-size: 1.3em;
     font-weight: 900;
     cursor: pointer;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    opacity: 0.7;
 }
-.league-nav-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 #FFD700;
+.league-nav-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+.league-nav-btn:active:not(:disabled) {
+    transform: scale(0.92);
+    opacity: 1;
+}
+.league-chevron-btn svg {
+    width: 28px;
+    height: 28px;
 }
 .league-modal-center {
     flex: 1;
@@ -463,11 +482,31 @@ main {
     gap: 8px;
     min-width: 0;
 }
+.league-img-glow-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+}
+.league-img-glow-wrap::before {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 236, 150, 0.55) 0%, rgba(255, 220, 100, 0.22) 45%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
 .league-modal-img {
     width: 140px;
     height: 140px;
     object-fit: contain;
-    filter: drop-shadow(4px 4px 0 #1C1C1C);
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
 }
 .league-modal-name {
     font-size: 1.8em;
@@ -484,34 +523,11 @@ main {
 .league-modal-desc {
     font-weight: 600;
     font-size: 0.95em;
-    line-height: 1.45;
+    line-height: 1.5;
     color: #333;
-    max-width: 280px;
-    margin-top: 6px;
-}
-.league-reward-card-ui {
-    background: #FFD700;
-    border: 3px solid #1C1C1C;
-    box-shadow: 4px 4px 0 #1C1C1C;
-    padding: 14px 22px;
-    margin-top: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    min-width: 160px;
-}
-.league-reward-label {
-    font-size: 0.7em;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #1C1C1C;
-    text-transform: uppercase;
-}
-.league-reward-amount {
-    font-size: 1.35em;
-    font-weight: 900;
-    color: #1C1C1C;
+    max-width: 300px;
+    margin-top: 10px;
+    padding: 0 8px;
 }
 .league-tip {
     margin-top: 24px;
@@ -519,6 +535,40 @@ main {
     font-size: 0.9em;
     color: var(--text-muted);
     max-width: 320px;
+}
+
+/* Nav red dots */
+.nav-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-red-dot {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    background: #E74C3C;
+    border-radius: 50%;
+    border: 1.5px solid #FFFFFF;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    pointer-events: none;
+    z-index: 2;
+}
+.task-btn-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 10px;
+    height: 10px;
+    background: #E74C3C;
+    border-radius: 50%;
+    border: 1.5px solid #FFFFFF;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 2;
 }
 
 /* Onboarding */
@@ -909,4 +959,288 @@ main {
         opacity: 0;
         transform: translate(-50%, -72px) scale(1);
     }
+}
+
+/* ========== NFT Competition sticky bar ========== */
+.nft-comp-sticky {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 78px;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px 8px 8px;
+    background: #1C1C1C;
+    color: #FFD700;
+    border: 3px solid #1C1C1C;
+    box-shadow: 4px 4px 0 #FFD700;
+    border-radius: 0;
+    cursor: pointer;
+    font-family: inherit;
+    width: auto;
+}
+.nft-comp-sticky:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #FFD700;
+}
+.nft-sticky-img-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #7B2FF7, #F107A3);
+    border: 2px solid #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.nft-sticky-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+.nft-sticky-text {
+    flex: 1;
+    font-weight: 900;
+    font-size: 1.05em;
+    letter-spacing: 1px;
+    text-align: left;
+    color: #FFD700;
+}
+.nft-sticky-chevron {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #FFD700;
+}
+
+/* ========== NFT Competition section ========== */
+.nft-comp-title {
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.5em;
+    margin-bottom: 16px;
+}
+.nft-prize-first {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 14px;
+    position: relative;
+}
+.nft-prize-badge {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFD700;
+    color: #1C1C1C;
+    font-weight: 900;
+    font-size: 0.75em;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border: 2px solid #1C1C1C;
+    box-shadow: 2px 2px 0 #1C1C1C;
+    z-index: 2;
+    text-transform: uppercase;
+}
+.nft-image-container {
+    width: 160px;
+    height: 160px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #7B2FF7 0%, #F107A3 50%, #FFD700 100%);
+    border: 3px solid #1C1C1C;
+    box-shadow: 6px 6px 0 #1C1C1C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-top: 14px;
+}
+.nft-prize-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+.nft-prize-label {
+    margin-top: 12px;
+    font-weight: 900;
+    font-size: 1.1em;
+}
+.nft-prizes-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.nft-prize-card {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 14px 10px !important;
+    margin-bottom: 0 !important;
+    text-align: center;
+}
+.nft-prize-rank {
+    font-weight: 900;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+.nft-prize-amount {
+    font-weight: 900;
+    font-size: 1.35em;
+    color: #1C1C1C;
+}
+.nft-prize-sub {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+.nft-comp-desc {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95em;
+    line-height: 1.45;
+    color: #333;
+    margin-bottom: 16px;
+    padding: 0 4px;
+}
+.nft-link-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin-bottom: 14px;
+}
+.nft-link-label {
+    font-weight: 800;
+    font-size: 0.85em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.nft-link-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.nft-link-input {
+    width: 100%;
+    font-size: 0.85em;
+    font-weight: 700;
+    border: 2px solid var(--border-hard);
+    padding: 10px 12px;
+    background: #F4F0EB;
+    color: #1C1C1C;
+    outline: none;
+    font-family: inherit;
+    border-radius: 0;
+}
+.nft-share-btn {
+    width: 100%;
+}
+.nft-steps-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    padding: 14px 16px !important;
+    margin-bottom: 16px;
+}
+.nft-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 2px dotted rgba(0, 0, 0, 0.2);
+}
+.nft-step-last {
+    border-bottom: none;
+    padding-bottom: 4px;
+}
+.nft-step-num {
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    border: 2px solid #000;
+    box-shadow: 2px 2px 0 #000;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.95em;
+    flex-shrink: 0;
+}
+.nft-step-1 { background: #FF4757; }
+.nft-step-2 { background: #2E86DE; }
+.nft-step-3 { background: #FFC312; color: #000; }
+.nft-step-text {
+    font-size: 0.9em;
+    font-weight: 900;
+    line-height: 1.3;
+    text-align: left;
+}
+.nft-ref-leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.nft-lb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+}
+.nft-lb-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+.nft-lb-rank {
+    font-weight: 900;
+    font-size: 0.95em;
+    min-width: 28px;
+}
+.nft-lb-name {
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nft-lb-count {
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.nft-lb-row.nft-lb-me {
+    background: #FFD700 !important;
+}
+.nft-lb-row.nft-lb-top1 {
+    border-color: #7B2FF7;
+    box-shadow: 4px 4px 0 #7B2FF7;
+}
+.nft-my-rank {
+    margin-top: 4px;
+    margin-bottom: 20px;
+    background: #FFD700 !important;
+    font-weight: 900;
+    justify-content: center !important;
+    text-align: center;
+}
+
+
+.nft-competition-block {
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed rgba(28, 28, 28, 0.15);
 }

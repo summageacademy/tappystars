@@ -224,6 +224,64 @@
 
         <!-- ========== BOXES ========== -->
         <section id="boxes" class="tab-content">
+
+            <!-- ========== NFT COMPETITION (top of Boxes) ========== -->
+            <div id="nft-competition-block" class="nft-competition-block">
+                <h2 class="nft-comp-title" data-i18n="nft_comp_title">NFT Competition</h2>
+
+                <div class="nft-prize-first">
+                    <div class="nft-prize-badge">1st</div>
+                    <div class="nft-image-container">
+                        <img src="images/nft.jpg" alt="NFT Prize" class="nft-prize-img">
+                    </div>
+                    <p class="nft-prize-label" data-i18n="nft_prize_1st">Exclusive NFT</p>
+                </div>
+
+                <div class="nft-prizes-row">
+                    <div class="glass-card nft-prize-card">
+                        <span class="nft-prize-rank">2nd</span>
+                        <span class="nft-prize-amount">100 <svg class="icon star-icon" style="width:1em;height:1em;vertical-align:-0.15em;display:inline;" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+                        <span class="nft-prize-sub" data-i18n="stars">Stars</span>
+                    </div>
+                    <div class="glass-card nft-prize-card">
+                        <span class="nft-prize-rank">3rd</span>
+                        <span class="nft-prize-amount">50 <svg class="icon star-icon" style="width:1em;height:1em;vertical-align:-0.15em;display:inline;" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+                        <span class="nft-prize-sub" data-i18n="stars">Stars</span>
+                    </div>
+                </div>
+
+                <p class="nft-comp-desc" data-i18n="nft_comp_desc">Invite as many people as possible with your link and become first in the leaderboard to win this NFT.</p>
+
+                <div class="glass-card nft-link-card">
+                    <span class="nft-link-label" data-i18n="your_invite_link">Your invite link</span>
+                    <div class="nft-link-row">
+                        <input type="text" id="nft-ref-link" class="nft-link-input" readonly value="">
+                        <button type="button" class="action-btn primary-btn nft-share-btn" onclick="shareReferral()" data-i18n="ref_share">Share Invite Link</button>
+                    </div>
+                </div>
+
+                <div class="glass-card nft-steps-card">
+                    <div class="nft-step">
+                        <div class="nft-step-num nft-step-1">1</div>
+                        <div class="nft-step-text" data-i18n="ref_step1">Share your invite link with friends.</div>
+                    </div>
+                    <div class="nft-step">
+                        <div class="nft-step-num nft-step-2">2</div>
+                        <div class="nft-step-text" data-i18n="ref_step2">Referrals count only after your friend watches an ad & does at least 1 spin.</div>
+                    </div>
+                    <div class="nft-step nft-step-last">
+                        <div class="nft-step-num nft-step-3">3</div>
+                        <div class="nft-step-text" data-i18n="nft_step3">Climb the referral leaderboard — 1st wins the NFT, 2nd & 3rd win Stars.</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title" data-i18n="ref_leaderboard">Referral Leaderboard</h3>
+                <div id="nft-ref-leaderboard" class="nft-ref-leaderboard">
+                    <p class="empty-state">Loading...</p>
+                </div>
+                <div id="nft-ref-my-rank" class="glass-card nft-my-rank" style="display:none;"></div>
+            </div>
+
             <div class="spin-section glass-card" id="spin-section" style="flex-direction:column;align-items:stretch;padding:16px;margin-bottom:20px;">
                 <div class="spin-section-head">
                     <span class="spin-section-tag">LUCKY SPIN</span>
@@ -391,7 +449,17 @@
                 </div>
             </div>
         </section>
-    </main>
+</main>
+
+
+    <!-- FREE NFT sticky bar (above bottom nav) -->
+    <button type="button" id="nft-comp-sticky" class="nft-comp-sticky" style="display:none;" onclick="openNftCompetition()" aria-label="Free NFT competition">
+        <div class="nft-sticky-img-wrap">
+            <img src="images/nft.jpg" alt="NFT" class="nft-sticky-img">
+        </div>
+        <span class="nft-sticky-text" data-i18n="free_nft">WIN FREE NFT</span>
+        <svg class="nft-sticky-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
 
     <!-- BOTTOM NAV -->
     <nav class="bottom-nav" id="bottom-nav" style="display:none;">
@@ -400,7 +468,10 @@
             <span class="nav-label" data-i18n="nav_earn">Earn</span>
         </div>
         <div class="nav-item" data-tab="tasks" onclick="switchTab('tasks')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                <span class="nav-red-dot" id="nav-dot-tasks" style="display:none;"></span>
+            </span>
             <span class="nav-label" data-i18n="nav_tasks">Tasks</span>
         </div>
         <div class="nav-item" data-tab="boosts" onclick="switchTab('boosts')">
@@ -408,7 +479,10 @@
             <span class="nav-label" data-i18n="nav_boosts">Boosts</span>
         </div>
         <div class="nav-item" data-tab="boxes" onclick="switchTab('boxes')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            <span class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                <span class="nav-red-dot" id="nav-dot-boxes" style="display:none;"></span>
+            </span>
             <span class="nav-label" data-i18n="nav_boxes">Boxes</span>
         </div>
         <div class="nav-item" data-tab="account" onclick="switchTab('account')">
@@ -421,18 +495,20 @@
     <div id="league-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content league-modal-content">
             <div class="league-nav-row">
-                <button class="league-nav-btn" id="league-prev" onclick="shiftLeague(-1)">◀</button>
+                <button class="league-nav-btn league-chevron-btn" id="league-prev" onclick="shiftLeague(-1)" aria-label="Previous league">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
                 <div class="league-modal-center">
-                    <img id="league-modal-img" src="images/bear.webp" alt="League" class="league-modal-img">
-                    <h2 id="league-modal-name" class="league-modal-name">Bear</h2>
-                    <p id="league-modal-range" class="league-modal-range">1 – 999 clicks</p>
-                    <p id="league-modal-desc" class="league-modal-desc"></p>
-                    <div class="league-reward-card-ui" id="league-modal-reward">
-                        <span class="league-reward-label">REWARD</span>
-                        <span class="league-reward-amount" id="league-modal-reward-amount">500 Coins</span>
+                    <div class="league-img-glow-wrap">
+                        <img id="league-modal-img" src="images/bear.webp" alt="League" class="league-modal-img">
                     </div>
+                    <h2 id="league-modal-name" class="league-modal-name">Bear</h2>
+                    <p id="league-modal-range" class="league-modal-range">0 – 999 clicks</p>
+                    <p id="league-modal-desc" class="league-modal-desc"></p>
                 </div>
-                <button class="league-nav-btn" id="league-next" onclick="shiftLeague(1)">▶</button>
+                <button class="league-nav-btn league-chevron-btn" id="league-next" onclick="shiftLeague(1)" aria-label="Next league">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
             <p class="league-tip" data-i18n="league_tip">Reach each league to unlock big coin rewards in the Tasks section!</p>
         </div>
