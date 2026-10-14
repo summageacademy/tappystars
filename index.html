@@ -94,6 +94,22 @@
 
             <!-- Daily tasks -->
             <div id="tasks-daily" class="tasks-panel active">
+                <!-- LUCKY SPIN MOVED HERE AS FIRST TASK -->
+                <div class="spin-section glass-card" id="spin-section" style="flex-direction:column;align-items:stretch;padding:16px;margin-bottom:14px;">
+                    <div class="spin-section-head">
+                        <span class="spin-section-tag">LUCKY SPIN</span>
+                        <h3 class="spin-section-title">SPIN &amp; WIN</h3>
+                        <p class="spin-section-sub">Coins · Stars</p>
+                    </div>
+                    <div class="spin-reel-wrap" id="spin-reel-wrap" hidden>
+                        <div class="spin-pointer-down"></div>
+                        <div class="spin-reel-viewport">
+                            <div class="spin-reel-track" id="spin-reel-track"></div>
+                        </div>
+                    </div>
+                    <div id="spin-result-inline" class="spin-result-inline" style="display:none;"></div>
+                    <button type="button" class="action-btn primary-btn" id="btn-spin-main" onclick="startSpinFlow()" style="width:100%;margin-top:12px;">SPIN</button>
+                </div>
                 <div class="glass-card card-vertical task-card" id="task-daily-ad1">
                     <div class="card-center">
                         <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3V9z"/></svg>
@@ -280,22 +296,6 @@
                     <p class="empty-state">Loading...</p>
                 </div>
                 <div id="nft-ref-my-rank" class="glass-card nft-my-rank" style="display:none;"></div>
-            </div>
-
-            <div class="spin-section glass-card" id="spin-section" style="flex-direction:column;align-items:stretch;padding:16px;margin-bottom:20px;">
-                <div class="spin-section-head">
-                    <span class="spin-section-tag">LUCKY SPIN</span>
-                    <h3 class="spin-section-title">SPIN &amp; WIN</h3>
-                    <p class="spin-section-sub">Coins · Stars</p>
-                </div>
-                <div class="spin-reel-wrap" id="spin-reel-wrap" hidden>
-                    <div class="spin-pointer-down"></div>
-                    <div class="spin-reel-viewport">
-                        <div class="spin-reel-track" id="spin-reel-track"></div>
-                    </div>
-                </div>
-                <div id="spin-result-inline" class="spin-result-inline" style="display:none;"></div>
-                <button type="button" class="action-btn primary-btn" id="btn-spin-main" onclick="startSpinFlow()" style="width:100%;margin-top:12px;">SPIN</button>
             </div>
 
             <h3 class="section-title" data-i18n="mystery_chests">Mystery Chests</h3>
