@@ -881,8 +881,8 @@ window.claimDailyTask = async (taskId) => {
     }
 };
 
-// ========== ADS DAILY LIMIT (10 / day, Tashkent reset) ==========
-const ADS_DAILY_LIMIT = 10;
+// ========== ADS DAILY LIMIT (6 / day, Tashkent reset) ==========
+const ADS_DAILY_LIMIT = 6;
 
 function ensureAdsFields() {
     if (!userData) return;
@@ -1368,8 +1368,8 @@ function initApp() {
     document.getElementById('top-bar').style.display = 'flex';
     document.getElementById('app-content').style.display = 'block';
     document.getElementById('bottom-nav').style.display = 'flex';
-    const nftSticky = document.getElementById('nft-comp-sticky');
-    if (nftSticky) nftSticky.style.display = 'flex';
+    // NFT sticky only on Earn tab
+    updateNftStickyVisibility('earn');
 
     if (!userData.onboardingDone) {
         document.getElementById('onboarding-modal').style.display = 'flex';
@@ -1392,6 +1392,16 @@ function initApp() {
     loadLeaderboardPreview();
     loadPurchases();
     startAutoTapLoop();
+
+    // Signal that core app is ready (for splash loader)
+    window.__tappyAppReady = true;
+    if (typeof window.__tappyHideLoader === 'function') window.__tappyHideLoader();
+}
+
+function updateNftStickyVisibility(tab) {
+    const nftSticky = document.getElementById('nft-comp-sticky');
+    if (!nftSticky) return;
+    nftSticky.style.display = (tab === 'earn') ? 'flex' : 'none';
 }
 
 // ========== TABS ==========
@@ -1404,6 +1414,7 @@ window.switchTab = (tab) => {
     if (nav) nav.classList.add('active');
     safeHaptic('selection');
     touchActivity();
+    updateNftStickyVisibility(tab);
 
     if (tab === 'tasks') {
         updateDailyTasksUI();
@@ -1809,15 +1820,15 @@ window.handleNewsReward = async () => {
 
 function grantChestPrize(type) {
     const roll = Math.random();
-    let prizeType = 'coins', amount = 100;
+    let prizeType = 'coins', amount = 80;
     if (type === 'small') {
-        amount = 50 + Math.floor(Math.random() * 150);
+        amount = 40 + Math.floor(Math.random() * 80); // 40–119
     } else if (type === 'medium') {
-        if (roll < 0.15) { prizeType = 'stars'; amount = 1; }
-        else amount = 200 + Math.floor(Math.random() * 300);
+        if (roll < 0.12) { prizeType = 'stars'; amount = 1; }
+        else amount = 150 + Math.floor(Math.random() * 150); // 150–299
     } else {
-        if (roll < 0.2) { prizeType = 'stars'; amount = 1 + Math.floor(Math.random() * 3); }
-        else amount = 400 + Math.floor(Math.random() * 600);
+        if (roll < 0.15) { prizeType = 'stars'; amount = 1 + Math.floor(Math.random() * 2); } // 1–2
+        else amount = 300 + Math.floor(Math.random() * 300); // 300–599
     }
     if (prizeType === 'stars') {
         userData.stars = (userData.stars || 0) + amount;
@@ -1836,14 +1847,14 @@ const ICON_COIN = `<svg class="spin-card-icon-img" viewBox="0 0 24 24" fill="non
 const ICON_STAR = `<svg class="spin-card-icon-img" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
 const SPIN_POOL = [
-    { type: 'coins', amount: 200, label: '+200', weight: 30, cls: '' },
-    { type: 'coins', amount: 250, label: '+250', weight: 25, cls: '' },
-    { type: 'coins', amount: 300, label: '+300', weight: 20, cls: '' },
-    { type: 'coins', amount: 400, label: '+400', weight: 15, cls: '' },
-    { type: 'coins', amount: 500, label: '+500', weight: 10, cls: '' },
-    { type: 'stars', amount: 1,  label: '1', weight: 0.5, cls: 'star' },
-    { type: 'stars', amount: 5,  label: '5', weight: 0.15, cls: 'star' },
-    { type: 'stars', amount: 10, label: '10', weight: 0.05, cls: 'star' }
+    { type: 'coins', amount: 150, label: '+150', weight: 30, cls: '' },
+    { type: 'coins', amount: 200, label: '+200', weight: 25, cls: '' },
+    { type: 'coins', amount: 250, label: '+250', weight: 20, cls: '' },
+    { type: 'coins', amount: 300, label: '+300', weight: 15, cls: '' },
+    { type: 'coins', amount: 400, label: '+400', weight: 10, cls: '' },
+    { type: 'stars', amount: 1,  label: '1', weight: 0.4, cls: 'star' },
+    { type: 'stars', amount: 3,  label: '3', weight: 0.12, cls: 'star' },
+    { type: 'stars', amount: 5,  label: '5', weight: 0.05, cls: 'star' }
 ];
 
 const SPIN_COOLDOWN_SHORT = 2 * 60 * 1000;  // first 3 spins / day

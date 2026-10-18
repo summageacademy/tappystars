@@ -1244,3 +1244,48 @@ main {
     padding-bottom: 8px;
     border-bottom: 2px dashed rgba(28, 28, 28, 0.15);
 }
+
+/* ========== Splash / Lottie loader ========== */
+.app-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 50000;
+    background: #F4F0EB;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+.app-loader.loader-hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.lottie-loader {
+    width: min(220px, 55vw);
+    height: min(220px, 55vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loader-text {
+    font-weight: 900;
+    font-size: 1.35em;
+    letter-spacing: 1px;
+    color: #1C1C1C;
+    text-transform: uppercase;
+}
+.loader-fallback-spinner {
+    width: 56px;
+    height: 56px;
+    border: 4px solid #1C1C1C;
+    border-top-color: #FFD700;
+    border-radius: 50%;
+    animation: loaderSpin 0.8s linear infinite;
+    box-shadow: 3px 3px 0 #1C1C1C;
+}
+@keyframes loaderSpin {
+    to { transform: rotate(360deg); }
+}

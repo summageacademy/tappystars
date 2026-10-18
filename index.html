@@ -7,8 +7,15 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
+    <!-- SPLASH LOADER (Lottie) -->
+    <div id="app-loader" class="app-loader" aria-busy="true" aria-live="polite">
+        <div id="lottie-loader" class="lottie-loader"></div>
+        <p class="loader-text">TappyStars</p>
+    </div>
+
     <!-- TOP BAR -->
     <header class="top-bar" id="top-bar" style="display: none;">
         <div class="currency-badge">
@@ -636,5 +643,82 @@
     </div>
 
     <script type="module" src="app.js"></script>
+    <script>
+    (function () {
+        const LOADER_MIN_MS = 3000;
+        const LOADER_MAX_MS = 12000; // safety: never trap the user
+        const start = Date.now();
+        let hidden = false;
+        const el = document.getElementById('app-loader');
+        const container = document.getElementById('lottie-loader');
+
+        // Try common paths for the Lottie JSON the project already has
+        const LOTTIE_PATHS = ['loader.json', 'images/loader.json', 'lottie/loader.json', 'assets/loader.json'];
+
+        function playLottie(path) {
+            if (!window.lottie || !container) return null;
+            try {
+                return lottie.loadAnimation({
+                    container: container,
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: path
+                });
+            } catch (e) { return null; }
+        }
+
+        // Sequential path try; fall back to a simple CSS spinner if none load
+        let anim = null;
+        let pathIdx = 0;
+        function tryNextPath() {
+            if (pathIdx >= LOTTIE_PATHS.length) {
+                if (container) container.innerHTML = '<div class="loader-fallback-spinner"></div>';
+                return;
+            }
+            const path = LOTTIE_PATHS[pathIdx++];
+            fetch(path, { method: 'HEAD' }).then(r => {
+                if (r.ok) {
+                    anim = playLottie(path);
+                } else {
+                    tryNextPath();
+                }
+            }).catch(() => tryNextPath());
+        }
+        if (window.lottie) tryNextPath();
+        else {
+            const waitLottie = setInterval(() => {
+                if (window.lottie) {
+                    clearInterval(waitLottie);
+                    tryNextPath();
+                }
+            }, 50);
+            setTimeout(() => clearInterval(waitLottie), 4000);
+        }
+
+        function hideLoader() {
+            if (hidden || !el) return;
+            const elapsed = Date.now() - start;
+            const wait = Math.max(0, LOADER_MIN_MS - elapsed);
+            setTimeout(() => {
+                if (hidden) return;
+                hidden = true;
+                el.classList.add('loader-hide');
+                setTimeout(() => {
+                    el.style.display = 'none';
+                    if (anim && anim.destroy) try { anim.destroy(); } catch (e) {}
+                }, 400);
+            }, wait);
+        }
+
+        window.__tappyHideLoader = hideLoader;
+
+        // If app already marked ready (fast path)
+        if (window.__tappyAppReady) hideLoader();
+
+        // Absolute safety net — never leave user stuck
+        setTimeout(hideLoader, LOADER_MAX_MS);
+    })();
+    </script>
 </body>
 </html>
