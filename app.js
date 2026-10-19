@@ -145,6 +145,12 @@ const TRANSLATIONS = {
         ref_leaderboard: "Referral Leaderboard",
         referrals_label: "referrals",
         your_rank: "Your rank",
+        status_pending: "Pending",
+        status_approved: "Approved",
+        status_sent: "Sent",
+        status_denied: "Denied",
+        status_declined: "Declined",
+        status_processing: "Processing",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -268,6 +274,12 @@ const TRANSLATIONS = {
         ref_leaderboard: "Таблица рефералов",
         referrals_label: "рефералов",
         your_rank: "Ваш ранг",
+        status_pending: "Ожидание",
+        status_approved: "Одобрено",
+        status_sent: "Отправлено",
+        status_denied: "Отклонено",
+        status_declined: "Отклонено",
+        status_processing: "В обработке",
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -391,6 +403,12 @@ const TRANSLATIONS = {
         ref_leaderboard: "Referallar jadvali",
         referrals_label: "referal",
         your_rank: "Sizning o'rningiz",
+        status_pending: "Kutilmoqda",
+        status_approved: "Tasdiqlangan",
+        status_sent: "Yuborilgan",
+        status_denied: "Rad etilgan",
+        status_declined: "Rad etilgan",
+        status_processing: "Jarayonda",
     }
 };
 
@@ -2373,6 +2391,7 @@ async function loadPurchases() {
         snap.forEach(d => {
             const p = d.data();
             const status = (p.status || p.state || 'pending').toString().toLowerCase();
+            const statusLabel = t(`status_${status}`) || status;
             const giftName = p.gift || p.giftName || p.name || 'Gift';
             const cost = p.cost ?? p.starCost ?? 0;
             const uname = p.username || '';
@@ -2381,7 +2400,7 @@ async function loadPurchases() {
                     <strong>${giftName}</strong>
                     <div style="font-size:0.8em;color:var(--text-muted);">${uname ? '@' + uname : ''} · ${cost}⭐</div>
                 </div>
-                <span class="status-badge status-${status}">${status}</span>
+                <span class="status-badge status-${status}">${statusLabel}</span>
             </div>`);
         });
         list.innerHTML = rows.join('');
@@ -2415,6 +2434,7 @@ async function loadPurchases() {
             items.sort((a, b) => String(b.createdAt || b.timestamp || '').localeCompare(String(a.createdAt || a.timestamp || '')));
             list.innerHTML = items.map(p => {
                 const status = (p.status || p.state || 'pending').toString().toLowerCase();
+                const statusLabel = t(`status_${status}`) || status;
                 const giftName = p.gift || p.giftName || p.name || 'Gift';
                 const cost = p.cost ?? p.starCost ?? 0;
                 const uname = p.username || '';
@@ -2423,7 +2443,7 @@ async function loadPurchases() {
                         <strong>${giftName}</strong>
                         <div style="font-size:0.8em;color:var(--text-muted);">${uname ? '@' + uname : ''} · ${cost}⭐</div>
                     </div>
-                    <span class="status-badge status-${status}">${status}</span>
+                    <span class="status-badge status-${status}">${statusLabel}</span>
                 </div>`;
             }).join('');
         } catch (e2) {
