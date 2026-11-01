@@ -21,6 +21,20 @@ const tg = window.Telegram?.WebApp || {};
 if (tg.expand) tg.expand();
 const user = tg.initDataUnsafe?.user || { id: "test_dev_user_789", first_name: "Explorer" };
 
+// Telegram CloudStorage Sync Helpers
+function cloudSet(key, value) {
+    if (tg.CloudStorage?.setItem) {
+        tg.CloudStorage.setItem(key, String(value), () => {});
+    }
+}
+function cloudGet(key, callback) {
+    if (tg.CloudStorage?.getItem) {
+        tg.CloudStorage.getItem(key, (err, val) => {
+            if (!err && val !== undefined && val !== null) callback(val);
+        });
+    }
+}
+
 // 3. I18N
 const TRANSLATIONS = {
     en: {
@@ -151,6 +165,48 @@ const TRANSLATIONS = {
         status_denied: "Denied",
         status_declined: "Declined",
         status_processing: "Processing",
+        no_internet: "No internet connection",
+        something_went_wrong: "Something went wrong",
+        retry_btn: "Retry",
+        nav_clan: "Clan",
+        clan_title: "Clan Battles",
+        clan_subtitle: "Join or create a clan to battle for Telegram Stars!",
+        join_clan_title: "Join a Clan",
+        search: "Search",
+        create_clan_btn: "Create Clan (2,000 Coins)",
+        clan_chat: "Chat",
+        clan_battle: "Battle",
+        clan_members: "Members",
+        clan_settings: "Settings",
+        clan_back: "Back",
+        clan_send: "Send",
+        clan_type_msg: "Type message...",
+        clan_enter_code: "ENTER CLAN CODE",
+        clan_how_points: "How to Earn Points",
+        clan_leaderboard: "Clan Leaderboard",
+        clan_settings_title: "Clan Settings",
+        clan_leave: "Leave Clan",
+        clan_name_label: "Clan Name",
+        clan_desc_label: "Description",
+        clan_save: "Save Settings",
+        clan_admin_only: "Only the clan Admin can edit clan settings.",
+        clan_feature_1_title: "Earn together",
+        clan_feature_1_desc: "Every 100 coins you mine adds 10 points to your clan.",
+        clan_feature_2_title: "Climb the ranks",
+        clan_feature_2_desc: "Battle other clans on the live leaderboard for glory.",
+        clan_feature_3_title: "Chat & coordinate",
+        clan_feature_3_desc: "Talk with members and plan your next push.",
+        clan_or: "OR",
+        clan_join_hint: "Enter a 6-digit clan code from a friend",
+        clan_create_hint: "Start fresh and become the admin! Create your own clan for 2000 coins!",
+        clan_rule_coins: "100 Coins",
+        clan_rule_coins_pts: "+10 Points",
+        clan_rule_referral: "Referral",
+        clan_rule_referral_pts: "+100 Points",
+        clan_rule_ad: "Watch Ad",
+        clan_rule_ad_pts: "+50 Points",
+        top_coins: "Top Coins",
+        top_stars: "Top Stars",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -280,6 +336,48 @@ const TRANSLATIONS = {
         status_denied: "Отклонено",
         status_declined: "Отклонено",
         status_processing: "В обработке",
+        no_internet: "Нет подключения к интернету",
+        something_went_wrong: "Что-то пошло не так",
+        retry_btn: "Повторить",
+        nav_clan: "Клан",
+        clan_title: "Клановые Битвы",
+        clan_subtitle: "Вступайте или создавайте клан для битвы за Звёзды!",
+        join_clan_title: "Вступить в Клан",
+        search: "Поиск",
+        create_clan_btn: "Создать Клан (2,000 Монет)",
+        clan_chat: "Чат",
+        clan_battle: "Битва",
+        clan_members: "Участники",
+        clan_settings: "Настройки",
+        clan_back: "Назад",
+        clan_send: "Отпр.",
+        clan_type_msg: "Сообщение...",
+        clan_enter_code: "КОД КЛАНА",
+        clan_how_points: "Как зарабатывать очки",
+        clan_leaderboard: "Таблица кланов",
+        clan_settings_title: "Настройки клана",
+        clan_leave: "Покинуть клан",
+        clan_name_label: "Название клана",
+        clan_desc_label: "Описание",
+        clan_save: "Сохранить",
+        clan_admin_only: "Только админ может менять настройки клана.",
+        clan_feature_1_title: "Зарабатывайте вместе",
+        clan_feature_1_desc: "Каждые 100 монет добавляют 10 очков вашему клану.",
+        clan_feature_2_title: "Поднимайтесь в рейтинге",
+        clan_feature_2_desc: "Сражайтесь с другими кланами в таблице лидеров.",
+        clan_feature_3_title: "Чат и координация",
+        clan_feature_3_desc: "Общайтесь с участниками и планируйте атаки.",
+        clan_or: "ИЛИ",
+        clan_join_hint: "Введите 6-значный код клана от друга",
+        clan_create_hint: "Создай свой и стань админом! Создай собственный клан за 2000 монет!",
+        clan_rule_coins: "100 Монет",
+        clan_rule_coins_pts: "+10 Очков",
+        clan_rule_referral: "Реферал",
+        clan_rule_referral_pts: "+100 Очков",
+        clan_rule_ad: "Реклама",
+        clan_rule_ad_pts: "+50 Очков",
+        top_coins: "Топ монет",
+        top_stars: "Топ звёзд",
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -409,34 +507,93 @@ const TRANSLATIONS = {
         status_denied: "Rad etilgan",
         status_declined: "Rad etilgan",
         status_processing: "Jarayonda",
+        no_internet: "Internet aloqasi yo'q",
+        something_went_wrong: "Xatolik yuz berdi",
+        retry_btn: "Qayta urinish",
+        nav_clan: "Klan",
+        clan_title: "Klan Janglari",
+        clan_subtitle: "Telegram Yulduzlari uchun klan yarating yoki qo'shiling!",
+        join_clan_title: "Klanga qo'shilish",
+        search: "Qidirish",
+        create_clan_btn: "Klan yaratish (2,000 Tanga)",
+        clan_chat: "Chat",
+        clan_battle: "Jang",
+        clan_members: "A'zolar",
+        clan_settings: "Sozlamalar",
+        clan_back: "Orqaga",
+        clan_send: "Yuborish",
+        clan_type_msg: "Xabar yozing...",
+        clan_enter_code: "KLAN KODI",
+        clan_how_points: "Ball qanday olinadi",
+        clan_leaderboard: "Klan reytingi",
+        clan_settings_title: "Klan sozlamalari",
+        clan_leave: "Klandan chiqish",
+        clan_name_label: "Klan nomi",
+        clan_desc_label: "Tavsif",
+        clan_save: "Saqlash",
+        clan_admin_only: "Faqat admin klan sozlamalarini o'zgartira oladi.",
+        clan_feature_1_title: "Birga ishlang",
+        clan_feature_1_desc: "Har 100 tanga klaningizga 10 ball qo'shadi.",
+        clan_feature_2_title: "Reytingda ko'tariling",
+        clan_feature_2_desc: "Boshqa klanlar bilan reytingda bellashing.",
+        clan_feature_3_title: "Chat va reja",
+        clan_feature_3_desc: "A'zolar bilan gaplashing va reja tuzing.",
+        clan_or: "YOKI",
+        clan_join_hint: "Do'stdan 6 xonali klan kodini kiriting",
+        clan_create_hint: "Yangi boshlang va admin bo'ling! 2000 tanga uchun o'z klaningizni oching!",
+        clan_rule_coins: "100 Tanga",
+        clan_rule_coins_pts: "+10 Ball",
+        clan_rule_referral: "Referal",
+        clan_rule_referral_pts: "+100 Ball",
+        clan_rule_ad: "Reklama",
+        clan_rule_ad_pts: "+50 Ball",
+        top_coins: "Top tangalar",
+        top_stars: "Top yulduzlar",
     }
 };
+
+let langUserPicked = false; // prevents CloudStorage from overwriting a fresh UI pick
 
 function detectUserLanguage() {
     const saved = localStorage.getItem('tappy_lang');
     if (saved && ['en', 'ru', 'uz'].includes(saved)) return saved;
+    cloudGet('tappy_lang', (val) => {
+        // Only apply cloud value if user hasn't explicitly chosen in this session
+        if (langUserPicked) return;
+        if (['en', 'ru', 'uz'].includes(val) && val !== currentLang) {
+            currentLang = val;
+            localStorage.setItem('tappy_lang', val);
+            applyLanguage();
+        }
+    });
     const code = (tg.initDataUnsafe?.user?.language_code || navigator.language || 'en').toLowerCase();
     if (code.startsWith('ru')) return 'ru';
     if (code.startsWith('uz')) return 'uz';
     return 'en';
 }
+
 let currentLang = detectUserLanguage();
 function t(key) {
     return TRANSLATIONS[currentLang]?.[key] || TRANSLATIONS.en?.[key] || key;
 }
-window.changeLanguage = (lang) => {
-    if (!['en', 'ru', 'uz'].includes(lang)) return;
-    currentLang = lang;
-    localStorage.setItem('tappy_lang', lang);
-    applyLanguage();
-    safeHaptic('selection');
-};
+
 window.selectLanguage = (code, label) => {
+    langUserPicked = true;
     changeLanguage(code);
     const el = document.getElementById('selected-lang');
     if (el) el.innerText = label;
     const dd = document.getElementById('langDropdown');
     if (dd) dd.classList.remove('open');
+};
+
+window.changeLanguage = (lang) => {
+    if (!['en', 'ru', 'uz'].includes(lang)) return;
+    langUserPicked = true;
+    currentLang = lang;
+    localStorage.setItem('tappy_lang', lang);
+    cloudSet('tappy_lang', lang);
+    applyLanguage();
+    safeHaptic('selection');
 };
 window.toggleLangMenu = (e) => {
     e.stopPropagation();
@@ -447,19 +604,57 @@ document.addEventListener('click', () => {
 });
 
 function applyLanguage() {
+    document.documentElement.lang = currentLang || 'en';
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (key) el.innerText = t(key);
+        if (!key) return;
+        const val = t(key);
+        // Prefer textContent so we don't fight nested markup; keep icons intact
+        if (el.children.length === 0) {
+            el.textContent = val;
+        } else {
+            // Replace only pure-text child nodes, leave SVGs etc.
+            let replaced = false;
+            el.childNodes.forEach(n => {
+                if (n.nodeType === Node.TEXT_NODE && n.textContent.trim()) {
+                    n.textContent = val;
+                    replaced = true;
+                }
+            });
+            if (!replaced) el.textContent = val;
+        }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key) el.placeholder = t(key);
     });
     const labels = { en: 'English', ru: 'Русский', uz: "O'zbekcha" };
     const sel = document.getElementById('selected-lang');
     if (sel) sel.innerText = labels[currentLang] || 'English';
-    updateLeagueCards();
-    renderLeagueRewards();
-    updateDailyTasksUI();
-    updateReferralUI();
-    updateNftCompUI();
+
+    // Re-render dynamic surfaces that inject translated strings via JS
+    try { updateLeagueCards(); } catch (e) {}
+    try { renderLeagueRewards(); } catch (e) {}
+    try { updateDailyTasksUI(); } catch (e) {}
+    try { updateReferralUI(); } catch (e) {}
+    try { updateNftCompUI(); } catch (e) {}
+    try { updateBearGiftButton(); } catch (e) {}
+    try { updateAllAdButtons(); } catch (e) {}
+    try { updateActiveBoosts(); } catch (e) {}
+    try { updateAccountStats(); } catch (e) {}
+    const lbPanel = document.getElementById('account-leaderboard');
+    if (lbPanel && lbPanel.classList.contains('active')) {
+        try { loadAccountLeaderboard(typeof currentLeaderboardMetric !== 'undefined' ? currentLeaderboardMetric : 'coins'); } catch (e) {}
+    }
+    // Clan dynamic bits
+    try {
+        if (currentClanData) {
+            if (document.getElementById('clan-panel-members')?.classList.contains('active')) renderClanMembers();
+            if (document.getElementById('clan-panel-settings')?.classList.contains('active')) renderClanSettings();
+        }
+    } catch (e) {}
 }
+window.applyLanguage = applyLanguage;
 
 function safeHaptic(type, style) {
     if (tg.isVersionAtLeast && tg.isVersionAtLeast('6.1') && tg.HapticFeedback) {
@@ -468,6 +663,28 @@ function safeHaptic(type, style) {
             else if (type === 'selection') tg.HapticFeedback.selectionChanged();
             else if (type === 'notification') tg.HapticFeedback.notificationOccurred(style || 'success');
         } catch (e) {}
+    }
+}
+
+async function updateAutomaticClanPoints() {
+    if (!userData || !userData.clanId) return;
+    
+    const coins = userData.coins || 0;
+    const adsWatched = userData.totalAdsWatched || userData.adsToday || 0;
+    const referrals = userData.referralCount || 0;
+    
+    // Automatic weighted point formula (Coins + Ads + Referrals)
+    const calculatedPoints = Math.floor(coins + (adsWatched * 50) + (referrals * 100));
+
+    try {
+        const clanRef = doc(db, 'clans', userData.clanId);
+        await updateDoc(clanRef, {
+            [`memberPoints.${user.id}`]: calculatedPoints
+        });
+        
+        // Recalculate total clan points from all members if needed, or update user contribution
+    } catch (e) {
+        console.warn('Error updating automatic clan points:', e);
     }
 }
 
@@ -536,6 +753,9 @@ function formatCompact(n) {
     return String(n);
 }
 
+const LB_COIN_ICON = `<svg class="lb-icon coin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>`;
+const LB_STAR_ICON = `<svg class="lb-icon star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+
 // ========== LEAGUES ==========
 const LEAGUES = [
     { id: 'bear', name: 'Bear', min: 0, max: 999, image: 'images/bear.webp', reward: 500, descKey: 'league_bear_desc', color: '#4A90E2', light: '#E3F0FB' },
@@ -565,10 +785,9 @@ function updateLeagueCards() {
         if (img) img.src = L.image;
         if (name) name.innerText = L.name;
         if (card) {
-            // Only the fill color changes — keep neo-brutalist black border + shadow
             card.style.background = L.color;
-            card.style.borderColor = '';           // leave default (#1C1C1C)
-            card.style.boxShadow = '';             // leave default (4px 4px 0 #1C1C1C)
+            card.style.borderColor = '';
+            card.style.boxShadow = '';
             const label = card.querySelector('.league-card-label');
             const chev = card.querySelector('.league-chevron');
             if (label) label.style.color = 'rgba(255,255,255,0.85)';
@@ -631,7 +850,7 @@ function renderLeagueRewards() {
     const claimed = userData.claimedLeagues || {};
     let html = '';
     for (const L of LEAGUES) {
-        if (claimed[L.id]) continue; // disappear after claim
+        if (claimed[L.id]) continue;
         const reached = clicks >= L.min;
         const pct = Math.min(100, Math.floor((clicks / Math.max(L.min, 1)) * 100));
         html += `
@@ -685,7 +904,6 @@ window.claimLeagueReward = async (leagueId) => {
 // ========== DAILY TASKS (Tashkent UTC+5) ==========
 function getTashkentDate() {
     const now = new Date();
-    // UTC+5
     const tash = new Date(now.getTime() + (5 * 60 + now.getTimezoneOffset()) * 60000);
     return tash.toISOString().split('T')[0];
 }
@@ -758,7 +976,6 @@ function updateDailyTasksUI() {
     ensureDailyFields();
     const dt = userData.dailyTasks || {};
 
-    // ad1
     const btn1 = document.getElementById('btn-task-ad1');
     if (btn1) {
         if (dt.ad1) {
@@ -775,7 +992,6 @@ function updateDailyTasksUI() {
         }
     }
 
-    // ad3
     const ad3Count = dt.ad3 || 0;
     const fill3 = document.getElementById('prog-task-ad3');
     const txt3 = document.getElementById('prog-task-ad3-txt');
@@ -805,7 +1021,6 @@ function updateDailyTasksUI() {
         }
     }
 
-    // tap500
     const todayTaps = userData.todayTapCoins || 0;
     const fillT = document.getElementById('prog-task-tap500');
     const txtT = document.getElementById('prog-task-tap500-txt');
@@ -899,7 +1114,7 @@ window.claimDailyTask = async (taskId) => {
     }
 };
 
-// ========== ADS DAILY LIMIT (6 / day, Tashkent reset) ==========
+// ========== ADS DAILY LIMIT ==========
 const ADS_DAILY_LIMIT = 6;
 
 function ensureAdsFields() {
@@ -924,7 +1139,6 @@ function canWatchAd() {
 
 function msUntilTashkentMidnight() {
     const now = new Date();
-    // Tashkent = UTC+5
     const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
     const tashMs = utcMs + 5 * 60 * 60000;
     const tash = new Date(tashMs);
@@ -969,21 +1183,6 @@ function updateAllAdButtons() {
         ? `${t('ads_reset_in')} ${formatAdsCooldown()}`
         : null;
 
-    const applyLimit = (btn, defaultTextKey, defaultBg, defaultColor, onclickFn) => {
-        if (!btn) return;
-        if (limited) {
-            btn.disabled = true;
-            btn.innerText = cooldownLabel;
-            btn.style.background = '#CFD8DC';
-            btn.style.color = '#1C1C1C';
-            btn.onclick = null;
-        } else if (onclickFn) {
-            // restore only if not already in a "done" state managed elsewhere
-            // callers will re-apply their specific UI after
-        }
-    };
-
-    // Daily task ad1
     const btn1 = document.getElementById('btn-task-ad1');
     if (btn1) {
         const dt = userData.dailyTasks || {};
@@ -1007,16 +1206,11 @@ function updateAllAdButtons() {
         }
     }
 
-    // Daily task ad3 — only override when waiting for more ads (not claimable/done)
     const btn3 = document.getElementById('btn-task-ad3');
     if (btn3) {
         const dt = userData.dailyTasks || {};
         const ad3Count = dt.ad3 || 0;
-        if (dt.ad3Claimed) {
-            // leave as done
-        } else if (ad3Count >= 3) {
-            // leave as claim
-        } else if (limited) {
+        if (!dt.ad3Claimed && ad3Count < 3 && limited) {
             btn3.disabled = true;
             btn3.innerText = cooldownLabel;
             btn3.style.background = '#CFD8DC';
@@ -1025,7 +1219,6 @@ function updateAllAdButtons() {
         }
     }
 
-    // Boost buttons
     ['btn-boost-auto', 'btn-boost-multitap', 'btn-boost-energy'].forEach(id => {
         const btn = document.getElementById(id);
         if (!btn) return;
@@ -1038,28 +1231,10 @@ function updateAllAdButtons() {
             btn.disabled = false;
             btn.innerText = t('watch_ad');
             btn.style.background = '#FF9800';
-            btn.style.color = id === 'btn-boost-energy' || true ? 'black' : '#1C1C1C';
-        }
-    });
-
-    // Chest buttons
-    ['btn-chest-small', 'btn-chest-medium', 'btn-chest-mega', 'btn-news-reward'].forEach(id => {
-        const btn = document.getElementById(id);
-        if (!btn) return;
-        if (limited) {
-            btn.disabled = true;
-            btn.innerText = cooldownLabel;
-            btn.style.background = '#CFD8DC';
             btn.style.color = '#1C1C1C';
-        } else {
-            btn.disabled = false;
-            btn.innerText = t('watch_ad');
-            btn.style.background = '#FF9800';
-            btn.style.color = 'black';
         }
     });
 
-    // Spin button — only override when not already in spin cooldown / spinning
     const spinBtn = document.getElementById('btn-spin-main');
     if (spinBtn && !isSpinning) {
         const remain = remainingSpinAdCooldown();
@@ -1069,8 +1244,6 @@ function updateAllAdButtons() {
             spinBtn.style.background = '#CFD8DC';
             spinBtn.style.color = '#1C1C1C';
             spinBtn.onclick = null;
-        } else if (!(remain > 0 && (userData.lastSpinAdTime || 0) > 0)) {
-            // leave spin UI to updateSpinUI
         }
     }
 }
@@ -1111,11 +1284,7 @@ function updateReferralUI() {
 
     const area = document.getElementById('ref-claim-area');
     if (area) {
-        if (pending > 0) {
-            area.style.display = 'block';
-        } else {
-            area.style.display = 'none';
-        }
+        area.style.display = pending > 0 ? 'block' : 'none';
     }
     updateNotificationDots();
 }
@@ -1136,7 +1305,6 @@ window.shareReferral = () => {
 
 window.claimReferralBear = () => {
     if (!userData || (userData.pendingBearClaims || 0) <= 0) return;
-    // open gift flow free
     pendingGift = { name: 'Bear Gift', cost: 0, isReferral: true };
     openGiftConfirmModal();
 };
@@ -1147,17 +1315,8 @@ function getReferralInviteLink() {
 }
 
 window.openNftCompetition = () => {
-    switchTab('boxes');
-    // scroll competition block into view after tab paint
-    requestAnimationFrame(() => {
-        const el = document.getElementById('nft-competition-block');
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        const main = document.getElementById('app-content');
-        if (main && el) {
-            // ensure near top of main scroll
-            main.scrollTop = Math.max(0, el.offsetTop - 8);
-        }
-    });
+    switchTab('tasks');
+    switchTasksTab('daily');
 };
 
 function updateNftCompUI() {
@@ -1165,96 +1324,14 @@ function updateNftCompUI() {
     if (input) input.value = getReferralInviteLink();
 }
 
-async function loadReferralLeaderboard() {
-    const list = document.getElementById('nft-ref-leaderboard');
-    const myRankEl = document.getElementById('nft-ref-my-rank');
-    if (!list) return;
-    list.innerHTML = `<p class="empty-state">Loading...</p>`;
-    try {
-        const q = query(collection(db, 'users'), orderBy('referralCount', 'desc'), limit(30));
-        const snap = await getDocs(q);
-        let html = '';
-        let rank = 1;
-        let myRank = null;
-        const myId = user.id.toString();
-        snap.forEach(d => {
-            const data = d.data();
-            const count = data.referralCount || 0;
-            const isMe = d.id === myId;
-            if (isMe) myRank = rank;
-            const topCls = rank === 1 ? ' nft-lb-top1' : '';
-            const meCls = isMe ? ' nft-lb-me' : '';
-            html += `<div class="glass-card nft-lb-row${topCls}${meCls}">
-                <div class="nft-lb-left">
-                    <span class="nft-lb-rank">#${rank}</span>
-                    <span class="nft-lb-name">${(data.name || 'Miner').toString().slice(0, 24)}</span>
-                </div>
-                <span class="nft-lb-count">${formatCompact(count)} ${t('referrals_label')}</span>
-            </div>`;
-            rank++;
-        });
-        list.innerHTML = html || `<p class="empty-state">—</p>`;
-        if (myRankEl) {
-            const myCount = userData?.referralCount || 0;
-            myRankEl.style.display = 'flex';
-            myRankEl.innerHTML = myRank != null
-                ? `<strong>${t('your_rank')} #${myRank}</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`
-                : `<strong>${t('your_rank')} —</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`;
-        }
-    } catch (e) {
-        console.warn('loadReferralLeaderboard', e);
-        try {
-            const q2 = query(collection(db, 'users'), limit(50));
-            const snap2 = await getDocs(q2);
-            const items = [];
-            snap2.forEach(d => {
-                const data = d.data();
-                items.push({ id: d.id, name: data.name || 'Miner', referralCount: data.referralCount || 0 });
-            });
-            items.sort((a, b) => b.referralCount - a.referralCount);
-            const top = items.slice(0, 30);
-            let html = '';
-            let myRank = null;
-            const myId = user.id.toString();
-            top.forEach((row, i) => {
-                const rank = i + 1;
-                if (row.id === myId) myRank = rank;
-                const topCls = rank === 1 ? ' nft-lb-top1' : '';
-                const meCls = row.id === myId ? ' nft-lb-me' : '';
-                html += `<div class="glass-card nft-lb-row${topCls}${meCls}">
-                    <div class="nft-lb-left">
-                        <span class="nft-lb-rank">#${rank}</span>
-                        <span class="nft-lb-name">${row.name.toString().slice(0, 24)}</span>
-                    </div>
-                    <span class="nft-lb-count">${formatCompact(row.referralCount)} ${t('referrals_label')}</span>
-                </div>`;
-            });
-            list.innerHTML = html || `<p class="empty-state">—</p>`;
-            if (myRankEl) {
-                const myCount = userData?.referralCount || 0;
-                myRankEl.style.display = 'flex';
-                myRankEl.innerHTML = myRank != null
-                    ? `<strong>${t('your_rank')} #${myRank}</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`
-                    : `<strong>${t('your_rank')} —</strong> · ${formatCompact(myCount)} ${t('referrals_label')}`;
-            }
-        } catch (e2) {
-            list.innerHTML = `<p class="empty-state">—</p>`;
-        }
-    }
-}
-
-
 async function processReferralOnStart() {
     try {
         const startParam = tg.initDataUnsafe?.start_param || '';
         if (!startParam.startsWith('ref_')) return;
         const referrerId = startParam.replace('ref_', '');
         if (!referrerId || referrerId === user.id.toString()) return;
-
-        // If already recorded, do nothing
         if (userData?.referredBy || userData?.referralCredited) return;
 
-        // Save the referrer ID on the new user's document
         await updateDoc(userRef, { referredBy: referrerId });
         userData.referredBy = referrerId;
     } catch (e) {
@@ -1262,43 +1339,37 @@ async function processReferralOnStart() {
     }
 }
 
-// ========== STATE ==========
+// ========== STATE & FIREBASE LISTENERS ==========
 const userRef = doc(db, 'users', user.id.toString());
 let userData = null;
 let isAppInitialized = false;
 let unsyncedCoins = 0;
+let unsyncedClanCoinPts = 0; // 100 coins → 10 pts
 let syncTimer = null;
 let isSyncing = false;
 let lastTouchActivityMs = 0;
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
-/** Track last interaction + DAU / MAU flags for admin analytics. */
 async function touchActivity() {
     if (!userData || !userRef) return;
     const now = Date.now();
-    // Throttle writes to once per 2 minutes
     if (now - lastTouchActivityMs < 2 * 60 * 1000 && userData.lastActiveAt) return;
     lastTouchActivityMs = now;
 
     const today = getTashkentDate();
-    const monthKey = today.slice(0, 7); // YYYY-MM
+    const monthKey = today.slice(0, 7);
     const updates = { lastActiveAt: now };
-    const prevActive = userData.lastActiveAt || 0;
-    const wasActiveRecently = prevActive && (now - prevActive) < 30 * 60 * 60 * 1000; // 30h
 
-    // DAU: count once per Tashkent day
     if (userData.dauDate !== today) {
         updates.dauDate = today;
         userData.dauDate = today;
-        // Increment global daily counter
         try {
             const dauRef = doc(db, 'analytics', `dau_${today}`);
             await setDoc(dauRef, { count: increment(1), date: today, updatedAt: now }, { merge: true });
         } catch (e) {}
     }
 
-    // MAU: count once per calendar month (Tashkent)
     if (userData.mauMonth !== monthKey) {
         updates.mauMonth = monthKey;
         userData.mauMonth = monthKey;
@@ -1308,7 +1379,6 @@ async function touchActivity() {
         } catch (e) {}
     }
 
-    // Also track "active in last 30h / 31d" snapshot flags for admin queries
     updates.isDau = true;
     updates.isMau = true;
     userData.lastActiveAt = now;
@@ -1355,7 +1425,7 @@ onSnapshot(userRef, async (docSnap) => {
         };
         await setDoc(userRef, userData);
     }
-    // defaults
+
     if (typeof userData.totalClicks !== 'number') userData.totalClicks = 0;
     if (typeof userData.coins !== 'number') userData.coins = 0;
     if (typeof userData.stars !== 'number') userData.stars = 0;
@@ -1367,11 +1437,10 @@ onSnapshot(userRef, async (docSnap) => {
     if (!userData.adsDate) userData.adsDate = getTashkentDate();
     if (!userData.lastEnergyUpdate) userData.lastEnergyUpdate = Date.now();
 
-    // Catch up offline energy before UI shows
     applyOfflineEnergyRegen();
-
     ensureDailyFields();
     ensureAdsFields();
+
     if (!isAppInitialized) {
         isAppInitialized = true;
         initApp();
@@ -1382,11 +1451,9 @@ onSnapshot(userRef, async (docSnap) => {
 });
 
 function initApp() {
-    // show UI
     document.getElementById('top-bar').style.display = 'flex';
     document.getElementById('app-content').style.display = 'block';
     document.getElementById('bottom-nav').style.display = 'flex';
-    // NFT sticky only on Earn tab
     updateNftStickyVisibility('earn');
 
     if (!userData.onboardingDone) {
@@ -1411,7 +1478,6 @@ function initApp() {
     loadPurchases();
     startAutoTapLoop();
 
-    // Signal that core app is ready (for splash loader)
     window.__tappyAppReady = true;
     if (typeof window.__tappyHideLoader === 'function') window.__tappyHideLoader();
 }
@@ -1422,14 +1488,48 @@ function updateNftStickyVisibility(tab) {
     nftSticky.style.display = (tab === 'earn') ? 'flex' : 'none';
 }
 
-// ========== TABS ==========
+// ========== DYNAMIC TABS & POPUP SUB-NAVBAR SYSTEM ==========
 window.switchTab = (tab) => {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('active', 'tab-enter');
+    });
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    
     const section = document.getElementById(tab);
-    if (section) section.classList.add('active');
+    if (section) {
+        section.classList.add('active');
+        // Smooth enter animation without lag (CSS only)
+        requestAnimationFrame(() => {
+            section.classList.add('tab-enter');
+        });
+    }
     const nav = document.querySelector(`.nav-item[data-tab="${tab}"]`);
     if (nav) nav.classList.add('active');
+
+    const mainNav = document.getElementById('bottom-nav');
+    const clanSubNav = document.getElementById('popup-subnav-clan');
+    const accountSubNav = document.getElementById('popup-subnav-account');
+
+    // Handle pitch-black popup subnav transitions
+    if (tab === 'clan') {
+        if (accountSubNav) accountSubNav.classList.remove('active');
+        // Paint shell first — decides whether main nav or clan subnav shows
+        paintClanShell();
+        initClanView();
+    } else if (tab === 'account') {
+        if (mainNav) mainNav.classList.add('nav-hidden');
+        if (clanSubNav) clanSubNav.classList.remove('active');
+        requestAnimationFrame(() => {
+            if (accountSubNav) accountSubNav.classList.add('active');
+        });
+        updateAccountStats();
+        loadPurchases();
+    } else {
+        if (mainNav) mainNav.classList.remove('nav-hidden');
+        if (clanSubNav) clanSubNav.classList.remove('active');
+        if (accountSubNav) accountSubNav.classList.remove('active');
+    }
+
     safeHaptic('selection');
     touchActivity();
     updateNftStickyVisibility(tab);
@@ -1439,16 +1539,11 @@ window.switchTab = (tab) => {
         renderLeagueRewards();
         updateReferralUI();
     }
-    if (tab === 'account') {
-        updateAccountStats();
-        loadPurchases();
-    }
     if (tab === 'boosts') updateAllAdButtons();
-    if (tab === 'boxes') {
-        updateSpinUI();
-        updateNftCompUI();
-        loadReferralLeaderboard();
-    }
+};
+
+window.exitSubSectionToEarn = () => {
+    switchTab('earn');
 };
 
 window.switchTasksTab = (sub) => {
@@ -1465,13 +1560,15 @@ window.switchTasksTab = (sub) => {
 };
 
 window.switchAccountTab = (sub) => {
-    document.querySelectorAll('#account-tabs .sub-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#popup-subnav-account .subnav-item').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.account-panel').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
-    const btn = document.querySelector(`#account-tabs .sub-tab-btn[data-tab="${sub}"]`);
+    const btn = document.querySelector(`#popup-subnav-account .subnav-item[data-tab="${sub}"]`);
     if (btn) btn.classList.add('active');
     const panel = document.getElementById(`account-${sub}`);
     if (panel) { panel.classList.add('active'); panel.style.display = 'block'; }
+    
     if (sub === 'general') updateAccountStats();
+    if (sub === 'leaderboard') loadAccountLeaderboard('coins'); // default to coins
     if (sub === 'history') loadPurchases();
     if (sub === 'gifts') updateBearGiftButton();
     safeHaptic('selection');
@@ -1490,9 +1587,9 @@ function updateAccountStats() {
 // ========== MINING ==========
 const ENERGY_MAX = 1000;
 const ENERGY_COST = 3;
-const ENERGY_REGEN = 2;           // online: +2 every 5s
+const ENERGY_REGEN = 2;
 const ENERGY_REGEN_MS = 5000;
-const ENERGY_REGEN_OFFLINE = 1;   // offline: +1 every 5s (slower)
+const ENERGY_REGEN_OFFLINE = 1;
 
 function getMineRate() {
     let rate = 1;
@@ -1506,7 +1603,6 @@ function ensureEnergy() {
     if (userData.energy > ENERGY_MAX) userData.energy = ENERGY_MAX;
 }
 
-/** Apply offline (or any gap) energy regen from lastEnergyUpdate at slower offline rate. */
 function applyOfflineEnergyRegen() {
     if (!userData) return;
     ensureEnergy();
@@ -1517,7 +1613,6 @@ function applyOfflineEnergyRegen() {
         return;
     }
     const elapsed = now - last;
-    // Offline rate: +1 every 5 seconds
     const ticks = Math.floor(elapsed / ENERGY_REGEN_MS);
     if (ticks > 0 && userData.energy < ENERGY_MAX) {
         userData.energy = Math.min(ENERGY_MAX, (userData.energy || 0) + ticks * ENERGY_REGEN_OFFLINE);
@@ -1540,7 +1635,6 @@ function spawnFloatText(btn, amount) {
     const el = document.createElement('div');
     el.className = 'float-tap-text';
     el.textContent = `+${amount}`;
-    // Random horizontal offset around center of button
     const offsetX = (Math.random() - 0.5) * 60;
     el.style.left = `${rect.left + rect.width / 2 + offsetX}px`;
     el.style.top = `${rect.top + rect.height / 2 - 10}px`;
@@ -1568,6 +1662,10 @@ function setupMining() {
         userData.totalClicks = (userData.totalClicks || 0) + 1;
         userData.lastEnergyUpdate = Date.now();
         unsyncedCoins += rate;
+        // Clan points: every 100 coins → 10 points (pro-rata per rate)
+        if (userData.clanId) {
+            unsyncedClanCoinPts += rate;
+        }
         spawnFloatText(btn, rate);
         updateUI();
         updateLeagueCards();
@@ -1594,6 +1692,17 @@ function scheduleSync() {
             };
             if (toSync > 0) payload.coins = increment(toSync);
             await updateDoc(userRef, payload);
+            // Flush clan points: floor(coins/100)*10
+            const ptsCoins = unsyncedClanCoinPts;
+            unsyncedClanCoinPts = 0;
+            const pts = Math.floor(ptsCoins / 100) * 10;
+            const remainder = ptsCoins % 100;
+            if (pts > 0) {
+                try { await addClanPoints(pts); unsyncedClanCoinPts += remainder; }
+                catch (_) { unsyncedClanCoinPts += ptsCoins; }
+            } else {
+                unsyncedClanCoinPts += remainder;
+            }
         } catch (e) {
             if (toSync > 0) unsyncedCoins += toSync;
         }
@@ -1618,7 +1727,6 @@ function updateUI() {
     updateAccountStats();
 }
 
-// Online energy regen: +2 every 5 seconds; also keep lastEnergyUpdate fresh
 setInterval(() => {
     if (!userData || !isAppInitialized) return;
     ensureEnergy();
@@ -1632,7 +1740,6 @@ setInterval(() => {
     }
 }, ENERGY_REGEN_MS);
 
-// Persist energy periodically so offline catch-up is accurate
 setInterval(() => {
     if (!userData || !isAppInitialized) return;
     persistEnergyUpdate();
@@ -1642,9 +1749,7 @@ setInterval(() => {
 const BOOST_DURATION = 30 * 60 * 1000;
 const BOOST_COOLDOWN = 15 * 60 * 1000;
 
-function updateBoostUI() {
-    // visual state of buttons can be extended
-}
+function updateBoostUI() {}
 
 function updateActiveBoosts() {
     const list = document.getElementById('active-boosts-list');
@@ -1709,34 +1814,6 @@ window.buyBoosterAd = async (type) => {
     safeAlert(`${type} activated!`, false);
 };
 
-window.buyBooster = async (type, cost) => {
-    if (!userData) return;
-    if ((userData.coins || 0) < cost) {
-        safeAlert(t('not_enough_coins'), true);
-        return;
-    }
-    const cds = userData.boostCooldowns || {};
-    if (cds[type] && cds[type] > Date.now()) {
-        safeAlert('Cooldown active.', true);
-        return;
-    }
-    userData.coins -= cost;
-    const until = Date.now() + BOOST_DURATION;
-    if (!userData.boosts) userData.boosts = {};
-    userData.boosts[type] = until;
-    if (!userData.boostCooldowns) userData.boostCooldowns = {};
-    userData.boostCooldowns[type] = Date.now() + BOOST_COOLDOWN;
-    try {
-        await updateDoc(userRef, {
-            coins: increment(-cost),
-            boosts: userData.boosts,
-            boostCooldowns: userData.boostCooldowns
-        });
-    } catch (e) {}
-    updateUI();
-    safeHaptic('notification', 'success');
-};
-
 function startAutoTapLoop() {
     setInterval(() => {
         if (!userData) return;
@@ -1772,95 +1849,7 @@ function updateChestUI() {
     setProg('prog-news-fill', 'prog-news-txt', cp.news || 0, 2);
 }
 
-window.handleChest = async (type, needed) => {
-    if (!userData) return;
-    if (!userData.chestProgress) userData.chestProgress = { medium: 0, mega: 0, news: 0 };
-    const cp = userData.chestProgress;
-
-    if (type === 'small') {
-        const ok = await showAd();
-        if (!ok) return;
-        grantChestPrize('small');
-        return;
-    }
-    const key = type === 'medium' ? 'medium' : 'mega';
-    if ((cp[key] || 0) >= needed) {
-        grantChestPrize(type);
-        cp[key] = 0;
-        try { await updateDoc(userRef, { chestProgress: cp }); } catch (e) {}
-        updateChestUI();
-        return;
-    }
-    const ok = await showAd();
-    if (!ok) return;
-    cp[key] = (cp[key] || 0) + 1;
-    try { await updateDoc(userRef, { chestProgress: cp }); } catch (e) {}
-    updateChestUI();
-    if (cp[key] >= needed) {
-        grantChestPrize(type);
-        cp[key] = 0;
-        try { await updateDoc(userRef, { chestProgress: cp }); } catch (e) {}
-        updateChestUI();
-    }
-};
-
-window.handleNewsReward = async () => {
-    if (!userData) return;
-    if (!userData.chestProgress) userData.chestProgress = { medium: 0, mega: 0, news: 0 };
-    const cp = userData.chestProgress;
-    if ((cp.news || 0) >= 2) {
-        userData.coins = (userData.coins || 0) + 200;
-        try {
-            await updateDoc(userRef, { coins: increment(200), 'chestProgress.news': 0 });
-        } catch (e) {}
-        cp.news = 0;
-        updateUI();
-        updateChestUI();
-        showChestRewardModal('coins', 200);
-        return;
-    }
-    const ok = await showAd();
-    if (!ok) return;
-    cp.news = (cp.news || 0) + 1;
-    try { await updateDoc(userRef, { chestProgress: cp }); } catch (e) {}
-    updateChestUI();
-    if (cp.news >= 2) {
-        userData.coins = (userData.coins || 0) + 200;
-        try {
-            await updateDoc(userRef, { coins: increment(200), 'chestProgress.news': 0 });
-        } catch (e) {}
-        cp.news = 0;
-        updateUI();
-        updateChestUI();
-        showChestRewardModal('coins', 200);
-    }
-};
-
-function grantChestPrize(type) {
-    const roll = Math.random();
-    let prizeType = 'coins', amount = 80;
-    if (type === 'small') {
-        amount = 40 + Math.floor(Math.random() * 80); // 40–119
-    } else if (type === 'medium') {
-        if (roll < 0.12) { prizeType = 'stars'; amount = 1; }
-        else amount = 150 + Math.floor(Math.random() * 150); // 150–299
-    } else {
-        if (roll < 0.15) { prizeType = 'stars'; amount = 1 + Math.floor(Math.random() * 2); } // 1–2
-        else amount = 300 + Math.floor(Math.random() * 300); // 300–599
-    }
-    if (prizeType === 'stars') {
-        userData.stars = (userData.stars || 0) + amount;
-        updateDoc(userRef, { stars: increment(amount) }).catch(() => {});
-    } else {
-        userData.coins = (userData.coins || 0) + amount;
-        updateDoc(userRef, { coins: increment(amount) }).catch(() => {});
-    }
-    updateUI();
-    showChestRewardModal(prizeType, amount);
-}
-
 // ========== SPIN ==========
-// Icons: coin SVG / star SVG (no emoji). Pool: coins + stars (incl. 15⭐). No bear.
 const ICON_COIN = `<svg class="spin-card-icon-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 10.5h7M8.5 13.5h7"/></svg>`;
 const ICON_STAR = `<svg class="spin-card-icon-img" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
@@ -1875,8 +1864,8 @@ const SPIN_POOL = [
     { type: 'stars', amount: 5,  label: '5', weight: 0.05, cls: 'star' }
 ];
 
-const SPIN_COOLDOWN_SHORT = 2 * 60 * 1000;  // first 3 spins / day
-const SPIN_COOLDOWN_LONG  = 10 * 60 * 1000; // after 3 spins
+const SPIN_COOLDOWN_SHORT = 2 * 60 * 1000;
+const SPIN_COOLDOWN_LONG  = 10 * 60 * 1000;
 const SPIN_FAST_LIMIT = 3;
 let isSpinning = false;
 
@@ -1916,12 +1905,6 @@ function remainingSpinAdCooldown() {
     return Math.max(0, need - (Date.now() - (userData?.lastSpinAdTime || 0)));
 }
 
-function processDailyLogin() {
-    if (!userData) return;
-    ensureSpinFields();
-    updateSpinUI();
-}
-
 function spinIconHtml(p) {
     return p.type === 'stars' ? ICON_STAR : ICON_COIN;
 }
@@ -1948,7 +1931,6 @@ function openSpinReel() {
     const wrap = document.getElementById('spin-reel-wrap');
     if (!wrap) return;
     wrap.hidden = false;
-    // force reflow then open
     void wrap.offsetHeight;
     wrap.classList.add('open');
 }
@@ -1979,7 +1961,6 @@ function updateSpinUI() {
         return;
     }
     const remain = remainingSpinAdCooldown();
-    // Always need ad; cooldown after last spin
     if (remain > 0 && (userData.lastSpinAdTime || 0) > 0) {
         const sec = Math.ceil(remain / 1000);
         btn.disabled = true;
@@ -2021,7 +2002,6 @@ window.startSpinFlow = async () => {
         return;
     }
 
-    // --- Referral credit (ONLY on successful spin ad) ---
     if (userData.referredBy && !userData.referralCredited) {
         try {
             const refRef = doc(db, 'users', userData.referredBy);
@@ -2038,18 +2018,13 @@ window.startSpinFlow = async () => {
                     pendingBearClaims: increment(earned)
                 });
 
-                // Only mark as credited AFTER successful update
                 userData.referralCredited = true;
                 await updateDoc(userRef, { referralCredited: true });
-            } else {
-                console.warn('Referrer document does not exist yet:', userData.referredBy);
             }
         } catch (e) {
             console.warn('Referrer credit error on spin:', e);
-            // Do NOT set referralCredited on failure → can retry next spin
         }
     }
-    // ----------------------------------------------------
 
     userData.lastSpinAdTime = Date.now();
     userData.spinsToday = (userData.spinsToday || 0) + 1;
@@ -2076,7 +2051,7 @@ async function doSpinAnimation() {
     }
 
     openSpinReel();
-    await new Promise(r => setTimeout(r, 280)); // let reel expand
+    await new Promise(r => setTimeout(r, 280));
 
     const built = buildSpinReel();
     const track = document.getElementById('spin-reel-track');
@@ -2111,20 +2086,13 @@ async function doSpinAnimation() {
             if (prize.type === 'stars') resEl.innerText = `You won: ${prize.amount} Star${prize.amount > 1 ? 's' : ''}`;
             else resEl.innerText = `You won: ${prize.amount} Coins`;
         }
-        // Also show chest-style modal for stronger feedback
         showChestRewardModal(prize.type, prize.amount);
         safeHaptic('notification', 'success');
         isSpinning = false;
         updateSpinUI();
-        // collapse reel after a moment
         setTimeout(() => closeSpinReel(), 2200);
     }, 3800);
 }
-
-// keep processDailyLogin on interval
-setInterval(() => {
-    if (userData && isAppInitialized) processDailyLogin();
-}, 2000);
 
 // ========== GIFTS / EXCHANGE / LEGAL / LEADERBOARD ==========
 let pendingGift = null;
@@ -2173,7 +2141,6 @@ window.confirmGiftPurchase = async () => {
     if (!pendingGift || !userData) return;
     const input = document.getElementById('gift-username-input');
     let username = (input?.value || '').trim();
-    // normalize: strip leading @
     if (username.startsWith('@')) username = username.slice(1);
     if (!username || username.length < 2 || username.length > 64) {
         safeAlert(t('username_required'), true);
@@ -2211,15 +2178,12 @@ window.confirmGiftPurchase = async () => {
     };
 
     try {
-        // User doc: only stars / referral flags — never store purchases array here
         const updates = {
             freeBearGift: !!userData.freeBearGift,
             pendingBearClaims: userData.pendingBearClaims || 0
         };
         if (cost > 0) updates.stars = increment(-cost);
         await updateDoc(userRef, updates);
-
-        // Source of truth: top-level purchases collection
         await addDoc(collection(db, 'purchases'), orderPayload);
     } catch (e) {
         console.warn('Gift order failed', e);
@@ -2309,6 +2273,10 @@ window.closeLegalModal = () => {
 async function loadLeaderboardPreview() {
     const list = document.getElementById('leaderboard-preview-list');
     if (!list) return;
+    list.innerHTML = `
+        <div class="skeleton-card" style="height: 44px; margin-bottom: 8px;"></div>
+        <div class="skeleton-card" style="height: 44px; margin-bottom: 8px;"></div>
+    `;
     try {
         const q = query(collection(db, 'users'), orderBy('coins', 'desc'), limit(5));
         const snap = await getDocs(q);
@@ -2318,7 +2286,7 @@ async function loadLeaderboardPreview() {
             const data = d.data();
             html += `<div style="display:flex;justify-content:space-between;font-weight:700;padding:6px 0;border-bottom:1px dashed #ddd;">
                 <span>#${rank} ${data.name || 'Miner'}</span>
-                <span>${formatCompact(data.coins || 0)} 🪙</span>
+                <span class="lb-val">${formatCompact(data.coins || 0)}${LB_COIN_ICON}</span>
             </div>`;
             rank++;
         });
@@ -2333,7 +2301,13 @@ window.openLeaderboard = async () => {
     if (modal) modal.style.display = 'flex';
     const list = document.getElementById('full-leaderboard-list');
     const sticky = document.getElementById('sticky-user-card');
-    if (list) list.innerHTML = 'Loading...';
+    if (list) {
+        list.innerHTML = `
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        `;
+    }
     try {
         const q = query(collection(db, 'users'), orderBy('coins', 'desc'), limit(30));
         const snap = await getDocs(q);
@@ -2344,14 +2318,14 @@ window.openLeaderboard = async () => {
             const data = d.data();
             const isMe = d.id === user.id.toString();
             if (isMe) myRank = rank;
-            html += `<div class="glass-card" style="padding:12px 14px;${isMe ? 'background:#FFD700;' : ''}">
+            html += `<div class="glass-card lb-row" style="padding:12px 14px;${isMe ? 'background:#FFD700;' : ''}">
                 <span style="font-weight:900;">#${rank} ${data.name || 'Miner'}</span>
-                <span style="font-weight:800;">${formatCompact(data.coins || 0)} 🪙</span>
+                <span style="font-weight:800;" class="lb-val">${formatCompact(data.coins || 0)}${LB_COIN_ICON}</span>
             </div>`;
             rank++;
         });
         list.innerHTML = html;
-        if (sticky) sticky.innerHTML = `<strong>You · Rank #${myRank}</strong> · ${formatCompact(userData?.coins || 0)} coins`;
+        if (sticky) sticky.innerHTML = `<strong>You · Rank #${myRank}</strong> · <span class="lb-val">${formatCompact(userData?.coins || 0)}${LB_COIN_ICON}</span>`;
     } catch (e) {
         if (list) list.innerHTML = 'Error loading.';
     }
@@ -2363,7 +2337,10 @@ window.closeLeaderboard = () => {
 async function loadPurchases() {
     const list = document.getElementById('purchases-list');
     if (!list) return;
-    list.innerHTML = `<p class="empty-state">Loading...</p>`;
+    list.innerHTML = `
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+    `;
     try {
         const q = query(
             collection(db, 'purchases'),
@@ -2406,51 +2383,75 @@ async function loadPurchases() {
         list.innerHTML = rows.join('');
     } catch (e) {
         console.warn('loadPurchases', e);
-        // Fallback without orderBy if index missing
-        try {
-            const q2 = query(
-                collection(db, 'purchases'),
-                where('userId', '==', user.id.toString()),
-                limit(50)
-            );
-            const snap2 = await getDocs(q2);
-            if (snap2.empty) {
-                list.innerHTML = `
-                    <div style="text-align: center; padding: 20px 0;">
-                        <p class="empty-state" style="margin-bottom: 12px;">${t('no_purchases')}</p>
-                        <button type="button" class="action-btn primary-btn buy-boosters-btn" onclick="switchAccountTab('gifts')">
-                            <svg class="buy-boosters-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            <span data-i18n="buy_gifts">${t('buy_gifts')}</span>
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            const items = [];
-            snap2.forEach(d => items.push(d.data()));
-            items.sort((a, b) => String(b.createdAt || b.timestamp || '').localeCompare(String(a.createdAt || a.timestamp || '')));
-            list.innerHTML = items.map(p => {
-                const status = (p.status || p.state || 'pending').toString().toLowerCase();
-                const statusLabel = t(`status_${status}`) || status;
-                const giftName = p.gift || p.giftName || p.name || 'Gift';
-                const cost = p.cost ?? p.starCost ?? 0;
-                const uname = p.username || '';
-                return `<div class="glass-card purchase-item">
-                    <div>
-                        <strong>${giftName}</strong>
-                        <div style="font-size:0.8em;color:var(--text-muted);">${uname ? '@' + uname : ''} · ${cost}⭐</div>
-                    </div>
-                    <span class="status-badge status-${status}">${statusLabel}</span>
-                </div>`;
-            }).join('');
-        } catch (e2) {
-            list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
-        }
+        list.innerHTML = `<p class="empty-state">${t('no_purchases')}</p>`;
     }
 }
+
+// ========== ERROR & OFFLINE OVERLAY HANDLER ==========
+const WIFI_OFF_ICON = `
+<svg class="error-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="1" y1="1" x2="23" y2="23"></line>
+    <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+    <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+    <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+    <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+    <line x1="12" y1="20" x2="12.01" y2="20"></line>
+</svg>`;
+
+const ALERT_TRIANGLE_ICON = `
+<svg class="error-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+    <line x1="12" y1="9" x2="12" y2="13"></line>
+    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+</svg>`;
+
+let currentErrorType = null;
+
+window.showErrorWindow = (type = 'network') => {
+    currentErrorType = type;
+    const overlay = document.getElementById('error-overlay');
+    const iconWrapper = document.getElementById('error-icon-wrapper');
+    const titleEl = document.getElementById('error-title');
+    if (!overlay) return;
+
+    if (type === 'network') {
+        if (iconWrapper) iconWrapper.innerHTML = WIFI_OFF_ICON;
+        if (titleEl) titleEl.innerText = t('no_internet');
+    } else {
+        if (iconWrapper) iconWrapper.innerHTML = ALERT_TRIANGLE_ICON;
+        if (titleEl) titleEl.innerText = t('something_went_wrong');
+    }
+    
+    applyLanguage();
+    overlay.style.display = 'flex';
+};
+
+window.hideErrorWindow = () => {
+    currentErrorType = null;
+    const overlay = document.getElementById('error-overlay');
+    if (overlay) overlay.style.display = 'none';
+};
+
+window.retryConnection = () => {
+    safeHaptic('selection');
+    if (navigator.onLine) {
+        hideErrorWindow();
+        if (userRef && userData) {
+            touchActivity();
+            updateUI();
+        } else {
+            window.location.reload();
+        }
+    } else {
+        showErrorWindow('network');
+        safeAlert(t('no_internet'), true);
+    }
+};
+
+window.addEventListener('offline', () => showErrorWindow('network'));
+window.addEventListener('online', () => hideErrorWindow());
+if (!navigator.onLine) showErrorWindow('network');
 
 // ========== ONBOARDING ==========
 window.nextSlide = (n) => {
@@ -2466,8 +2467,513 @@ window.skipOnboarding = window.finishOnboarding = async () => {
     }
 };
 
-// greet
-const greet = document.getElementById('profile-greeting');
-if (greet && user.first_name) {
-    // will be overwritten by i18n, keep simple
+// ========== CLAN STATE & LOGIC ==========
+let currentClanData = null;
+let currentClanId = null;
+let clanChatUnsub = null;
+let foundClanToJoin = null;
+let lastClanChatTime = 0;
+
+async function addClanPoints(points) {
+    if (!userData || !userData.clanId) return;
+    try {
+        const clanRef = doc(db, 'clans', userData.clanId);
+        await updateDoc(clanRef, { points: increment(points) });
+    } catch (e) {
+        console.warn('Failed to add clan points:', e);
+    }
+}
+
+window.switchClanTab = (tab) => {
+    document.querySelectorAll('#popup-subnav-clan .subnav-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.clan-panel').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+    const btn = document.querySelector(`#popup-subnav-clan .subnav-item[data-clantab="${tab}"]`);
+    if (btn) btn.classList.add('active');
+    const panel = document.getElementById(`clan-panel-${tab}`);
+    if (panel) {
+        panel.classList.add('active');
+        panel.style.display = (tab === 'chat') ? 'flex' : 'block';
+    }
+    safeHaptic('selection');
+
+    if (tab === 'chat') listenClanChat();
+    if (tab === 'battle') loadClanLeaderboard();
+    if (tab === 'members') renderClanMembers();
+    if (tab === 'settings') renderClanSettings();
+};
+
+function generateClanCode() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+window.openCreateClanModal = () => {
+    if ((userData?.coins || 0) < 2000) {
+        safeAlert(t('not_enough_coins'), true);
+        return;
+    }
+    const modal = document.getElementById('clan-create-modal');
+    if (modal) modal.style.display = 'flex';
+};
+
+window.closeCreateClanModal = () => {
+    const modal = document.getElementById('clan-create-modal');
+    if (modal) modal.style.display = 'none';
+};
+
+window.confirmCreateClan = async () => {
+    if ((userData?.coins || 0) < 2000) {
+        safeAlert(t('not_enough_coins'), true);
+        return;
+    }
+    const nameInput = document.getElementById('create-clan-name');
+    const descInput = document.getElementById('create-clan-desc');
+    const name = (nameInput?.value || '').trim();
+    const desc = (descInput?.value || '').trim();
+
+    if (!name) {
+        safeAlert('Please enter a clan name', true);
+        return;
+    }
+
+    const code = generateClanCode();
+    const clanId = `clan_${Date.now()}`;
+    const newClan = {
+        id: clanId,
+        code: code,
+        name: name,
+        description: desc,
+        adminId: user.id.toString(),
+        members: [{ id: user.id.toString(), name: user.first_name || 'Miner' }],
+        points: 0,
+        createdAt: Date.now()
+    };
+
+    try {
+        userData.coins -= 2000;
+        userData.clanId = clanId;
+        await updateDoc(userRef, {
+            coins: increment(-2000),
+            clanId: clanId
+        });
+        await setDoc(doc(db, 'clans', clanId), newClan);
+        closeCreateClanModal();
+        initClanView();
+        safeAlert('Clan created successfully!', false);
+        safeHaptic('notification', 'success');
+    } catch (e) {
+        console.warn('Clan create error:', e);
+        safeAlert('Failed to create clan.', true);
+    }
+};
+
+window.searchClanByCode = async () => {
+    const input = document.getElementById('clan-code-input');
+    const code = (input?.value || '').trim();
+    if (!code) return;
+
+    try {
+        const q = query(collection(db, 'clans'), where('code', '==', code), limit(1));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+            safeAlert('Clan not found. Invalid code.', true);
+            return;
+        }
+        snap.forEach(d => {
+            foundClanToJoin = d.data();
+            foundClanToJoin.docId = d.id;
+        });
+
+        document.getElementById('modal-clan-title').innerText = foundClanToJoin.name;
+        document.getElementById('modal-clan-desc').innerText = foundClanToJoin.description || 'No description.';
+        document.getElementById('modal-clan-count').innerText = foundClanToJoin.members?.length || 1;
+        document.getElementById('clan-join-modal').style.display = 'flex';
+    } catch (e) {
+        safeAlert('Error finding clan.', true);
+    }
+};
+
+window.closeClanJoinModal = () => {
+    document.getElementById('clan-join-modal').style.display = 'none';
+    foundClanToJoin = null;
+};
+
+window.confirmJoinClan = async () => {
+    if (!foundClanToJoin || !userData) return;
+    try {
+        const clanRef = doc(db, 'clans', foundClanToJoin.docId);
+        const members = foundClanToJoin.members || [];
+        if (!members.some(m => m.id === user.id.toString())) {
+            members.push({ id: user.id.toString(), name: user.first_name || 'Miner' });
+        }
+        await updateDoc(clanRef, { members: members });
+        await updateDoc(userRef, { clanId: foundClanToJoin.docId });
+        userData.clanId = foundClanToJoin.docId;
+        closeClanJoinModal();
+        initClanView();
+        safeAlert('Joined clan successfully!', false);
+        safeHaptic('notification', 'success');
+    } catch (e) {
+        safeAlert('Failed to join clan.', true);
+    }
+};
+
+function paintClanShell() {
+    const unjoined = document.getElementById('clan-unjoined-view');
+    const joined = document.getElementById('clan-joined-view');
+    const mainNav = document.getElementById('bottom-nav');
+    const clanSubNav = document.getElementById('popup-subnav-clan');
+    const clanSection = document.getElementById('clan');
+    const onClanTab = !!(clanSection && clanSection.classList.contains('active'));
+    const hasClan = !!(userData && userData.clanId);
+
+    if (unjoined) {
+        unjoined.style.display = hasClan ? 'none' : 'block';
+        unjoined.style.opacity = hasClan ? '0' : '1';
+    }
+    if (joined) {
+        if (hasClan) {
+            joined.style.display = 'flex';
+            joined.style.flexDirection = 'column';
+            joined.style.flex = '1';
+            joined.style.minHeight = '0';
+            joined.style.opacity = '1';
+        } else {
+            joined.style.display = 'none';
+            joined.style.opacity = '0';
+        }
+    }
+
+    // Clan black subnav ONLY when user is in a clan AND on the clan tab.
+    // Otherwise keep the normal bottom navbar (does not affect Account subnav).
+    if (onClanTab) {
+        if (hasClan) {
+            if (mainNav) mainNav.classList.add('nav-hidden');
+            if (clanSubNav) {
+                requestAnimationFrame(() => clanSubNav.classList.add('active'));
+            }
+        } else {
+            if (clanSubNav) clanSubNav.classList.remove('active');
+            if (mainNav) mainNav.classList.remove('nav-hidden');
+            // Keep Clan tab highlighted on main nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const clanNav = document.querySelector('.nav-item[data-tab="clan"]');
+            if (clanNav) clanNav.classList.add('active');
+        }
+    }
+}
+
+async function initClanView() {
+    paintClanShell();
+
+    if (!userData?.clanId) {
+        currentClanData = null;
+        currentClanId = null;
+        return;
+    }
+
+    try {
+        const clanSnap = await getDoc(doc(db, 'clans', userData.clanId));
+        if (!clanSnap.exists()) {
+            userData.clanId = null;
+            try { await updateDoc(userRef, { clanId: null }); } catch (_) {}
+            currentClanData = null;
+            currentClanId = null;
+            paintClanShell();
+            return;
+        }
+
+        currentClanData = clanSnap.data();
+        currentClanId = clanSnap.id;
+        paintClanShell();
+
+        const nameEl = document.getElementById('clan-header-name');
+        const descEl = document.getElementById('clan-header-desc');
+        const codeEl = document.getElementById('clan-header-code');
+        if (nameEl) nameEl.innerText = currentClanData.name;
+        if (descEl) descEl.innerText = currentClanData.description || 'No description';
+        if (codeEl) codeEl.innerText = currentClanData.code || '------';
+
+        // Keep current panel if already on a clan tab; otherwise open chat
+        const activePanel = document.querySelector('.clan-panel.active');
+        if (!activePanel) switchClanTab('chat');
+        else if (activePanel.id === 'clan-panel-chat') listenClanChat();
+    } catch (e) {
+        console.warn('initClanView error:', e);
+        paintClanShell();
+    }
+}
+
+function listenClanChat() {
+    if (!currentClanId) return;
+    if (clanChatUnsub) clanChatUnsub();
+
+    const messagesEl = document.getElementById('clan-chat-messages');
+    const q = query(collection(db, 'clans', currentClanId, 'messages'), orderBy('createdAt', 'asc'), limit(50));
+    clanChatUnsub = onSnapshot(q, (snap) => {
+        let html = '';
+        snap.forEach(d => {
+            const m = d.data();
+            const isMe = m.senderId === user.id.toString();
+            html += `<div class="clan-msg ${isMe ? 'me' : 'other'}">
+                <span class="clan-msg-sender">${m.senderName}</span>
+                <p class="clan-msg-text">${m.text}</p>
+            </div>`;
+        });
+        if (messagesEl) {
+            messagesEl.innerHTML = html || '<p class="empty-state">No messages yet.</p>';
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+    });
+}
+
+window.sendClanMessage = async () => {
+    const input = document.getElementById('clan-chat-input');
+    const text = (input?.value || '').trim();
+    if (!text || !currentClanId) return;
+
+    const now = Date.now();
+    if (now - lastClanChatTime < 60000) {
+        const cd = Math.ceil((60000 - (now - lastClanChatTime)) / 1000);
+        safeAlert(`Cooldown: Wait ${cd}s before sending another message.`, true);
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, 'clans', currentClanId, 'messages'), {
+            senderId: user.id.toString(),
+            senderName: user.first_name || 'Miner',
+            text: text,
+            createdAt: Date.now()
+        });
+        lastClanChatTime = now;
+        input.value = '';
+    } catch (e) {
+        safeAlert('Failed to send message.', true);
+    }
+};
+
+async function loadClanLeaderboard() {
+    const list = document.getElementById('clan-leaderboard-list');
+    if (!list) return;
+    list.innerHTML = `<div class="skeleton-card"></div><div class="skeleton-card"></div>`;
+
+    try {
+        const q = query(collection(db, 'clans'), orderBy('points', 'desc'), limit(30));
+        const snap = await getDocs(q);
+        let html = '';
+        let rank = 1;
+        snap.forEach(d => {
+            const data = d.data();
+            const isMyClan = d.id === currentClanId;
+            html += `<div class="glass-card clan-lb-row ${isMyClan ? 'my-clan' : ''}">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-weight:900;">#${rank}</span>
+                    <span style="font-weight:800;">${data.name}</span>
+                </div>
+                <span style="font-weight:900;">${formatCompact(data.points || 0)} PTS</span>
+            </div>`;
+            rank++;
+        });
+        list.innerHTML = html || '<p class="empty-state">No clans active.</p>';
+    } catch (e) {
+        list.innerHTML = '<p class="empty-state">Failed to load leaderboard.</p>';
+    }
+}
+
+function renderClanMembers() {
+    const list = document.getElementById('clan-members-list');
+    if (!list || !currentClanData) return;
+
+    const isAdmin = currentClanData.adminId === user.id.toString();
+    const members = currentClanData.members || [];
+
+    let html = '';
+
+    members.forEach(m => {
+        const isMemAdmin = m.id === currentClanData.adminId;
+        html += `<div class="glass-card clan-member-row ${isMemAdmin ? 'admin-highlight' : ''}">
+            <div class="clan-member-left">
+                <span class="clan-member-name">${m.name}</span>
+            </div>
+            <div class="clan-member-right">
+                ${isMemAdmin ? '<span class="admin-tag">ADMIN</span>' : ''}
+                ${isAdmin && !isMemAdmin ? `<button type="button" class="action-btn clan-remove-btn" onclick="removeClanMember('${m.id}')">Remove</button>` : ''}
+            </div>
+        </div>`;
+    });
+
+    // Single invite button right after the users list if members < 5
+    if (members.length < 5) {
+        const botUsername = 'tappystars_bot';
+        const inviteLink = `https://t.me/${botUsername}?start=clan_${currentClanData.code}`;
+        const shareText = `${t('share_text')} Join our clan "${currentClanData.name}" using code: ${currentClanData.code}\n${inviteLink}`;
+        
+        html += `
+        <button type="button" class="action-btn primary-btn" style="width:100%; margin-top:10px;" onclick="shareClanInvite('${inviteLink}', '${encodeURIComponent(shareText)}')">
+            ${t('ref_share')} (${members.length}/5)
+        </button>`;
+    }
+    
+    list.innerHTML = html;
+}
+
+window.shareClanInvite = (link, textEncoded) => {
+    const text = decodeURIComponent(textEncoded);
+    if (tg.openTelegramLink) {
+        tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+    } else if (navigator.share) {
+        navigator.share({ title: 'TappyStars Clan', text, url: link }).catch(() => {});
+    } else {
+        navigator.clipboard?.writeText(link);
+        safeAlert('Clan invite link copied!', false);
+    }
+};
+
+window.removeClanMember = async (memberId) => {
+    if (!currentClanData || currentClanData.adminId !== user.id.toString()) return;
+    try {
+        const newMembers = (currentClanData.members || []).filter(m => m.id !== memberId);
+        await updateDoc(doc(db, 'clans', currentClanId), { members: newMembers });
+        await updateDoc(doc(db, 'users', memberId), { clanId: null });
+        currentClanData.members = newMembers;
+        renderClanMembers();
+        safeAlert('Member removed.', false);
+    } catch (e) {
+        safeAlert('Failed to remove member.', true);
+    }
+};
+
+function renderClanSettings() {
+    const isAdmin = currentClanData?.adminId === user.id.toString();
+    const adminView = document.getElementById('clan-settings-admin-view');
+    const memberView = document.getElementById('clan-settings-member-view');
+
+    if (isAdmin) {
+        if (adminView) adminView.style.display = 'flex';
+        if (memberView) memberView.style.display = 'none';
+        document.getElementById('clan-edit-name-input').value = currentClanData.name;
+        document.getElementById('clan-edit-desc-input').value = currentClanData.description || '';
+    } else {
+        if (adminView) adminView.style.display = 'none';
+        if (memberView) memberView.style.display = 'flex';
+    }
+}
+
+window.saveClanSettings = async () => {
+    if (!currentClanData || currentClanData.adminId !== user.id.toString()) return;
+    const name = document.getElementById('clan-edit-name-input').value.trim();
+    const desc = document.getElementById('clan-edit-desc-input').value.trim();
+    if (!name) return;
+
+    try {
+        await updateDoc(doc(db, 'clans', currentClanId), {
+            name: name,
+            description: desc
+        });
+        currentClanData.name = name;
+        currentClanData.description = desc;
+        document.getElementById('clan-header-name').innerText = name;
+        document.getElementById('clan-header-desc').innerText = desc;
+        safeAlert('Settings saved!', false);
+    } catch (e) {
+        safeAlert('Failed to save settings.', true);
+    }
+};
+
+window.leaveClan = async () => {
+    if (!userData?.clanId) return;
+    try {
+        const newMembers = (currentClanData?.members || []).filter(m => m.id !== user.id.toString());
+        await updateDoc(doc(db, 'clans', currentClanId), { members: newMembers });
+        await updateDoc(userRef, { clanId: null });
+        userData.clanId = null;
+        if (clanChatUnsub) clanChatUnsub();
+        initClanView();
+        safeAlert('Left clan.', false);
+    } catch (e) {
+        safeAlert('Failed to leave clan.', true);
+    }
+};
+
+let currentLeaderboardMetric = 'coins';
+
+window.switchLeaderboardType = (type) => {
+    if (type === currentLeaderboardMetric) return;
+    currentLeaderboardMetric = type;
+    document.querySelectorAll('#leaderboard-type-switcher .sub-tab-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-lbtype') === type);
+    });
+    loadAccountLeaderboard(type, true);
+    safeHaptic('selection');
+};
+
+function rankBadge(rank) {
+    if (rank === 1) return '<span class="lb-rank lb-rank-1">1</span>';
+    if (rank === 2) return '<span class="lb-rank lb-rank-2">2</span>';
+    if (rank === 3) return '<span class="lb-rank lb-rank-3">3</span>';
+    return `<span class="lb-rank">${rank}</span>`;
+}
+
+async function loadAccountLeaderboard(metric = 'coins', animate = false) {
+    const list = document.getElementById('account-full-leaderboard-list');
+    const sticky = document.getElementById('account-sticky-user-card');
+    if (!list) return;
+
+    if (animate) {
+        list.classList.add('lb-list-fading');
+        await new Promise(r => setTimeout(r, 140));
+    }
+
+    list.innerHTML = `
+        <div class="skeleton-card lb-skel"></div>
+        <div class="skeleton-card lb-skel"></div>
+        <div class="skeleton-card lb-skel"></div>
+    `;
+    list.classList.remove('lb-list-fading');
+    
+    try {
+        const q = query(collection(db, 'users'), orderBy(metric, 'desc'), limit(30));
+        const snap = await getDocs(q);
+        let html = '';
+        let rank = 1;
+        let myRank = '—';
+        
+        snap.forEach(d => {
+            const data = d.data();
+            const isMe = d.id === user.id.toString();
+            if (isMe) myRank = rank;
+            const icon = metric === 'stars' ? LB_STAR_ICON : LB_COIN_ICON;
+            const num = metric === 'stars' ? (data.stars || 0) : formatCompact(data.coins || 0);
+            const topClass = rank <= 3 ? ` lb-top-${rank}` : '';
+            const meClass = isMe ? ' lb-me' : '';
+            
+            html += `<div class="lb-row glass-card${topClass}${meClass}" style="--i:${rank}">
+                <div class="lb-left">
+                    ${rankBadge(rank)}
+                    <span class="lb-name">${data.name || 'Miner'}</span>
+                </div>
+                <span class="lb-val">${num}${icon}</span>
+            </div>`;
+            rank++;
+        });
+        
+        list.innerHTML = html || '<p class="empty-state">No entries yet.</p>';
+        // Force reflow then animate in (CSS handles stagger via --i)
+        list.classList.remove('lb-list-ready');
+        void list.offsetWidth;
+        list.classList.add('lb-list-ready');
+
+        if (sticky) {
+            const icon = metric === 'stars' ? LB_STAR_ICON : LB_COIN_ICON;
+            const num = metric === 'stars' ? formatCompact(userData?.stars || 0) : formatCompact(userData?.coins || 0);
+            sticky.innerHTML = `
+                <div class="lb-sticky-inner">
+                    <span class="lb-sticky-rank">You · #${myRank}</span>
+                    <span class="lb-val">${num}${icon}</span>
+                </div>`;
+            sticky.classList.add('lb-sticky-pop');
+        }
+    } catch (e) {
+        if (list) list.innerHTML = '<p class="empty-state">Error loading leaderboard.</p>';
+    }
 }
