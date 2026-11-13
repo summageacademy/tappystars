@@ -1804,3 +1804,161 @@ main:has(#clan.active) {
 .clan-unjoined-container .clan-create-hint {
     margin-bottom: 24px;
 }
+
+/* Profile Avatar & Plus Badge */
+.profile-avatar-container {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 14px;
+    cursor: pointer;
+}
+.profile-avatar-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #FFD700;
+    border: 3px solid #1C1C1C;
+    box-shadow: 4px 4px 0 #1C1C1C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.1s;
+}
+.profile-avatar-container:active .profile-avatar-wrapper {
+    transform: scale(0.96);
+}
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.profile-plus-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background: #FFD700;
+    border: 2.5px solid #1C1C1C;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 0 #1C1C1C;
+    color: #1C1C1C;
+}
+.profile-plus-badge svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========== GLASSY FRAMES (Inner shine, zero outer shadows/glows) ========== */
+
+/* 1. Glassy Black Frame (500 Coins) */
+.frame-glass-black {
+    border: 5px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.8) !important;
+    background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(15, 15, 15, 0.9) 100%) !important;
+}
+
+/* 2. Glassy Red Frame (1,000 Coins) */
+.frame-glass-red {
+    border: 5px solid rgba(255, 100, 100, 0.4) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 200, 200, 0.6),
+        inset 0 -2px 4px rgba(139, 0, 0, 0.8) !important;
+    background: linear-gradient(135deg, rgba(255, 100, 100, 0.5) 0%, rgba(150, 0, 20, 0.9) 100%) !important;
+}
+
+/* 3. Glassy Gold Frame (5,000 Coins) */
+.frame-glass-gold {
+    border: 5px solid rgba(255, 230, 120, 0.5) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 220, 0.7),
+        inset 0 -2px 4px rgba(184, 134, 11, 0.8) !important;
+    background: linear-gradient(135deg, rgba(255, 245, 200, 0.6) 0%, rgba(200, 140, 10, 0.95) 100%) !important;
+}
+
+/* 4. Wooden Decorated Frame (10 Stars) */
+.frame-wood {
+    border: 6px solid #5C3A21 !important;
+    outline: 2px dashed #D4AF37;
+    outline-offset: -4px;
+    box-shadow: inset 0 0 6px #2B170A !important;
+    background: repeating-linear-gradient(
+        45deg,
+        #6E472B,
+        #6E472B 4px,
+        #52321B 4px,
+        #52321B 8px
+    ) !important;
+}
+
+/* 5. Chaos Frame: Dark World Map (30 Stars) */
+.frame-chaos {
+    border: 6px solid transparent !important;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8) !important;
+    background: 
+        linear-gradient(#1C1C1C, #1C1C1C) padding-box,
+        conic-gradient(from 0deg, #090A0F 0%, #3A0CA3 20%, #7209B7 40%, #14213D 60%, #E63946 80%, #090A0F 100%) border-box !important;
+}
+
+/* Subtle glossy reflection overlay across the top */
+.profile-avatar-wrapper::after,
+.avatar-shop-preview::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.35) 0%,
+        rgba(255, 255, 255, 0.04) 40%,
+        transparent 50%
+    );
+    transform: rotate(25deg);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Avatar Shop Cards */
+.avatar-shop-card {
+    background: #FFFFFF;
+    border: 2px solid #1C1C1C;
+    box-shadow: 3px 3px 0 #1C1C1C;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    border-radius: 0;
+}
+.avatar-shop-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #1C1C1C;
+    background: #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.avatar-shop-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.avatar-shop-card.equipped {
+    background: #FFF8E7;
+    border-color: #27AE60;
+}

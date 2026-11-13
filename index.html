@@ -128,16 +128,16 @@
                     <button class="action-btn" id="btn-task-ad1" style="background:#FF9800;color:#1C1C1C;" onclick="doDailyTask('ad1')" data-i18n="watch_ad">Watch Ad</button>
                 </div>
 
-                <div class="glass-card card-vertical task-card" id="task-daily-ad3">
+                <div class="glass-card card-vertical task-card" id="task-daily-ref1">
                     <div class="card-center">
-                        <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3V9z"/></svg>
+                        <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                         <div class="card-info">
-                            <h3 data-i18n="task_watch_3">Watch 3 Ads</h3>
+                            <h3 data-i18n="task_ref_1">1 New Referral Today</h3>
                             <p data-i18n="task_reward_3stars">+1500 coins</p>
                         </div>
                     </div>
-                    <div class="progress-bg"><div class="progress-fill" id="prog-task-ad3"></div><div class="progress-text" id="prog-task-ad3-txt">0 / 3</div></div>
-                    <button class="action-btn" id="btn-task-ad3" style="background:#FF9800;color:#1C1C1C;" onclick="doDailyTask('ad3')" data-i18n="watch_ad">Watch Ad</button>
+                    <div class="progress-bg"><div class="progress-fill" id="prog-task-ref1"></div><div class="progress-text" id="prog-task-ref1-txt">0 / 1</div></div>
+                    <button class="action-btn" id="btn-task-ref1" onclick="claimDailyTask('ref1')" data-i18n="claim">Claim</button>
                 </div>
 
                 <div class="glass-card card-vertical task-card" id="task-daily-tap500">
@@ -393,6 +393,14 @@
 
         <!-- ========== ACCOUNT ========== -->
         <section id="account" class="tab-content">
+            <div class="profile-avatar-container" onclick="openAvatarShop()">
+                <div class="profile-avatar-wrapper" id="profile-avatar-wrapper">
+                    <img id="user-profile-avatar-img" src="images/bear.webp" alt="Avatar" class="profile-avatar-img">
+                </div>
+                <div class="profile-plus-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </div>
+            </div>
             <h2 id="profile-greeting" style="text-align:center;margin-bottom:20px;font-weight:900;font-size:1.8em;" data-i18n="hello_miner">Hello, Miner!</h2>
 
             <!-- General -->
@@ -729,6 +737,21 @@
             <button type="button" class="action-btn primary-btn" style="width:100%;" onclick="confirmCreateClan()" data-i18n="confirm_purchase">Confirm &amp; Create</button>
             <button type="button" class="action-btn primary-btn" style="width:100%; background:#E74C3C; color:#fff; box-shadow:4px 4px 0px rgba(0,0,0,0.2);" onclick="closeCreateClanModal()" data-i18n="cancel">Cancel</button>
         </div>
+    </div>
+
+    <!-- AVATAR SHOP MODAL -->
+    <div id="avatar-shop-modal" class="overlay marketplace-fullscreen" style="display:none;">
+        <div class="marketplace-content" style="padding:20px;display:flex;flex-direction:column;height:100%;">
+            <h2 style="font-weight:900;margin-bottom:16px;">Avatar Shop</h2>
+            <div class="sub-tab-switcher" id="avatar-shop-tabs" style="margin-bottom:16px;">
+                <button class="sub-tab-btn active" data-shop="avatars" onclick="switchAvatarShopTab('avatars')">Avatars</button>
+                <button class="sub-tab-btn" data-shop="frames" onclick="switchAvatarShopTab('frames')">Frames</button>
+            </div>
+            <div id="avatar-shop-grid" class="avatar-shop-grid" style="flex:1;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:100px;"></div>
+        </div>
+        <nav class="marketplace-bottom-bar">
+            <button class="action-btn primary-btn" onclick="closeAvatarShop()" style="width:100%;">Close</button>
+        </nav>
     </div>
 
     <!-- CLAN JOIN CONFIRM MODAL -->

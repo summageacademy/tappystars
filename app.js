@@ -207,6 +207,7 @@ const TRANSLATIONS = {
         clan_rule_ad_pts: "+50 Points",
         top_coins: "Top Coins",
         top_stars: "Top Stars",
+        task_ref_1: "1 New Referral Today",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -378,6 +379,7 @@ const TRANSLATIONS = {
         clan_rule_ad_pts: "+50 Очков",
         top_coins: "Топ монет",
         top_stars: "Топ звёзд",
+        task_ref_1: "1 новый реферал сегодня",
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -416,7 +418,7 @@ const TRANSLATIONS = {
         you_won: "Siz yutdingiz!",
         congrats: "Tabriklaymiz! Siz qabul qildingiz:",
         thanks: "Rahmat!",
-        top_miners: "Eng yaxshilar",
+        top_miners: "Top",
         see_all: "Barchasini ko'rish",
         my_purchases: "Xaridlarim",
         no_purchases: "Hali xaridlar yo'q.",
@@ -549,6 +551,7 @@ const TRANSLATIONS = {
         clan_rule_ad_pts: "+50 Ball",
         top_coins: "Top tangalar",
         top_stars: "Top yulduzlar",
+        task_ref_1: "Bugun 1 ta yangi referal",
     }
 };
 
@@ -913,7 +916,7 @@ function ensureDailyFields() {
     const today = getTashkentDate();
     if (userData.dailyTasksDate !== today) {
         userData.dailyTasksDate = today;
-        userData.dailyTasks = { ad1: false, ad3: 0, ad3Claimed: false, tap500Claimed: false };
+        userData.dailyTasks = { ad1: false, ref1Claimed: false, tap500Claimed: false, startReferralCount: userData.referralCount || 0 };
         userData.todayTapCoins = 0;
         try {
             if (userRef) {
@@ -925,7 +928,10 @@ function ensureDailyFields() {
             }
         } catch (e) {}
     }
-    if (!userData.dailyTasks) userData.dailyTasks = { ad1: false, ad3: 0, ad3Claimed: false, tap500Claimed: false };
+    if (!userData.dailyTasks) userData.dailyTasks = { ad1: false, ref1Claimed: false, tap500Claimed: false, startReferralCount: userData.referralCount || 0 };
+    if (userData.dailyTasks.startReferralCount === undefined) {
+        userData.dailyTasks.startReferralCount = userData.referralCount || 0;
+    }
 }
 
 function setTaskBtnDot(btn, show) {
@@ -992,32 +998,30 @@ function updateDailyTasksUI() {
         }
     }
 
-    const ad3Count = dt.ad3 || 0;
-    const fill3 = document.getElementById('prog-task-ad3');
-    const txt3 = document.getElementById('prog-task-ad3-txt');
-    if (fill3) fill3.style.width = `${Math.min(100, (ad3Count / 3) * 100)}%`;
-    if (txt3) txt3.innerText = `${ad3Count} / 3`;
-    const btn3 = document.getElementById('btn-task-ad3');
-    if (btn3) {
-        if (dt.ad3Claimed) {
-            btn3.disabled = true;
-            btn3.innerText = t('done_today');
-            btn3.style.background = '#CFD8DC';
-            setTaskBtnDot(btn3, false);
-        } else if (ad3Count >= 3) {
-            btn3.disabled = false;
-            btn3.innerText = t('claim');
-            btn3.style.background = '#2ECC71';
-            btn3.style.color = '#fff';
-            btn3.onclick = () => claimDailyTask('ad3');
-            setTaskBtnDot(btn3, true);
+    const todayRefs = Math.max(0, (userData.referralCount || 0) - (dt.startReferralCount || 0));
+    const fillRef = document.getElementById('prog-task-ref1');
+    const txtRef = document.getElementById('prog-task-ref1-txt');
+    if (fillRef) fillRef.style.width = `${Math.min(100, (todayRefs / 1) * 100)}%`;
+    if (txtRef) txtRef.innerText = `${Math.min(1, todayRefs)} / 1`;
+    const btnRef = document.getElementById('btn-task-ref1');
+    if (btnRef) {
+        if (dt.ref1Claimed) {
+            btnRef.disabled = true;
+            btnRef.innerText = t('done_today');
+            btnRef.style.background = '#CFD8DC';
+            setTaskBtnDot(btnRef, false);
+        } else if (todayRefs >= 1) {
+            btnRef.disabled = false;
+            btnRef.innerText = t('claim');
+            btnRef.style.background = '#2ECC71';
+            btnRef.style.color = '#fff';
+            btnRef.onclick = () => claimDailyTask('ref1');
+            setTaskBtnDot(btnRef, true);
         } else {
-            btn3.disabled = false;
-            btn3.innerText = t('watch_ad');
-            btn3.style.background = '#FF9800';
-            btn3.style.color = '#1C1C1C';
-            btn3.onclick = () => doDailyTask('ad3');
-            setTaskBtnDot(btn3, true);
+            btnRef.disabled = true;
+            btnRef.innerText = t('claim');
+            btnRef.style.background = '';
+            setTaskBtnDot(btnRef, false);
         }
     }
 
@@ -1111,11 +1115,22 @@ window.claimDailyTask = async (taskId) => {
         updateDailyTasksUI();
         safeHaptic('notification', 'success');
         safeAlert('+700 Coins!', false);
+    } else if (taskId === 'ref1') {
+        if (dt.ref1Claimed || Math.max(0, (userData.referralCount || 0) - (dt.startReferralCount || 0)) < 1) return;
+        dt.ref1Claimed = true;
+        userData.coins = (userData.coins || 0) + 1500;
+        try {
+            await updateDoc(userRef, { coins: increment(1500), dailyTasks: dt });
+        } catch (e) {}
+        updateUI();
+        updateDailyTasksUI();
+        safeHaptic('notification', 'success');
+        safeAlert('+1500 Coins!', false);
     }
 };
 
 // ========== ADS DAILY LIMIT ==========
-const ADS_DAILY_LIMIT = 6;
+const ADS_DAILY_LIMIT = 3;
 
 function ensureAdsFields() {
     if (!userData) return;
@@ -1421,7 +1436,11 @@ onSnapshot(userRef, async (docSnap) => {
             adsToday: 0,
             adsDate: getTashkentDate(),
             totalAdsWatched: 0,
-            lastActiveAt: Date.now()
+            lastActiveAt: Date.now(),
+            currentAvatar: 'av_1',
+            currentFrame: 'fr_1',
+            unlockedAvatars: ['av_1'],
+            unlockedFrames: ['fr_1'],
         };
         await setDoc(userRef, userData);
     }
@@ -1713,6 +1732,7 @@ function scheduleSync() {
 function updateUI() {
     if (!userData) return;
     ensureEnergy();
+    updateProfileDisplay();
     const coinEl = document.getElementById('coin-bal');
     const starEl = document.getElementById('star-bal');
     if (coinEl) coinEl.innerText = formatCompact(userData.coins || 0);
@@ -2092,6 +2112,211 @@ async function doSpinAnimation() {
         updateSpinUI();
         setTimeout(() => closeSpinReel(), 2200);
     }, 3800);
+}
+
+// ========== AVATAR & FRAME SHOP ==========
+const AVATARS = [
+    { id: 'av_1', name: 'Black', image: 'images/avatars/black.webp', cost: 0, currency: 'free' },
+    { id: 'av_2', name: 'Red', image: 'images/avatars/red.webp', cost: 100, currency: 'coins' },
+    { id: 'av_3', name: 'Golden', image: 'images/avatars/golden.webp', cost: 500, currency: 'coins' },
+    { id: 'av_4', name: 'Farmer', image: 'images/avatars/farm.webp', cost: 1000, currency: 'coins' },
+    { id: 'av_5', name: 'Map Guy', image: 'images/avatars/map.webp', cost: 5000, currency: 'coins' },
+    { id: 'av_6', name: 'Cosmic', image: 'images/avatars/cosmos.webp', cost: 10, currency: 'stars' }
+];
+
+const FRAMES = [
+    { id: 'fr_1', name: 'Default', cssClass: '', cost: 0, currency: 'free' },
+    { id: 'fr_2', name: 'Glassy Black', cssClass: 'frame-glass-black', cost: 500, currency: 'coins' },
+    { id: 'fr_3', name: 'Glassy Red', cssClass: 'frame-glass-red', cost: 1000, currency: 'coins' },
+    { id: 'fr_4', name: 'Glassy Gold', cssClass: 'frame-glass-gold', cost: 5000, currency: 'coins' },
+    { id: 'fr_5', name: 'Royal Wood', cssClass: 'frame-wood', cost: 10, currency: 'stars' },
+    { id: 'fr_6', name: 'Dark Chaos', cssClass: 'frame-chaos', cost: 30, currency: 'stars' }
+];
+
+let currentShopTab = 'avatars';
+
+window.openAvatarShop = () => {
+    const modal = document.getElementById('avatar-shop-modal');
+    if (modal) modal.style.display = 'flex';
+    renderAvatarShop();
+    safeHaptic('selection');
+};
+
+window.closeAvatarShop = () => {
+    const modal = document.getElementById('avatar-shop-modal');
+    if (modal) modal.style.display = 'none';
+};
+
+window.switchAvatarShopTab = (tab) => {
+    currentShopTab = tab;
+    document.querySelectorAll('#avatar-shop-tabs .sub-tab-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-shop') === tab);
+    });
+    renderAvatarShop();
+    safeHaptic('selection');
+};
+
+function renderAvatarShop() {
+    const grid = document.getElementById('avatar-shop-grid');
+    if (!grid || !userData) return;
+
+    let html = '';
+    if (currentShopTab === 'avatars') {
+        AVATARS.forEach(av => {
+            const unlocked = (userData.unlockedAvatars || ['av_1']).includes(av.id);
+            const equipped = userData.currentAvatar === av.id;
+            let btnText = 'Equip';
+            let btnClass = 'action-btn primary-btn';
+            let disabled = false;
+
+            if (equipped) {
+                btnText = 'Equipped';
+                btnClass = 'action-btn';
+                disabled = true;
+            } else if (!unlocked) {
+                btnText = av.currency === 'stars' ? `${av.cost} ⭐` : `${formatCompact(av.cost)} 🪙`;
+                btnClass = 'action-btn';
+            }
+
+            html += `
+            <div class="avatar-shop-card ${equipped ? 'equipped' : ''}">
+                <div class="avatar-shop-preview">
+                    <img src="${av.image}" alt="${av.name}">
+                </div>
+                <strong style="font-size:0.9em;">${av.name}</strong>
+                <button type="button" class="${btnClass}" ${disabled ? 'disabled' : ''} style="width:100%;padding:8px;font-size:0.85em;" onclick="buyOrEquipAvatar('${av.id}')">${btnText}</button>
+            </div>`;
+        });
+    } else {
+        FRAMES.forEach(fr => {
+            const unlocked = (userData.unlockedFrames || ['fr_1']).includes(fr.id);
+            const equipped = userData.currentFrame === fr.id;
+            let btnText = 'Equip';
+            let btnClass = 'action-btn primary-btn';
+            let disabled = false;
+
+            if (equipped) {
+                btnText = 'Equipped';
+                btnClass = 'action-btn';
+                disabled = true;
+            } else if (!unlocked) {
+                btnText = fr.currency === 'stars' ? `${fr.cost} ⭐` : `${formatCompact(fr.cost)} 🪙`;
+                btnClass = 'action-btn';
+            }
+
+            html += `
+            <div class="avatar-shop-card ${equipped ? 'equipped' : ''}">
+                <div class="avatar-shop-preview ${fr.cssClass}">
+                    <img src="images/avatars/default.webp" alt="Frame Preview">
+                </div>
+                <strong style="font-size:0.9em;">${fr.name}</strong>
+                <button type="button" class="${btnClass}" ${disabled ? 'disabled' : ''} style="width:100%;padding:8px;font-size:0.85em;" onclick="buyOrEquipFrame('${fr.id}')">${btnText}</button>
+            </div>`;
+        });
+    }
+    grid.innerHTML = html;
+}
+
+window.buyOrEquipAvatar = async (id) => {
+    if (!userData) return;
+    const av = AVATARS.find(x => x.id === id);
+    if (!av) return;
+
+    let unlocked = userData.unlockedAvatars || ['av_1'];
+    if (!unlocked.includes(id)) {
+        if (av.currency === 'stars') {
+            if ((userData.stars || 0) < av.cost) {
+                safeAlert('Not enough Stars.', true);
+                return;
+            }
+            userData.stars -= av.cost;
+        } else {
+            if ((userData.coins || 0) < av.cost) {
+                safeAlert('Not enough Coins.', true);
+                return;
+            }
+            userData.coins -= av.cost;
+        }
+        unlocked.push(id);
+        userData.unlockedAvatars = unlocked;
+    }
+
+    userData.currentAvatar = id;
+    try {
+        const payload = {
+            currentAvatar: id,
+            unlockedAvatars: unlocked
+        };
+        if (av.cost > 0) {
+            if (av.currency === 'stars') payload.stars = increment(-av.cost);
+            else payload.coins = increment(-av.cost);
+        }
+        await updateDoc(userRef, payload);
+    } catch (e) {
+        console.warn('Avatar equip error', e);
+    }
+
+    updateUI();
+    renderAvatarShop();
+    safeHaptic('notification', 'success');
+};
+
+window.buyOrEquipFrame = async (id) => {
+    if (!userData) return;
+    const fr = FRAMES.find(x => x.id === id);
+    if (!fr) return;
+
+    let unlocked = userData.unlockedFrames || ['fr_1'];
+    if (!unlocked.includes(id)) {
+        if (fr.currency === 'stars') {
+            if ((userData.stars || 0) < fr.cost) {
+                safeAlert('Not enough Stars.', true);
+                return;
+            }
+            userData.stars -= fr.cost;
+        } else {
+            if ((userData.coins || 0) < fr.cost) {
+                safeAlert('Not enough Coins.', true);
+                return;
+            }
+            userData.coins -= fr.cost;
+        }
+        unlocked.push(id);
+        userData.unlockedFrames = unlocked;
+    }
+
+    userData.currentFrame = id;
+    try {
+        const payload = {
+            currentFrame: id,
+            unlockedFrames: unlocked
+        };
+        if (fr.cost > 0) {
+            if (fr.currency === 'stars') payload.stars = increment(-fr.cost);
+            else payload.coins = increment(-fr.cost);
+        }
+        await updateDoc(userRef, payload);
+    } catch (e) {
+        console.warn('Frame equip error', e);
+    }
+
+    updateUI();
+    renderAvatarShop();
+    safeHaptic('notification', 'success');
+};
+
+function updateProfileDisplay() {
+    if (!userData) return;
+    const wrapper = document.getElementById('profile-avatar-wrapper');
+    const img = document.getElementById('user-profile-avatar-img');
+
+    const av = AVATARS.find(x => x.id === (userData.currentAvatar || 'av_1')) || AVATARS[0];
+    const fr = FRAMES.find(x => x.id === (userData.currentFrame || 'fr_1')) || FRAMES[0];
+
+    if (img) img.src = av.image;
+    if (wrapper) {
+        wrapper.className = `profile-avatar-wrapper ${fr.cssClass}`;
+    }
 }
 
 // ========== GIFTS / EXCHANGE / LEGAL / LEADERBOARD ==========
