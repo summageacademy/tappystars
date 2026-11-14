@@ -1041,21 +1041,6 @@ function updateDailyTasksUI() {
         }
     }
 
-    const btnAdsgram = document.getElementById('btn-task-adsgram');
-    if (btnAdsgram) {
-        if (dt.adsgramTaskDone) {
-            btnAdsgram.disabled = true;
-            btnAdsgram.innerText = t('done_today');
-            btnAdsgram.style.background = '#CFD8DC';
-            btnAdsgram.style.color = '#1C1C1C';
-        } else {
-            btnAdsgram.disabled = false;
-            btnAdsgram.innerText = t('watch_ad');
-            btnAdsgram.style.background = '#FF9800';
-            btnAdsgram.style.color = '#1C1C1C';
-        }
-    }
-
     const todayRefs = Math.max(0, (userData.referralCount || 0) - (dt.startReferralCount || 0));
     const fillRef = document.getElementById('prog-task-ref1');
     const txtRef = document.getElementById('prog-task-ref1-txt');
@@ -1554,7 +1539,6 @@ function initApp() {
     loadLeaderboardPreview();
     loadPurchases();
     startAutoTapLoop();
-    setupAdsgramTask()
 
     window.__tappyAppReady = true;
     if (typeof window.__tappyHideLoader === 'function') window.__tappyHideLoader();
