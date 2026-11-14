@@ -128,6 +128,20 @@
                     <button class="action-btn" id="btn-task-ad1" style="background:#FF9800;color:#1C1C1C;" onclick="doDailyTask('ad1')" data-i18n="watch_ad">Watch Ad</button>
                 </div>
 
+                <!-- Inside <div id="tasks-daily" class="tasks-panel active"> -->
+                <div class="glass-card card-vertical task-card" id="task-daily-adsgram">
+                    <div class="card-center">
+                        <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <div class="card-info">
+                            <h3 data-i18n="task_adsgram_title">Partner Daily Task</h3>
+                            <p data-i18n="task_adsgram_reward">+1,000 Coins</p>
+                        </div>
+                    </div>
+                    <div id="adsgram-task-container" style="width:100%; margin-top:8px;">
+                        <adsgram-task id="adsgram-task-widget" data-block-id="task-44503" data-debug="false"></adsgram-task>
+                    </div>
+                </div>
+
                 <div class="glass-card card-vertical task-card" id="task-daily-ref1">
                     <div class="card-center">
                         <svg class="icon icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -405,12 +419,31 @@
 
             <!-- General -->
             <div id="account-general" class="account-panel active">
-                <div class="glass-card card-vertical" style="gap:10px;">
-                    <div class="stat-line"><span data-i18n="stat_coins">Coins</span><strong id="stat-coins">0</strong></div>
-                    <div class="stat-line"><span data-i18n="stat_stars">Stars</span><strong id="stat-stars">0</strong></div>
-                    <div class="stat-line"><span data-i18n="stat_clicks">Total Clicks</span><strong id="stat-clicks">0</strong></div>
-                    <div class="stat-line"><span data-i18n="stat_tgid">Telegram ID</span><strong id="stat-tgid">—</strong></div>
-                    <div class="stat-line"><span data-i18n="stat_league">League</span><strong id="stat-league">Bear</strong></div>
+                <div class="profile-stats-grid">
+                    <div class="glass-card stat-box">
+                        <span class="stat-label" data-i18n="stat_coins">Coins</span>
+                        <span class="stat-value" id="stat-coins">0</span>
+                    </div>
+                    <div class="glass-card stat-box">
+                        <span class="stat-label" data-i18n="stat_stars">Stars</span>
+                        <span class="stat-value" id="stat-stars">0</span>
+                    </div>
+                    <div class="glass-card stat-box">
+                        <span class="stat-label" data-i18n="stat_clicks">Total Clicks</span>
+                        <span class="stat-value" id="stat-clicks">0</span>
+                    </div>
+                    <div class="glass-card stat-box">
+                        <span class="stat-label" data-i18n="ref_count">Referrals</span>
+                        <span class="stat-value" id="stat-refs">0</span>
+                    </div>
+                    <div class="glass-card stat-box">
+                        <span class="stat-label" data-i18n="stat_tgid">Telegram ID</span>
+                        <span class="stat-value" id="stat-tgid">—</span>
+                    </div>
+                    <div class="glass-card stat-box">
+                        <span class="stat-label" data-i18n="stat_league">League</span>
+                        <span class="stat-value" id="stat-league">Bear</span>
+                    </div>
                 </div>
 
                 <div class="glass-card exchange-card exchange-card-yellow" style="margin-top:16px;">

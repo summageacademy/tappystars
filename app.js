@@ -208,6 +208,8 @@ const TRANSLATIONS = {
         top_coins: "Top Coins",
         top_stars: "Top Stars",
         task_ref_1: "1 New Referral Today",
+        task_adsgram_title: "Partner Daily Task",
+        task_adsgram_reward: "+1,000 Coins"
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -380,6 +382,8 @@ const TRANSLATIONS = {
         top_coins: "Топ монет",
         top_stars: "Топ звёзд",
         task_ref_1: "1 новый реферал сегодня",
+        task_adsgram_title: "Партнерское задание",
+        task_adsgram_reward: "+1000 Монет"
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -552,6 +556,8 @@ const TRANSLATIONS = {
         top_coins: "Top tangalar",
         top_stars: "Top yulduzlar",
         task_ref_1: "Bugun 1 ta yangi referal",
+        task_adsgram_title: "Hamkor kunlik vazifasi",
+        task_adsgram_reward: "+1,000 Tanga"
     }
 };
 
@@ -916,7 +922,7 @@ function ensureDailyFields() {
     const today = getTashkentDate();
     if (userData.dailyTasksDate !== today) {
         userData.dailyTasksDate = today;
-        userData.dailyTasks = { ad1: false, ref1Claimed: false, tap500Claimed: false, startReferralCount: userData.referralCount || 0 };
+        userData.dailyTasks = { ad1: false, ad3: 0, ad3Claimed: false, ref1Claimed: false, tap500Claimed: false, adsgramTaskDone: false, startReferralCount: userData.referralCount || 0 };
         userData.todayTapCoins = 0;
         try {
             if (userRef) {
@@ -928,10 +934,46 @@ function ensureDailyFields() {
             }
         } catch (e) {}
     }
-    if (!userData.dailyTasks) userData.dailyTasks = { ad1: false, ref1Claimed: false, tap500Claimed: false, startReferralCount: userData.referralCount || 0 };
+    if (!userData.dailyTasks) userData.dailyTasks = { ad1: false, ad3: 0, ad3Claimed: false, ref1Claimed: false, tap500Claimed: false, adsgramTaskDone: false, startReferralCount: userData.referralCount || 0 };
+    if (userData.dailyTasks.adsgramTaskDone === undefined) userData.dailyTasks.adsgramTaskDone = false;
     if (userData.dailyTasks.startReferralCount === undefined) {
         userData.dailyTasks.startReferralCount = userData.referralCount || 0;
     }
+}
+
+function setupAdsgramTask() {
+    const taskWidget = document.getElementById('adsgram-task-widget');
+    if (!taskWidget) return;
+    
+    taskWidget.addEventListener('reward', async (event) => {
+        ensureDailyFields();
+        if (userData.dailyTasks.adsgramTaskDone) return;
+        
+        userData.dailyTasks.adsgramTaskDone = true;
+        userData.stars = (userData.stars || 0) + 2;
+        userData.coins = (userData.coins || 0) + 1000;
+        
+        try {
+            await updateDoc(userRef, {
+                stars: increment(2),
+                coins: increment(1000),
+                dailyTasks: userData.dailyTasks
+            });
+        } catch (e) {}
+        
+        updateUI();
+        updateDailyTasksUI();
+        safeHaptic('notification', 'success');
+        safeAlert('Task completed! +2 Stars & +1,000 Coins earned!', false);
+    });
+
+    taskWidget.addEventListener('onError', (e) => {
+        console.warn('Adsgram task error:', e.detail);
+    });
+
+    taskWidget.addEventListener('onBannerNotFound', (e) => {
+        console.warn('Adsgram task banner not found:', e.detail);
+    });
 }
 
 function setTaskBtnDot(btn, show) {
@@ -995,6 +1037,29 @@ function updateDailyTasksUI() {
             btn1.style.background = '#FF9800';
             btn1.style.color = '#1C1C1C';
             setTaskBtnDot(btn1, true);
+        }
+    }
+
+    const taskWidget = document.getElementById('adsgram-task-widget');
+    if (taskWidget) {
+        if (dt.adsgramTaskDone) {
+            taskWidget.style.display = 'none';
+            let doneEl = document.getElementById('adsgram-task-done-msg');
+            if (!doneEl) {
+                doneEl = document.createElement('div');
+                doneEl.id = 'adsgram-task-done-msg';
+                doneEl.className = 'action-btn';
+                doneEl.style.cssText = 'background:#CFD8DC; color:#1C1C1C; width:100%; text-align:center; pointer-events:none;';
+                doneEl.innerText = t('done_today');
+                taskWidget.parentElement.appendChild(doneEl);
+            } else {
+                doneEl.style.display = 'block';
+                doneEl.innerText = t('done_today');
+            }
+        } else {
+            taskWidget.style.display = 'block';
+            const doneEl = document.getElementById('adsgram-task-done-msg');
+            if (doneEl) doneEl.style.display = 'none';
         }
     }
 
@@ -1496,6 +1561,7 @@ function initApp() {
     loadLeaderboardPreview();
     loadPurchases();
     startAutoTapLoop();
+    setupAdsgramTask()
 
     window.__tappyAppReady = true;
     if (typeof window.__tappyHideLoader === 'function') window.__tappyHideLoader();
@@ -1599,6 +1665,7 @@ function updateAccountStats() {
     set('stat-coins', formatCompact(userData.coins || 0));
     set('stat-stars', formatCompact(userData.stars || 0));
     set('stat-clicks', formatCompact(userData.totalClicks || 0));
+    set('stat-refs', formatCompact(userData.referralCount || 0));
     set('stat-tgid', user.id.toString());
     set('stat-league', getLeagueForClicks(userData.totalClicks || 0).name);
 }
@@ -2464,11 +2531,14 @@ window.confirmExchange = async () => {
     }
     const stars = Math.floor(coins / 1000);
     const spent = stars * 1000;
-    userData.coins -= spent;
+    
+    // Clamp at 0 minimum
+    userData.coins = Math.max(0, (userData.coins || 0) - spent);
     userData.stars = (userData.stars || 0) + stars;
+    
     try {
         await updateDoc(userRef, {
-            coins: increment(-spent),
+            coins: Math.max(0, (userData.coins || 0)), // Ensure Firestore also receives non-negative value
             stars: increment(stars)
         });
     } catch (e) {}
