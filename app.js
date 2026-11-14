@@ -941,21 +941,27 @@ function ensureDailyFields() {
     }
 }
 
-function setupAdsgramTask() {
-    const taskWidget = document.getElementById('adsgram-task-widget');
-    if (!taskWidget) return;
-    
-    taskWidget.addEventListener('reward', async (event) => {
-        ensureDailyFields();
-        if (userData.dailyTasks.adsgramTaskDone) return;
+async function doAdsgramRewardTask() {
+    if (!userData) return;
+    ensureDailyFields();
+    if (userData.dailyTasks.adsgramTaskDone) return;
+
+    if (!window.Adsgram) {
+        safeAlert('Ads unavailable.', true);
+        return;
+    }
+
+    try {
+        // Initialize with your Reward block ID
+        const AdController = window.Adsgram.init({ blockId: "44503", debug: false });
+        const result = await AdController.show();
         
+        // User watched the ad completely
         userData.dailyTasks.adsgramTaskDone = true;
-        userData.stars = (userData.stars || 0) + 2;
         userData.coins = (userData.coins || 0) + 1000;
         
         try {
             await updateDoc(userRef, {
-                stars: increment(2),
                 coins: increment(1000),
                 dailyTasks: userData.dailyTasks
             });
@@ -964,16 +970,11 @@ function setupAdsgramTask() {
         updateUI();
         updateDailyTasksUI();
         safeHaptic('notification', 'success');
-        safeAlert('Task completed! +2 Stars & +1,000 Coins earned!', false);
-    });
-
-    taskWidget.addEventListener('onError', (e) => {
-        console.warn('Adsgram task error:', e.detail);
-    });
-
-    taskWidget.addEventListener('onBannerNotFound', (e) => {
-        console.warn('Adsgram task banner not found:', e.detail);
-    });
+        safeAlert('Task completed! +1,000 Coins earned!', false);
+    } catch (e) {
+        console.warn('Adsgram reward task error:', e);
+        safeAlert('Ad not completed.', true);
+    }
 }
 
 function setTaskBtnDot(btn, show) {
@@ -1040,26 +1041,18 @@ function updateDailyTasksUI() {
         }
     }
 
-    const taskWidget = document.getElementById('adsgram-task-widget');
-    if (taskWidget) {
+    const btnAdsgram = document.getElementById('btn-task-adsgram');
+    if (btnAdsgram) {
         if (dt.adsgramTaskDone) {
-            taskWidget.style.display = 'none';
-            let doneEl = document.getElementById('adsgram-task-done-msg');
-            if (!doneEl) {
-                doneEl = document.createElement('div');
-                doneEl.id = 'adsgram-task-done-msg';
-                doneEl.className = 'action-btn';
-                doneEl.style.cssText = 'background:#CFD8DC; color:#1C1C1C; width:100%; text-align:center; pointer-events:none;';
-                doneEl.innerText = t('done_today');
-                taskWidget.parentElement.appendChild(doneEl);
-            } else {
-                doneEl.style.display = 'block';
-                doneEl.innerText = t('done_today');
-            }
+            btnAdsgram.disabled = true;
+            btnAdsgram.innerText = t('done_today');
+            btnAdsgram.style.background = '#CFD8DC';
+            btnAdsgram.style.color = '#1C1C1C';
         } else {
-            taskWidget.style.display = 'block';
-            const doneEl = document.getElementById('adsgram-task-done-msg');
-            if (doneEl) doneEl.style.display = 'none';
+            btnAdsgram.disabled = false;
+            btnAdsgram.innerText = t('watch_ad');
+            btnAdsgram.style.background = '#FF9800';
+            btnAdsgram.style.color = '#1C1C1C';
         }
     }
 
