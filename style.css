@@ -1018,64 +1018,6 @@ main {
     }
 }
 
-/* NFT Competition sticky bar */
-.nft-comp-sticky {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: 78px;
-    z-index: 99;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 14px 8px 8px;
-    background: #1C1C1C;
-    color: #FFD700;
-    border: 3px solid #1C1C1C;
-    box-shadow: 4px 4px 0 #FFD700;
-    border-radius: 0;
-    cursor: pointer;
-    font-family: inherit;
-    width: auto;
-}
-.nft-comp-sticky:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 #FFD700;
-}
-.nft-sticky-img-wrap {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: linear-gradient(145deg, #7B2FF7, #F107A3);
-    border: 2px solid #FFD700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-.nft-sticky-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-}
-.nft-sticky-text {
-    flex: 1;
-    font-weight: 900;
-    font-size: 1.05em;
-    letter-spacing: 1px;
-    text-align: left;
-    color: #FFD700;
-}
-.nft-sticky-chevron {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    color: #FFD700;
-}
-
 /* Splash / Lottie loader */
 .app-loader {
     position: fixed;
@@ -1994,4 +1936,68 @@ main:has(#clan.active) {
 .avatar-shop-card.equipped {
     background: #FFF8E7;
     border-color: #27AE60;
+}
+
+/* ========== LEGAL CARDS (PRIVACY & TERMS) ========== */
+.legal-cards-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+}
+
+.legal-card {
+    background: var(--surface);
+    border: 2px solid var(--border-hard);
+    box-shadow: 4px 4px 0px var(--border-hard);
+    border-radius: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+}
+
+.legal-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legal-card-num {
+    background: #FFD700;
+    color: #1C1C1C;
+    border: 2px solid var(--border-hard);
+    box-shadow: 2px 2px 0px var(--border-hard);
+    font-weight: 900;
+    font-size: 0.78em;
+    padding: 2px 8px;
+    flex-shrink: 0;
+}
+
+.legal-card-title {
+    font-weight: 900;
+    font-size: 1em;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.legal-card-body {
+    font-size: 0.88em;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #333333;
+    margin: 0;
+}
+
+.legal-updated-badge {
+    display: inline-block;
+    align-self: center;
+    background: #FFF8E7;
+    border: 2px solid var(--border-hard);
+    padding: 4px 12px;
+    font-size: 0.78em;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin-bottom: 6px;
 }

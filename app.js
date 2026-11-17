@@ -209,7 +209,39 @@ const TRANSLATIONS = {
         top_stars: "Top Stars",
         task_ref_1: "1 New Referral Today",
         task_adsgram_title: "Partner Daily Task",
-        task_adsgram_reward: "+1,000 Coins"
+        task_adsgram_reward: "+1,000 Coins",
+        spin_for_ad: "Spin for Ad",
+        privacy_updated: "Last Updated: November 2026",
+        terms_updated: "Last Updated: November 2026",
+        priv_title_1: "1. Data We Collect",
+        priv_body_1: "When you launch TappyStars via Telegram Mini Apps, we collect your public Telegram User ID, first name, preferred interface language, and in-game activity (Coins, Stars, total taps, energy state, league progress, clan membership, and referral counts). When you redeem a Telegram Gift, we also store the recipient @username you manually submit.",
+        priv_title_2: "2. How Your Data Is Used",
+        priv_body_2: "Your data is used strictly to operate game mechanics, synchronize your balance across sessions, calculate global and clan leaderboards, verify valid referrals, and fulfill Telegram Gift orders.",
+        priv_title_3: "3. Cloud Storage & Security",
+        priv_body_3: "All game states, clan messages, and purchase records are stored securely on Google Firebase Cloud Firestore. We never ask for your Telegram password, phone number, two-factor authentication codes, or private wallet keys.",
+        priv_title_4: "4. Third-Party Advertising (Adsgram)",
+        priv_body_4: "TappyStars integrates the Adsgram SDK to display optional rewarded advertisements (for Lucky Spins and Power Boosters). Adsgram may process technical device identifiers, IP-based region data, and ad interaction events in accordance with its own privacy policy to prevent fraud and serve relevant ads.",
+        priv_title_5: "5. Data Sharing & Retention",
+        priv_body_5: "We do not sell, rent, or trade your personal information to third parties. Your Telegram first name, avatar selection, and Coin/Star totals are visible to other players on public leaderboards and inside Clans you voluntarily join.",
+        priv_title_6: "6. User Rights & Contact",
+        priv_body_6: "You may stop using TappyStars at any time. To request data review or deletion of your game profile and purchase logs, contact our support team through the official @tappystars_bot Telegram bot.",
+        terms_title_1: "1. Acceptance of Terms",
+        terms_body_1: "By accessing or playing TappyStars, you agree to be bound by these Terms of Service and Telegram’s Mini App Terms. If you do not agree, please discontinue use of the application.",
+        terms_title_2: "2. Virtual Currency (Coins & Stars)",
+        terms_body_2: "TappyStars Coins and in-app Stars are virtual entertainment items with no real-world monetary value and cannot be exchanged for cash or cryptocurrency. Coins may be converted into in-app Stars at a fixed rate of 1,000 Coins = 1 Star.",
+        terms_title_3: "3. Rewarded Advertisements",
+        terms_body_3: "Watching ads is strictly voluntary. Rewards (Lucky Spin attempts, Auto-Tap, Multi-Tap, and Instant Energy Restore) are granted only after an advertisement finishes playing completely and is verified by the Adsgram SDK. Daily ad views and booster cooldowns apply.",
+        terms_title_4: "4. Telegram Gift Redemptions",
+        terms_body_4: "Accumulated Stars may be redeemed for virtual Telegram Gifts (such as Bear, Gift Box, Bouquet, Rose, Diamond, and Trophy) in the Marketplace. Once confirmed, orders are manually reviewed and delivered to the specified Telegram @username within 7 to 10 business days, subject to Telegram availability and anti-fraud checks.",
+        terms_title_5: "5. Referral Program Rules",
+        terms_body_5: "A referral is counted only after the invited user joins via your unique invite link, watches an advertisement, and completes at least one Lucky Spin. Self-referrals, fake accounts, and bot farms are strictly prohibited and will void pending rewards.",
+        terms_title_6: "6. Clans & Community Conduct",
+        terms_body_6: "Creating a Clan costs 2,000 Coins and supports up to 5 members. Clan names, descriptions, and chat messages must not contain hate speech, spam, illegal links, or harassment. Clan admins may remove members at their discretion, and platform moderators reserve the right to disband abusive clans.",
+        terms_title_7: "7. Fair Play & Account Suspension",
+        terms_body_7: "Using auto-clickers, emulators, modified clients, network exploits, or automated scripts to farm taps, ad views, or referrals is forbidden. Accounts caught violating fair play rules may have their balances reset, pending gift orders denied, or access permanently restricted.",
+        terms_title_8: "8. Service Availability & Updates",
+        terms_body_8: "TappyStars is provided 'as is.' We reserve the right to adjust game economy rates, league thresholds, booster durations, and reward pools at any time to maintain platform balance.",
+        spin_for_ad: "Spin for Ad",
     },
     ru: {
         tap_to_mine: "Нажимайте для добычи монет",
@@ -383,7 +415,39 @@ const TRANSLATIONS = {
         top_stars: "Топ звёзд",
         task_ref_1: "1 новый реферал сегодня",
         task_adsgram_title: "Партнерское задание",
-        task_adsgram_reward: "+1000 Монет"
+        task_adsgram_reward: "+1000 Монет",
+        spin_for_ad: "Крутить за рекламу",
+        privacy_updated: "Последнее обновление: Ноябрь 2026",
+        terms_updated: "Последнее обновление: Ноябрь 2026",
+        priv_title_1: "1. Собираемые данные",
+        priv_body_1: "При запуске TappyStars через Telegram Mini Apps мы собираем ваш публичный ID в Telegram, имя, предпочитаемый язык интерфейса и игровую активность (Монеты, Звёзды, общее количество кликов, состояние энергии, прогресс лиг, членство в кланах и рефералы). При заказе подарка мы также сохраняем указанный вами юзернейм @username.",
+        priv_title_2: "2. Использование данных",
+        priv_body_2: "Ваши данные используются исключительно для работы игровых механик, синхронизации баланса, расчета глобальных и клановых таблиц лидеров, проверки рефералов и выполнения заказов подарков.",
+        priv_title_3: "3. Облачное хранилище и безопасность",
+        priv_body_3: "Все игровые данные, сообщения чата кланов и история покупок надежно хранятся в Google Firebase Cloud Firestore. Мы никогда не запрашиваем пароль от Telegram, номер телефона или коды двухфакторной аутентификации.",
+        priv_title_4: "4. Стонняя реклама (Adsgram)",
+        priv_body_4: "TappyStars использует SDK Adsgram для показа добровольной рекламы за вознаграждение (спины и бустеры). Adsgram может обрабатывать технические идентификаторы устройства и региональные данные для предотвращения мошенничества.",
+        priv_title_5: "5. Передача и хранение данных",
+        priv_body_5: "Мы не продаем и не передаем вашу личную информацию третьим лицам. Ваше имя, аватар и баланс видны другим игрокам в таблицах лидеров и в кланах, к которым вы присоединяетесь.",
+        priv_title_6: "6. Ваши права и контакты",
+        priv_body_6: "Вы можете в любой момент прекратить использование приложения. Для проверки или удаления профиля обратитесь в нашу службу поддержки через официальный бот @tappystars_bot.",
+        terms_title_1: "1. Принятие условий",
+        terms_body_1: "Запуская TappyStars, вы соглашаетесь с данными Условиями использования и правилами Telegram Mini Apps. Если вы не согласны, пожалуйста, прекратите использование приложения.",
+        terms_title_2: "2. Виртуальная валюта (Монеты и Звёзды)",
+        terms_body_2: "Монеты и Звёзды в TappyStars являются виртуальными объектами развлечения, не имеют реальной денежной стоимости и не обмениваются на наличные. Монеты можно обменять на Звёзды по курсу 1000 Монет = 1 Звезда.",
+        terms_title_3: "3. Рекламные ролики",
+        terms_body_3: "Просмотр рекламы является строго добровольным. Награды начисляются только после полного просмотра рекламы, подтвержденного SDK Adsgram. Применяются дневные лимиты и кулдауны.",
+        terms_title_4: "4. Получение подарков Telegram",
+        terms_body_4: "Накопленные Звёзды можно обменять на реальные подарки Telegram в Маркетплейсе. Заказы проверяются вручную и доставляются на указанный @username в течение 7–10 рабочих дней.",
+        terms_title_5: "5. Реферальная программа",
+        terms_body_5: "Реферал засчитывается только после того, как приглашенный друг перейдет по ссылке, посмотрит рекламу и сделает хотя бы 1 спин. Саморефералы и боты строго запрещены и аннулируют награды.",
+        terms_title_6: "6. Кланы и правила поведения",
+        terms_body_6: "Создание клана стоит 2000 монет (до 5 участников). Названия, описания и чаты не должны содержать спам, оскорбления или ссылки. Администраторы кланов могут удалять участников.",
+        terms_title_7: "7. Честная игра и блокировка",
+        terms_body_7: "Использование автокликеров, эмуляторов, модифицированных клиентов или скриптов для накрутки запрещено. Нарушители могут быть заблокированы с обнулением баланса.",
+        terms_title_8: "8. Доступность сервиса",
+        terms_body_8: "TappyStars предоставляется по принципу 'как есть'. Мы оставляем за собой право изменять экономику игры, лимиты лиг и пулы наград для поддержания баланса платформы.",
+        spin_for_ad: "Крутить за рекламу",
     },
     uz: {
         tap_to_mine: "Tanga olish uchun bosing",
@@ -557,7 +621,39 @@ const TRANSLATIONS = {
         top_stars: "Top yulduzlar",
         task_ref_1: "Bugun 1 ta yangi referal",
         task_adsgram_title: "Hamkor kunlik vazifasi",
-        task_adsgram_reward: "+1,000 Tanga"
+        task_adsgram_reward: "+1,000 Tanga",
+        spin_for_ad: "Reklamaga Aylantirish",
+        privacy_updated: "Oxirgi yangilanish: Noyabr 2026",
+        terms_updated: "Oxirgi yangilanish: Noyabr 2026",
+        priv_title_1: "1. Yig'iladigan ma'lumotlar",
+        priv_body_1: "TappyStars ilovasini Telegram Mini Apps orqali ishga tushirganingizda, biz sizning Telegram ID, ismingiz, interfeys tilingiz va o'yin faoliyatingizni (Tangalar, Yulduzlar, kliklar, energiya, ligalar, klanlar va referallar) to'playmiz. Sovg'a buyurtma qilganda kiritgan @username ham saqlanadi.",
+        priv_title_2: "2. Ma'lumotlardan foydalanish",
+        priv_body_2: "Ma'lumotlaringiz faqat o'yin mexanikasini yuritish, balansni sinxronlashtirish, reytinglarni hisoblash, referallarni tekshirish va sovg'alarni yetkazib berish uchun ishlatiladi.",
+        priv_title_3: "3. Bulutli xotira va xavfsizlik",
+        priv_body_3: "Barcha o'yin ma'lumotlari, klan chatlari va xaridlar tarixi Google Firebase Cloud Firestore da xavfsiz saqlanadi. Biz hech qachon Telegram parolingiz yoki kodlaringizni so'ramaymiz.",
+        priv_title_4: "4. Uchinchi tomon reklamasi (Adsgram)",
+        priv_body_4: "TappyStars ixtiyoriy mukofotli reklamalarni ko'rsatish uchun Adsgram SDK dan foydalanadi. Adsgram firibgarlikning oldini olish uchun texnik qurilma ma'lumotlarini qayta ishlashi mumkin.",
+        priv_title_5: "5. Ma'lumotlarni ulashish",
+        priv_body_5: "Biz shaxsiy ma'lumotlaringizni sotmaymiz. Ismingiz, avataringiz va balansingiz ommaviy reytinglarda hamda siz qo'shilgan klanlarda boshqa o'yinchilarga ko'rinadi.",
+        priv_title_6: "6. Huquqlar va aloqa",
+        priv_body_6: "Ilovadan foydalanishni istalgan vaqtda to'xtatishingiz mumkin. Ma'lumotlarni tekshirish yoki o'chirish uchun rasmiy @tappystars_bot orqali qo'llab-quvvatlash guruhiga murojaat qiling.",
+        terms_title_1: "1. Shartlarni qabul qilish",
+        terms_body_1: "TappyStars dan foydalanish orqali ushbu Foydalanish shartlari va Telegram Mini Apps qoidalariga rozi bo'lasiz. Agar rozi bo'lmasangiz, ilovadan foydalanishni to'xtating.",
+        terms_title_2: "2. Virtual valyuta (Tangalar va Yulduzlar)",
+        terms_body_2: "TappyStars tangalari va yulduzlari virtual ko'ngilochar narsalar bo'lib, real pul qiymatiga ega emas. Tangalarni har 1000 Tanga = 1 Yulduz kursi bo'yicha almashtirish mumkin.",
+        terms_title_3: "3. Mukofotli reklamalar",
+        terms_body_3: "Reklama ko'rish ixtiyoriy. Mukofotlar faqat reklama to'liq ko'rib bo'lingandan so'ng beriladi. Kunlik cheklovlar va vaqt oralig'i amal qiladi.",
+        terms_title_4: "4. Telegram sovg'alari",
+        terms_body_4: "Yig'ilgan yulduzlarni Telegram sovg'alariga almashtirish mumkin. Buyurtmalar tekshirilib, 7–10 ish kuni ichida ko'rsatilgan @username ga yetkazib beriladi.",
+        terms_title_5: "5. Referal dasturi qoidalari",
+        terms_body_5: "Referal faqat do'stingiz havola orqali qo'shilib, reklama ko'rib, kamida 1 ta spin bajargandan so'ng hisoblanadi. Soxta akkauntlar taqiqlanadi va mukofotlar bekor qilinadi.",
+        terms_title_6: "6. Klanlar va tartib-qoidalar",
+        terms_body_6: "Klan yaratish 2000 tanga turadi (5 tagacha a'zo). Nomlar, tavsiflar va chatlarda spam yoki haqorat bo'lmasligi kerak. Klan adminlari a'zolarni chetlatishi mumkin.",
+        terms_title_7: "7. Adolatli o'yin va bloklash",
+        terms_body_7: "Avto-klikerlar, emulatorlar yoki skriptlardan foydalanish taqiqlanadi. Qoidalarni buzganlar bloklanishi va balansi nollashtirilishi mumkin.",
+        terms_title_8: "8. Xizmat mavjudligi",
+        terms_body_8: "TappyStars 'boricha' taqdim etiladi. Biz o'yin iqtisodiyoti va mukofotlarni o'zgartirish huquqini saqlab qolamiz.",
+        spin_for_ad: "Reklama orqali aylantirish"
     }
 };
 
@@ -1536,7 +1632,6 @@ function initApp() {
     updateSpinUI();
     updateAllAdButtons();
     updateNotificationDots();
-    loadLeaderboardPreview();
     loadPurchases();
     startAutoTapLoop();
 
@@ -2034,7 +2129,7 @@ function updateSpinUI() {
         btn.onclick = null;
     } else {
         btn.disabled = false;
-        btn.innerText = 'SPIN';
+        btn.innerText = t('spin_for_ad');
         btn.style.background = '';
         btn.style.color = '';
         btn.onclick = () => startSpinFlow();
@@ -2529,44 +2624,48 @@ window.openLegalModal = (type) => {
     const modal = document.getElementById('legal-modal');
     const title = document.getElementById('legal-title');
     const content = document.getElementById('legal-content');
-    if (type === 'privacy') {
-        if (title) title.innerText = t('privacy_policy');
-        if (content) content.innerHTML = `<p>We respect your privacy. TappyStars stores only your Telegram ID, username, game progress and purchase history needed to operate the service. We do not sell personal data. Ads are served by third-party providers.</p>`;
-    } else {
-        if (title) title.innerText = t('terms_of_service');
-        if (content) content.innerHTML = `<p>By using TappyStars you agree to play fairly. Virtual coins and stars have no real-world cash value. Gifts are delivered to the Telegram account you specify within 7–10 days after order confirmation. Abuse, fraud or exploitation of the system may result in account restriction.</p>`;
+    
+    const isPrivacy = type === 'privacy';
+    if (title) {
+        title.innerText = isPrivacy ? t('privacy_policy') : t('terms_of_service');
     }
+
+    if (content) {
+        const updatedText = isPrivacy ? t('privacy_updated') : t('terms_updated');
+        const count = isPrivacy ? 6 : 8; // 6 cards for privacy, 8 for terms
+        let cardsHtml = '';
+
+        for (let i = 1; i <= count; i++) {
+            const cardTitle = t(`${isPrivacy ? 'priv' : 'terms'}_title_${i}`);
+            const cardBody = t(`${isPrivacy ? 'priv' : 'terms'}_body_${i}`);
+            cardsHtml += `
+                <div class="legal-card">
+                    <div class="legal-card-header">
+                        <span class="legal-card-num">${String(i).padStart(2, '0')}</span>
+                        <h3 class="legal-card-title">${cardTitle.replace(/^\d+\.\s*/, '')}</h3>
+                    </div>
+                    <p class="legal-card-body">${cardBody}</p>
+                </div>
+            `;
+        }
+
+        content.innerHTML = `
+            <div class="legal-cards-stack">
+                <div class="legal-updated-badge">${updatedText}</div>
+                ${cardsHtml}
+            </div>
+        `;
+        const scrollContainer = modal?.querySelector('.marketplace-content');
+        if (scrollContainer) scrollContainer.scrollTop = 0;
+    }
+
     if (modal) modal.style.display = 'flex';
+    safeHaptic('selection');
 };
+
 window.closeLegalModal = () => {
     document.getElementById('legal-modal').style.display = 'none';
 };
-
-async function loadLeaderboardPreview() {
-    const list = document.getElementById('leaderboard-preview-list');
-    if (!list) return;
-    list.innerHTML = `
-        <div class="skeleton-card" style="height: 44px; margin-bottom: 8px;"></div>
-        <div class="skeleton-card" style="height: 44px; margin-bottom: 8px;"></div>
-    `;
-    try {
-        const q = query(collection(db, 'users'), orderBy('coins', 'desc'), limit(5));
-        const snap = await getDocs(q);
-        let html = '';
-        let rank = 1;
-        snap.forEach(d => {
-            const data = d.data();
-            html += `<div style="display:flex;justify-content:space-between;font-weight:700;padding:6px 0;border-bottom:1px dashed #ddd;">
-                <span>#${rank} ${data.name || 'Miner'}</span>
-                <span class="lb-val">${formatCompact(data.coins || 0)}${LB_COIN_ICON}</span>
-            </div>`;
-            rank++;
-        });
-        list.innerHTML = html || '<p style="text-align:center;">—</p>';
-    } catch (e) {
-        list.innerHTML = '<p style="text-align:center;">Error</p>';
-    }
-}
 
 window.openLeaderboard = async () => {
     const modal = document.getElementById('leaderboard-modal');
@@ -3230,7 +3329,6 @@ async function loadAccountLeaderboard(metric = 'coins', animate = false) {
         });
         
         list.innerHTML = html || '<p class="empty-state">No entries yet.</p>';
-        // Force reflow then animate in (CSS handles stagger via --i)
         list.classList.remove('lb-list-ready');
         void list.offsetWidth;
         list.classList.add('lb-list-ready');

@@ -10,13 +10,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
-    <!-- SPLASH LOADER (Lottie) -->
     <div id="app-loader" class="app-loader" aria-busy="true" aria-live="polite">
         <div id="lottie-loader" class="lottie-loader"></div>
         <p class="loader-text">TappyStars</p>
     </div>
 
-    <!-- TOP BAR -->
     <header class="top-bar" id="top-bar" style="display: none;">
         <div class="currency-badge">
             <svg class="icon coin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
@@ -44,8 +42,6 @@
     </header>
 
     <main id="app-content" style="display: none;">
-
-        <!-- ========== EARN ========== -->
         <section id="earn" class="tab-content active">
             <div class="league-card glass-card" id="league-card-earn" onclick="openLeagueModal()">
                 <img id="league-img-earn" src="images/bear.webp" alt="League" class="league-card-img">
@@ -82,7 +78,6 @@
             </div>
         </section>
 
-        <!-- ========== TASKS ========== -->
         <section id="tasks" class="tab-content">
             <div class="league-card glass-card" id="league-card-tasks" onclick="openLeagueModal()">
                 <img id="league-img-tasks" src="images/bear.webp" alt="League" class="league-card-img">
@@ -99,9 +94,7 @@
                 <button class="sub-tab-btn" data-tab="referrals" onclick="switchTasksTab('referrals')" data-i18n="tab_referrals">Referrals</button>
             </div>
 
-            <!-- Daily tasks -->
             <div id="tasks-daily" class="tasks-panel active">
-                <!-- LUCKY SPIN -->
                 <div class="spin-section glass-card" id="spin-section" style="flex-direction:column;align-items:stretch;padding:16px;margin-bottom:14px;">
                     <div class="spin-section-head">
                         <span class="spin-section-tag">LUCKY SPIN</span>
@@ -115,7 +108,7 @@
                         </div>
                     </div>
                     <div id="spin-result-inline" class="spin-result-inline" style="display:none;"></div>
-                    <button type="button" class="action-btn primary-btn" id="btn-spin-main" onclick="startSpinFlow()" style="width:100%;margin-top:12px;">SPIN</button>
+                    <button type="button" class="action-btn primary-btn" id="btn-spin-main" onclick="startSpinFlow()" data-i18n="spin_for_ad" style="width:100%;margin-top:12px;">Spin for Ad</button>
                 </div>
 
                 <div class="glass-card card-vertical task-card" id="task-daily-ref1">
@@ -143,12 +136,10 @@
                 </div>
             </div>
 
-            <!-- Leagues rewards -->
             <div id="tasks-leagues" class="tasks-panel" style="display:none;">
                 <div id="league-rewards-list"></div>
             </div>
 
-            <!-- Referrals -->
             <div id="tasks-referrals" class="tasks-panel" style="display:none;">
                 <div class="glass-card card-vertical" style="text-align:center; margin: 0; display: flex; flex-direction: column;">
                     <img src="images/bear.webp" alt="Bear" style="width:65px;height:65px;object-fit:contain;margin:0 auto 6px;">
@@ -184,7 +175,6 @@
             </div>
         </section>
 
-        <!-- ========== BOOSTS ========== -->
         <section id="boosts" class="tab-content">
             <h2 style="font-weight:900;margin-bottom:15px;text-align:center;" data-i18n="power_boosters">Power Boosters</h2>
 
@@ -230,9 +220,7 @@
             <p class="cooldown-note" data-i18n="cooldown_note">Boosters active for 30 mins. 15-minute buying cooldown per booster.</p>
         </section>
 
-        <!-- ========== CLAN BATTLES SECTION ========== -->
         <section id="clan" class="tab-content">
-            <!-- Unjoined View -->
             <div id="clan-unjoined-view" class="clan-unjoined-container clan-view">
                 <div class="clan-hero">
                     <h2 class="clan-main-title" data-i18n="clan_title">Clan Battles</h2>
@@ -287,9 +275,7 @@
                 <p class="clan-box-hint clan-create-hint" style="margin-top: 20px;" data-i18n="clan_create_hint">Start fresh — you become the Admin</p>
             </div>
 
-            <!-- Joined View -->
             <div id="clan-joined-view" class="clan-joined-container clan-view" style="display:none;">
-                <!-- Clan Header Info -->
                 <div class="glass-card clan-header-card">
                     <div>
                         <h2 id="clan-header-name" class="clan-header-name">Clan Name</h2>
@@ -300,7 +286,6 @@
                     </div>
                 </div>
 
-                <!-- Chat Panel -->
                 <div id="clan-panel-chat" class="clan-panel active">
                     <div id="clan-chat-messages" class="clan-chat-messages"></div>
                     <div class="clan-chat-input-row">
@@ -310,7 +295,6 @@
                     <p id="clan-chat-cooldown-text" class="clan-cooldown-note" style="display:none;"></p>
                 </div>
 
-                <!-- Battle Leaderboard Panel -->
                 <div id="clan-panel-battle" class="clan-panel" style="display:none;">
                     <div class="glass-card card-vertical clan-points-rules">
                         <div class="clan-points-head">
@@ -354,12 +338,10 @@
                     <div id="clan-leaderboard-list" class="clan-leaderboard-list"></div>
                 </div>
 
-                <!-- Members Panel -->
                 <div id="clan-panel-members" class="clan-panel" style="display:none;">
                     <div id="clan-members-list" class="clan-members-list"></div>
                 </div>
 
-                <!-- Settings Panel -->
                 <div id="clan-panel-settings" class="clan-panel" style="display:none;">
                     <div id="clan-settings-admin-view" class="glass-card card-vertical">
                         <h3 style="font-weight:900;" data-i18n="clan_settings_title">Clan Settings</h3>
@@ -381,7 +363,6 @@
             </div>
         </section>
 
-        <!-- ========== ACCOUNT ========== -->
         <section id="account" class="tab-content">
             <div class="profile-avatar-container" onclick="openAvatarShop()">
                 <div class="profile-avatar-wrapper" id="profile-avatar-wrapper">
@@ -393,7 +374,6 @@
             </div>
             <h2 id="profile-greeting" style="text-align:center;margin-bottom:20px;font-weight:900;font-size:1.8em;" data-i18n="hello_miner">Hello, Miner!</h2>
 
-            <!-- General -->
             <div id="account-general" class="account-panel active">
                 <div class="profile-stats-grid">
                     <div class="glass-card stat-box">
@@ -436,7 +416,6 @@
                 </div>
             </div>
 
-            <!-- NEW: Dedicated Leaderboard Sub-section -->
             <div id="account-leaderboard" class="account-panel" style="display:none;">
                 <div class="sub-tab-switcher" id="leaderboard-type-switcher" style="margin-bottom: 14px;">
                     <button class="sub-tab-btn active" data-lbtype="coins" onclick="switchLeaderboardType('coins')" data-i18n="top_coins">Top Coins</button>
@@ -446,7 +425,6 @@
                 <div id="account-full-leaderboard-list" style="display:flex;flex-direction:column;gap:8px;"></div>
             </div>
 
-            <!-- Gifts marketplace -->
             <div id="account-gifts" class="account-panel" style="display:none;">
                 <p class="subtitle" style="text-align:center;color:var(--text-muted);margin-bottom:16px;font-weight:500;" data-i18n="gifts_subtitle">Exchange Stars for real Telegram Gifts</p>
                 <div class="gift-grid">
@@ -483,7 +461,6 @@
                 </div>
             </div>
 
-            <!-- History -->
             <div id="account-history" class="account-panel" style="display:none;">
                 <h3 class="section-title" data-i18n="my_purchases">My Purchases</h3>
                 <div id="purchases-list" class="purchases-list">
@@ -493,10 +470,6 @@
         </section>
 </main>
 
-
-    
-
-    <!-- MAIN BOTTOM NAV -->
     <nav class="bottom-nav" id="bottom-nav" style="display:none;">
         <div class="nav-item active" data-tab="earn" onclick="switchTab('earn')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
@@ -526,7 +499,6 @@
         </div>
     </nav>
 
-    <!-- DYNAMIC POPUP SUB-NAVBAR: CLAN SECTION -->
     <nav class="popup-subnav" id="popup-subnav-clan">
         <div class="subnav-item back-btn" onclick="exitSubSectionToEarn()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -551,7 +523,6 @@
         </div>
     </nav>
 
-    <!-- DYNAMIC POPUP SUB-NAVBAR: ACCOUNT/PROFILE SECTION -->
     <nav class="popup-subnav" id="popup-subnav-account">
         <div class="subnav-item back-btn" onclick="exitSubSectionToEarn()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -576,7 +547,6 @@
         </div>
     </nav>
 
-    <!-- LEAGUE INFO MODAL -->
     <div id="league-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content league-modal-content">
             <div class="league-nav-row">
@@ -602,7 +572,6 @@
         </nav>
     </div>
 
-    <!-- ONBOARDING -->
     <div id="onboarding-modal" class="overlay fullscreen-overlay" style="z-index:10000;">
         <div class="fullscreen-content onboarding-content">
             <div id="slide-1" class="slide active">
@@ -628,7 +597,6 @@
         </div>
     </div>
 
-    <!-- LEGAL -->
     <div id="legal-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content" style="padding:20px 20px 100px;text-align:left;">
             <h2 id="legal-title" style="font-weight:900;margin-bottom:20px;text-align:center;"></h2>
@@ -639,7 +607,6 @@
         </nav>
     </div>
 
-    <!-- GIFT CONFIRM -->
     <div id="gift-confirm-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content" style="display:flex;flex-direction:column;height:100%;padding:20px 20px 120px;">
             <h2 style="font-weight:900;margin-top:10px;" data-i18n="gift_confirm_title">Confirm Gift Purchase</h2>
@@ -657,7 +624,6 @@
         </nav>
     </div>
 
-    <!-- EXCHANGE -->
     <div id="exchange-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content" style="display:flex;flex-direction:column;height:100%;padding:20px 20px 120px;">
             <h2 style="font-weight:900;margin-top:10px;" data-i18n="exchange_title">Turn Coins into Stars</h2>
@@ -689,7 +655,6 @@
         </nav>
     </div>
 
-    <!-- LEADERBOARD -->
     <div id="leaderboard-modal" class="overlay marketplace-fullscreen">
         <div class="marketplace-content" style="padding:0;display:flex;flex-direction:column;height:100%;">
             <h2 style="color:var(--text-main);margin-top:15px;font-weight:900;">Global Top 30</h2>
@@ -701,7 +666,6 @@
         </nav>
     </div>
 
-    <!-- CHEST REWARD -->
     <div id="chest-reward-modal" class="overlay chest-reward-overlay" onclick="handleChestModalBackdropClick(event)" style="display:none;">
         <div class="glass-card chest-reward-card">
             <h2 id="chest-reward-title" data-i18n="you_won" style="font-size:2.2em;font-weight:900;margin-bottom:5px;">You Won!</h2>
@@ -712,7 +676,6 @@
         </div>
     </div>
 
-    <!-- CUSTOM ALERT -->
     <div id="custom-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:transparent;z-index:9999;justify-content:center;align-items:flex-end;padding-bottom:110px;">
         <div style="background:#FFD700;border:3px solid var(--border-hard);box-shadow:6px 6px 0px var(--border-hard);border-radius:0;display:flex;flex-direction:column;width:90%;max-width:350px;padding:20px;text-align:center;gap:15px;animation:popIn 0.2s ease;pointer-events:auto;">
             <p id="custom-modal-text" style="font-size:1.05em;font-weight:800;color:#1C1C1C;line-height:1.4;margin:0;"></p>
@@ -720,7 +683,6 @@
         </div>
     </div>
 
-    <!-- ERROR / NO NETWORK OVERLAY -->
     <div id="error-overlay" class="overlay error-overlay" style="display:none; z-index:99999;">
         <div class="error-container">
             <div id="error-icon-wrapper" class="error-icon-wrapper"></div>
@@ -729,8 +691,6 @@
         </div>
     </div>
 
-    
-    <!-- CLAN CREATE MODAL -->
     <div id="clan-create-modal" class="overlay" style="display:none; align-items:center; justify-content:center;">
         <div class="glass-card card-vertical" style="width:90%; max-width:360px; margin:0; gap:14px; text-align:left;">
             <h2 style="font-weight:900; text-align:center; margin:0;" data-i18n="create_clan_btn">Create Clan</h2>
@@ -748,7 +708,6 @@
         </div>
     </div>
 
-    <!-- AVATAR SHOP MODAL -->
     <div id="avatar-shop-modal" class="overlay marketplace-fullscreen" style="display:none;">
         <div class="marketplace-content" style="padding:20px;display:flex;flex-direction:column;height:100%;">
             <h2 style="font-weight:900;margin-bottom:16px;">Avatar Shop</h2>
@@ -763,7 +722,6 @@
         </nav>
     </div>
 
-    <!-- CLAN JOIN CONFIRM MODAL -->
     <div id="clan-join-modal" class="overlay" style="display:none; align-items:center; justify-content:center;">
         <div class="glass-card card-vertical" style="width:90%; max-width:360px; margin:0; gap:12px; text-align:center;">
             <h2 id="modal-clan-title" style="font-weight:900; margin:0;">Clan Name</h2>
